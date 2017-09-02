@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mblog.base.utils.PreviewTextUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,6 @@ import mblog.core.persist.service.UserService;
 import mblog.core.persist.utils.BeanMapUtils;
 import mtons.modules.lang.EntityStatus;
 import mtons.modules.pojos.Paging;
-import mtons.modules.utils.PreviewTextUtils;
 
 /**
  * @author langhsu

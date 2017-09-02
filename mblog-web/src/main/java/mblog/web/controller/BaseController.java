@@ -10,13 +10,16 @@
 package mblog.web.controller;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import mblog.web.formatter.StringEscapeEditor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -32,6 +35,9 @@ import mblog.core.data.Attach;
 import mblog.shiro.authc.AccountSubject;
 import mtons.modules.pojos.Paging;
 import mtons.modules.security.MD5;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 
 /**
  * Controller 基类
@@ -46,6 +52,19 @@ public class BaseController {
 	protected AppContext appContext;
 	@Autowired
 	protected FileRepoFactory fileRepoFactory;
+
+	@InitBinder
+	public void initBinder(ServletRequestDataBinder binder) {
+		/**
+		 * 自动转换日期类型的字段格式
+		 */
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
+
+		/**
+		 * 防止XSS攻击
+		 */
+		binder.registerCustomEditor(String.class, new StringEscapeEditor(true, false));
+	}
 
 	/**
 	 * 获取登录信息
