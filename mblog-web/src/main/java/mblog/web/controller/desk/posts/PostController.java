@@ -65,7 +65,7 @@ public class PostController extends BaseController {
 		if (blog != null && StringUtils.isNotBlank(blog.getTitle())) {
 			String content = request.getParameter("content");
 			UserProfile profile = getSubject().getProfile();
-			blog.setContent(HtmlUtils.htmlUnescape(blog.getContent()));
+			blog.setContent(content);
 			String[] ablums = request.getParameterValues("delayImages");
 			blog.setAlbums(handleAlbums(ablums));
 			blog.setAuthorId(profile.getId());
@@ -124,9 +124,12 @@ public class PostController extends BaseController {
 	public String subUpdate(Post p, HttpServletRequest request) {
 		UserProfile up = getSubject().getProfile();
 		if (p != null && p.getAuthorId() == up.getId()) {
+			String content = request.getParameter("content");
+
 			String[] ablums = request.getParameterValues("delayImages");
 			p.setAlbums(handleAlbums(ablums));
-			postPlanet.update(p);
+			p.setContent(content);
+ 			postPlanet.update(p);
 		}
 		return Views.REDIRECT_HOME_POSTS;
 	}

@@ -42,9 +42,11 @@ public class PostVideoController extends BaseController {
 	private AttachService attachService;
 	
 	@RequestMapping(value = "/submit/video", method = RequestMethod.POST)
-	public String postVideo(Post post, String url) throws MalformedURLException {
+	public String postVideo(Post post, String url, HttpServletRequest request) throws MalformedURLException {
 		
 		if (StringUtils.isNotBlank(url)) {
+			String content = request.getParameter("content");
+
 			UserProfile up = getSubject().getProfile();
 			
 			Video video = videoAnalysis.take(url);
@@ -53,7 +55,7 @@ public class PostVideoController extends BaseController {
 			
 			post.setTitle(video.getTitle());
 			post.setSummary(video.getDescription());
-			post.setContent(post.getContent());
+			post.setContent(content);
 			post.setAuthorId(up.getId());
 			post.setAlbums(Collections.singletonList(att));
 
@@ -76,6 +78,7 @@ public class PostVideoController extends BaseController {
 	public String subUpdate(Post post, String url, HttpServletRequest request) throws MalformedURLException {
 		UserProfile up = getSubject().getProfile();
 		if (StringUtils.isNotBlank(url) && post.getAuthorId() == up.getId()) {
+			String content = request.getParameter("content");
 
 			Video video = videoAnalysis.take(url);
 
@@ -83,7 +86,7 @@ public class PostVideoController extends BaseController {
 
 			post.setTitle(video.getTitle());
 			post.setSummary(video.getDescription());
-			post.setContent(post.getContent());
+			post.setContent(content);
 			post.setAuthorId(up.getId());
 			post.setAlbums(Collections.singletonList(att));
 
