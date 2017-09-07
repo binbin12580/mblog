@@ -24,6 +24,7 @@ import mblog.web.controller.BaseController;
 import mblog.web.controller.desk.Views;
 import mtons.modules.pojos.Data;
 import mtons.modules.pojos.UserProfile;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * 文章操作
@@ -62,8 +63,9 @@ public class PostController extends BaseController {
 	public String post(Post blog, HttpServletRequest request) {
 
 		if (blog != null && StringUtils.isNotBlank(blog.getTitle())) {
+			String content = request.getParameter("content");
 			UserProfile profile = getSubject().getProfile();
-
+			blog.setContent(content);
 			String[] ablums = request.getParameterValues("delayImages");
 			blog.setAlbums(handleAlbums(ablums));
 			blog.setAuthorId(profile.getId());
@@ -122,9 +124,12 @@ public class PostController extends BaseController {
 	public String subUpdate(Post p, HttpServletRequest request) {
 		UserProfile up = getSubject().getProfile();
 		if (p != null && p.getAuthorId() == up.getId()) {
+			String content = request.getParameter("content");
+
 			String[] ablums = request.getParameterValues("delayImages");
 			p.setAlbums(handleAlbums(ablums));
-			postPlanet.update(p);
+			p.setContent(content);
+ 			postPlanet.update(p);
 		}
 		return Views.REDIRECT_HOME_POSTS;
 	}
