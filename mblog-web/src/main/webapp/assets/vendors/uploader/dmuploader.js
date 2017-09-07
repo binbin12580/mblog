@@ -102,10 +102,50 @@
   DmUploader.prototype.init = function()
   {
     var widget = this;
-
+    var item = $('.uploader-item');
     widget.queue = new Array();
-    widget.queuePos = -1;
+    if(item == null){
+    	widget.queuePos = -1;
+    }else{
+    	for(var i=0;i<item.length;i++){
+    		widget.queue.push(i);
+    	}
+    	widget.queuePos = item.length - 1;
+    }
+    
     widget.queueRunning = false;
+    
+    $(document).on('click', 'button[data-action="remove-album"]', function () {
+		$(this).closest('div').remove();
+		
+		var i = $('#upload-albums').attr('file-counter');
+		if (parseInt(i) > 0) {
+			$('#upload-albums').attr('file-counter', i - 1);
+		}
+		widget.queue.pop();
+		widget.queuePos -= 1;
+	});
+    
+    $(document).on('click', '[rel="remove-album"]', function () {
+    	var that = $(this);
+        var rowId = that.attr('rowId');
+
+        if (confirm("确定删除此项吗？")) {
+            jQuery.getJSON('/post/delete_album.json', {id: rowId}, function (ret) {
+                alert(ret.message);
+                if (ret.code >= 0) {
+                    that.closest('div[row="alb"]').remove();
+                    var i = $('#upload-albums').attr('file-counter');
+            		if (parseInt(i) > 0) {
+            			$('#upload-albums').attr('file-counter', i - 1);
+            		}
+                    widget.queue.pop();
+            		widget.queuePos -= 1;
+                }
+            });
+        }
+	});
+    
 
     // -- Drag and drop event
     widget.element.on('drop', function (evt){

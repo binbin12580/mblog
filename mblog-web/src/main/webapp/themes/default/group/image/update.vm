@@ -105,19 +105,4 @@ seajs.use('post', function (post) {
 });
 seajs.use('upload');
 
-$(function () {
-    $('[rel="remove-album"]').click(function () {
-        var that = $(this);
-        var rowId = that.attr('rowId');
-
-        if (confirm("确定删除此项吗？")) {
-            jQuery.getJSON('$base/post/delete_album.json', {id: rowId}, function (ret) {
-                alert(ret.message);
-                if (ret.code >= 0) {
-                    that.closest('div[row="alb"]').remove();
-                }
-            });
-        }
-    });
-});
 </script>

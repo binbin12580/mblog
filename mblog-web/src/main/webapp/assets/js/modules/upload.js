@@ -115,14 +115,5 @@ define(function(require, exports, module) {
 		}
 	});
 	
-	$(document).on('click', 'button[data-action="remove-album"]', function () {
-		$(this).closest('div').remove();
-		
-		var i = $('#upload-albums').attr('file-counter');
-		if (parseInt(i) > 0) {
-			$('#upload-albums').attr('file-counter', i - 1);
-		}
-	});
-	
 	
 });
