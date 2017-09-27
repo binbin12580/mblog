@@ -59,42 +59,6 @@
 </div>
 #end
 
-## 问答列表显示
-#macro(showAsk $row)
-<div class="stream-item" id="loop-${row.id}">
-    <div class="qus-rank">
-        <div class="answers plus">
-            <span>${row.comments}</span>
-            <small>回答</small>
-        </div>
-        <div class="views hidden-xs">
-            <span>${row.views}</span>
-            <small>浏览</small>
-        </div>
-    </div>
-    <div class="summary">
-        <h2 class="title">#postLink($row)</h2>
-
-        <div class="foot-block clearfix">
-            <div class="author">
-                <span><a href="$base/ta/${row.author.id}">#showName($row.author)</a></span>
-                <time>$date.format('yyyy-MM-dd', $row.created)</time>
-            </div>
-            <ul class="tags">
-				#foreach($tag in $row.tagsArray)
-                    <li>
-                        <a class="tag tag-sm" href="$base/tag/${tag}/">$tag</a>
-                    </li>
-				#end
-            </ul>
-            <div class="pull-right hidden-xs">
-                <a href="$base/view/${row.id}" class="act">查看更多</a>
-            </div>
-        </div>
-    </div>
-</div>
-#end
-
 ## 翻页代码
 #macro (page $url $p $maxList)
 	#set($span = (${maxList} - 3)/2)
@@ -171,9 +135,9 @@
 ## 文章附件显示
 #macro (albShow $att)
 	#if($att.store == 1)
-        <img src="$base/assets/images/spinner-overlay.gif" data-original="${att.screenshot}"/>
+        <img src="$base/assets/images/spinner-overlay.png" data-original="${att.screenshot}"/>
 	#else
-        <img src="$base/assets/images/spinner-overlay.gif" data-original="#resource(${att.screenshot})"/>
+        <img src="$base/assets/images/spinner-overlay.png" data-original="#resource(${att.screenshot})"/>
 	#end
 #end
 
@@ -188,15 +152,15 @@
 
 ## 文章group显示
 #macro (showGroup $row $showFeatured)
-	#if ($row.featured > 1 && $showFeatured)
-    	<span class="label label-danger">推荐</span>
-	#elseif($row.group == 1)
-    	<span class="label label-success">文</span>
-	#elseif($row.group == 2)
-    	<span class="label label-info">图</span>
-	#elseif($row.group == 3)
-    	<span class="label label-violet">视频</span>
-	#elseif($row.group == 4)
-    	<span class="label label-warning">问</span>
-	#end
+##	#if ($row.featured > 1 && $showFeatured)
+##    	<span class="label label-danger">推荐</span>
+##	#elseif($row.group == 1)
+##    	<span class="label label-success">文</span>
+##	#elseif($row.group == 2)
+##    	<span class="label label-info">图</span>
+##	#elseif($row.group == 3)
+##    	<span class="label label-violet">视频</span>
+##	#elseif($row.group == 4)
+##    	<span class="label label-warning">问</span>
+##	#end
 #end

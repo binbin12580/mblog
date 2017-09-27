@@ -66,7 +66,7 @@
 					
     			</ul>
     			<div id="_search_box" class="search-box navbar-left hidden-xs hidden-sm">
-    				<form class="navbar-form" method="get" action="$base/browse/search">
+    				<form class="navbar-form" method="get" action="$base/search">
     					<input type="text" class="form-control" name="q" placeholder="搜索...">
 						<button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
     				</form>
@@ -75,19 +75,7 @@
     			<ul class="nav navbar-nav navbar-right sign">
     				#if($profile)
 					<li class="dropdown">
-                        <a href="#" class="publish dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-magic"></i> 发布
-                        </a>
-                    	<ul class="dropdown-menu publishs" role="menu">
-						#foreach($g in $groups)
-                        	<li>
-                                <a href="$base/post/new/${g.key}">
-                                    <i class="${g.icon} icon"></i>
-                                    <span>${g.alias}</span>
-                                </a>
-							</li>
-						#end
-						</ul>
+                        <a href="$base/post/new" class="publish"><i class="fa fa-magic"></i> 写文章</a>
 					</li>
     				<li class="dropdown">
     					<a href="#" class="ava dropdown-toggle" data-toggle="dropdown">

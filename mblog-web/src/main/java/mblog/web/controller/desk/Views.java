@@ -53,11 +53,10 @@ public interface Views {
 	
 	String BROWSE_GALLERY = "/gallery/index";
 	String BROWSE_GALLERY_SNIPPET = "/gallery/snippet";
-	String BROWSE_SEARCH = "/browse/search";
-	String BROWSE_DETAIL = "/browse/detail";
-	
-	String ROUTE_POST_PUBLISH = "/group/%s/post";
-	String ROUTE_POST_INDEX = "/group/%s/index";
-	String ROUTE_POST_VIEW = "/group/%s/view";
-	String ROUTE_POST_UPDATE = "/group/%s/update";
+	String BROWSE_SEARCH = "/search";
+
+	String ROUTE_POST_PUBLISH = "/blog/post";
+	String ROUTE_POST_INDEX = "/blog/index";
+	String ROUTE_POST_VIEW = "/blog/view";
+	String ROUTE_POST_UPDATE = "/blog/update";
 }

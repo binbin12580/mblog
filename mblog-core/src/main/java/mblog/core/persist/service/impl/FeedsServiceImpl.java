@@ -9,7 +9,6 @@
 */
 package mblog.core.persist.service.impl;
 
-import mblog.base.lang.EnumPrivacy;
 import mblog.core.data.Feeds;
 import mblog.core.data.Post;
 import mblog.core.persist.dao.FeedsDao;
@@ -22,7 +21,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.*;
 
@@ -48,13 +46,8 @@ public class FeedsServiceImpl implements FeedsService {
 		// 给自己保存一条
 		feedsDao.save(po);
 
-		int ret = 1;
-
-		if (feeds.getPrivacy() != EnumPrivacy.SECRECY.getIndex()){
-			// 派发给粉丝
-			ret += feedsDao.batchAdd(feeds);
-		}
-		return ret;
+		// 派发给粉丝
+		return feedsDao.batchAdd(feeds);
 	}
 
 	@Override

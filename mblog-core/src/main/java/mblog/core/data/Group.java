@@ -23,14 +23,8 @@ public class Group implements Serializable {
 	
 	private String name;
 	
-	private String alias;
-	
 	private String key;
 	
-	private String icon;
-	
-	private String template;
-
 	private int status;
 
 	public int getId() {
@@ -55,30 +49,6 @@ public class Group implements Serializable {
 
 	public void setKey(String key) {
 		this.key = key;
-	}
-
-	public String getTemplate() {
-		return template;
-	}
-
-	public void setTemplate(String template) {
-		this.template = template;
-	}
-
-	public String getIcon() {
-		return icon;
-	}
-
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-
-	public String getAlias() {
-		return alias;
-	}
-
-	public void setAlias(String alias) {
-		this.alias = alias;
 	}
 
 	public int getStatus() {

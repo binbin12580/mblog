@@ -68,8 +68,8 @@ CREATE TABLE `mto_config` (
 INSERT INTO `mto_config` VALUES ('1', 'site_name', '0', 'Mtons');
 INSERT INTO `mto_config` VALUES ('2', 'site_welcomes', '0', 'Mtons, 轻松分享你的兴趣');
 INSERT INTO `mto_config` VALUES ('3', 'site_domain', '0', 'http://mtons.com');
-INSERT INTO `mto_config` VALUES ('4', 'site_keywords', '0', 'mtons,博客,社区,摄影,旅游,艺术,娱乐');
-INSERT INTO `mto_config` VALUES ('5', 'site_description', '0', 'Mtons, 轻松分享你的兴趣. 便捷的文字、图片发布,扁平化的响应式设计,美观、大气,是您记录生活的最佳选择');
+INSERT INTO `mto_config` VALUES ('4', 'site_keywords', '0', 'mtons,博客,社区');
+INSERT INTO `mto_config` VALUES ('5', 'site_description', '0', '请添加网站描述');
 INSERT INTO `mto_config` VALUES ('6', 'site_editor', '1', 'ueditor');
 
 -- ----------------------------
@@ -122,9 +122,6 @@ CREATE TABLE `mto_group` (
 -- Records of mto_group
 -- ----------------------------
 INSERT INTO `mto_group` VALUES ('1', 'blog', '文章', '写文章', 'fa fa-pencil-square', 'blog', '0');
-INSERT INTO `mto_group` VALUES ('2', 'image', '图片', '发图片', 'fa fa-camera', 'image', '0');
-INSERT INTO `mto_group` VALUES ('3', 'video', '视频', '搬视频', 'fa fa-toggle-right', 'video', '0');
-INSERT INTO `mto_group` VALUES ('4', 'ask', '问答', '提问题', 'fa fa-question-circle', 'ask', '0');
 
 -- ----------------------------
 -- Table structure for mto_menu
@@ -144,8 +141,6 @@ CREATE TABLE `mto_menu` (
 -- Records of mto_menu
 -- ----------------------------
 INSERT INTO `mto_menu` VALUES ('1', '文章', '_self', 'g/blog', '0', '0');
-INSERT INTO `mto_menu` VALUES ('2', '视频', '_self', 'g/video', '0', '0');
-INSERT INTO `mto_menu` VALUES ('3', '问答', '_self', 'g/ask', '0', '0');
 INSERT INTO `mto_menu` VALUES ('4', '发现', '_self', 'tags', '0', '0');
 INSERT INTO `mto_menu` VALUES ('5', '走廊', '_self', 'gallery?g=2', '0', '0');
 

@@ -12,6 +12,7 @@ package mblog.core.persist.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,12 @@ import mblog.core.persist.utils.BeanMapUtils;
  *
  */
 @Service
+@Transactional(readOnly = true)
 public class GroupServiceImpl implements GroupService {
 	@Autowired
 	private GroupDao groupDao;
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<Group> findAll() {
 		List<GroupPO> list = groupDao.findAll();
 		List<Group> rets = new ArrayList<>();
@@ -43,17 +44,34 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	@Cacheable(value = "groupsCaches", key = "'g_' + #id")
 	public Group getById(int id) {
 		return BeanMapUtils.copy(groupDao.get(id));
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	@Cacheable(value = "groupsCaches", key = "'g_' + #key")
 	public Group getByKey(String key) {
 		return BeanMapUtils.copy(groupDao.getByKey(key));
 	}
-	
+
+	@Override
+	@Transactional
+	public void update(Group group) {
+		GroupPO po = groupDao.get(group.getId());
+		if (po != null) {
+			BeanUtils.copyProperties(group, po);
+		} else {
+			po = new GroupPO();
+			BeanUtils.copyProperties(group, po);
+			groupDao.save(po);
+		}
+	}
+
+	@Override
+	@Transactional
+	public void delete(int id) {
+		groupDao.deleteById(id);
+	}
+
 }

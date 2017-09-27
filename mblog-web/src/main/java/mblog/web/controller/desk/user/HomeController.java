@@ -9,27 +9,19 @@
 */
 package mblog.web.controller.desk.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import mblog.base.lang.EnumPrivacy;
 import mblog.core.data.AccountProfile;
 import mblog.core.data.User;
-import mblog.core.persist.service.CommentService;
-import mblog.core.persist.service.FavorService;
-import mblog.core.persist.service.FeedsService;
-import mblog.core.persist.service.FollowService;
-import mblog.core.persist.service.NotifyService;
-import mblog.core.persist.service.PostService;
-import mblog.core.persist.service.UserService;
+import mblog.core.persist.service.*;
 import mblog.shiro.authc.AccountSubject;
 import mblog.web.controller.BaseController;
 import mblog.web.controller.desk.Views;
 import mtons.modules.lang.Const;
 import mtons.modules.pojos.Paging;
 import mtons.modules.pojos.UserProfile;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 用户主页
@@ -82,7 +74,7 @@ public class HomeController extends BaseController {
 	public String posts(Integer pn, ModelMap model) {
 		Paging page = wrapPage(pn);
 		UserProfile up = getSubject().getProfile();
-		postService.pagingByAuthorId(page, up.getId(), EnumPrivacy.ALL);
+		postService.pagingByAuthorId(page, up.getId());
 
 		model.put("page", page);
 		initUser(model);

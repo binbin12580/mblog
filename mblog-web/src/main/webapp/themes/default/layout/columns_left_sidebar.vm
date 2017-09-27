@@ -40,12 +40,5 @@
 
     #parse("/default/inc/footer.vm")
 
-    <a href="#" class="site-scroll-top"></a>
-
-    <script type="text/javascript">
-        seajs.use('main', function (main) {
-            main.init();
-        });
-    </script>
 </body>
 </html>

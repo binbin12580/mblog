@@ -38,26 +38,10 @@ public class GroupPO {
 	private String name;
 
 	/**
-	 * 别名或说明
-	 */
-	private String alias;
-
-	/**
 	 * 唯一关键字
 	 */
 	@Column(name = "key_", unique = true)
 	private String key;
-
-	/**
-	 * 图标
-	 */
-	private String icon;
-
-	/**
-	 * 使用模板
-	 */
-	@Column(name = "template", length = 16)
-	private String template;
 
 	private int status;
 
@@ -83,30 +67,6 @@ public class GroupPO {
 
 	public void setKey(String key) {
 		this.key = key;
-	}
-
-	public String getTemplate() {
-		return template;
-	}
-
-	public void setTemplate(String template) {
-		this.template = template;
-	}
-
-	public String getIcon() {
-		return icon;
-	}
-
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
-
-	public String getAlias() {
-		return alias;
-	}
-
-	public void setAlias(String alias) {
-		this.alias = alias;
 	}
 
 	public int getStatus() {

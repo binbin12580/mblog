@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 相片走廊
+ * 瀑布流
  * @author langhsu
  *
  */
@@ -49,7 +49,7 @@ public class GalleryController extends BaseController {
 	}
 
 	/**
-	 * ajax 请求走廊片段
+	 * ajax 请求片段
 	 * @param pn
 	 * @param model
 	 * @param request

@@ -23,4 +23,6 @@ public interface GroupService {
 	List<Group> findAll();
 	Group getById(int id);
 	Group getByKey(String key);
+	void update(Group group);
+	void delete(int id);
 }

@@ -3,18 +3,15 @@
  */
 package mblog.velocity.directive;
 
-import java.io.IOException;
-
-import javax.servlet.ServletRequest;
-
-import org.springframework.web.bind.ServletRequestUtils;
-
 import mblog.base.context.SpringContextHolder;
-import mblog.base.lang.EnumPrivacy;
 import mblog.core.biz.PostBiz;
 import mblog.velocity.BaseDirective;
 import mblog.velocity.handler.RenderHandler;
 import mtons.modules.pojos.Paging;
+import org.springframework.web.bind.ServletRequestUtils;
+
+import javax.servlet.ServletRequest;
+import java.io.IOException;
 
 /**
  * 根据作者取文章列表
@@ -42,7 +39,7 @@ public class AuthorContentsDirective extends BaseDirective {
         String alias = handler.getStringParameter(1);
         
         Paging paging = wrapPaing(pn);
-		Paging result = postPlanet.pagingByAuthorId(paging, uid, EnumPrivacy.OPEN);
+		Paging result = postPlanet.pagingByAuthorId(paging, uid);
 		
 		handler.put(alias, result);
 		handler.doRender();

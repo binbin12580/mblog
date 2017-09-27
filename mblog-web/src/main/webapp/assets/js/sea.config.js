@@ -10,8 +10,6 @@ seajs.config({
         'authc': 'modules/authc',
         'sidebox': 'modules/sidebox',
         'post': 'modules/post',
-        'upload': 'modules/upload',
-        'video': 'modules/video',
         'comment': 'modules/comment',
         'phiz': 'modules/phiz',
         'avatar': 'modules/avatar',

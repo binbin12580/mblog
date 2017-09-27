@@ -5,7 +5,6 @@ package mblog.web.controller.desk.posts;
 
 import javax.servlet.http.HttpServletRequest;
 
-import mblog.core.persist.service.AttachService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,14 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import mblog.core.biz.PostBiz;
-import mblog.core.data.Group;
 import mblog.core.data.Post;
 import mblog.core.persist.service.GroupService;
 import mblog.web.controller.BaseController;
 import mblog.web.controller.desk.Views;
 import mtons.modules.pojos.Data;
 import mtons.modules.pojos.UserProfile;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * 文章操作
@@ -35,23 +32,18 @@ import org.springframework.web.util.HtmlUtils;
 @RequestMapping("/post")
 public class PostController extends BaseController {
 	@Autowired
-	private PostBiz postPlanet;
+	private PostBiz postBiz;
 	@Autowired
 	private GroupService groupService;
-	@Autowired
-	private AttachService attachService;
 
 	/**
 	 * 发布文章页
-	 * @param groupKey
-	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/new/{groupKey}", method = RequestMethod.GET)
-	public String view(@PathVariable String groupKey, ModelMap model) {
-		Group group = groupService.getByKey(groupKey);
-		model.put("group", group);
-		return routeView(Views.ROUTE_POST_PUBLISH, group.getTemplate());
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	public String view(ModelMap model) {
+		model.put("groups", groupService.findAll());
+		return getView(Views.ROUTE_POST_PUBLISH);
 	}
 
 	/**
@@ -70,7 +62,7 @@ public class PostController extends BaseController {
 			blog.setAlbums(handleAlbums(ablums));
 			blog.setAuthorId(profile.getId());
 
-			postPlanet.post(blog);
+			postBiz.post(blog);
 		}
 		return Views.REDIRECT_HOME_POSTS;
 	}
@@ -86,7 +78,7 @@ public class PostController extends BaseController {
 		if (id != null) {
 			UserProfile up = getSubject().getProfile();
 			try {
-				postPlanet.delete(id, up.getId());
+				postBiz.delete(id, up.getId());
 				data = Data.success("操作成功", Data.NOOP);
 			} catch (Exception e) {
 				data = Data.failure(e.getMessage());
@@ -103,16 +95,15 @@ public class PostController extends BaseController {
 	@RequestMapping("/to_update/{id}")
 	public String toUpdate(@PathVariable Long id, ModelMap model) {
 		UserProfile up = getSubject().getProfile();
-		Post ret = postPlanet.getPost(id);
+		Post ret = postBiz.getPost(id);
 
 		Assert.notNull(ret, "该文章已被删除");
 
 		Assert.isTrue(ret.getAuthorId() == up.getId(), "该文章不属于你");
-		Group group = groupService.getById(ret.getGroup());
 
+		model.put("groups", groupService.findAll());
 		model.put("view", ret);
-		model.put("group", group);
-		return routeView(Views.ROUTE_POST_UPDATE, group.getTemplate());
+		return getView(Views.ROUTE_POST_UPDATE);
 	}
 
 	/**
@@ -120,7 +111,7 @@ public class PostController extends BaseController {
 	 * @author LBB
 	 * @return
 	 */
-	@RequestMapping(value = "/update/{groupKey}", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String subUpdate(Post p, HttpServletRequest request) {
 		UserProfile up = getSubject().getProfile();
 		if (p != null && p.getAuthorId() == up.getId()) {
@@ -129,24 +120,9 @@ public class PostController extends BaseController {
 			String[] ablums = request.getParameterValues("delayImages");
 			p.setAlbums(handleAlbums(ablums));
 			p.setContent(content);
- 			postPlanet.update(p);
+ 			postBiz.update(p);
 		}
 		return Views.REDIRECT_HOME_POSTS;
 	}
-
-	@RequestMapping("/delete_album")
-	public @ResponseBody Data deleteAlbum(Long id) {
-		Data data = Data.failure("操作失败");
-		if (id != null) {
-			try {
-				attachService.delete(id);
-				data = Data.success("操作成功", Data.NOOP);
-			} catch (Exception e) {
-				data = Data.failure(e.getMessage());
-			}
-		}
-		return data;
-	}
-
 
 }

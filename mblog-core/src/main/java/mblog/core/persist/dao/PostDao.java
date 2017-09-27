@@ -12,7 +12,6 @@ package mblog.core.persist.dao;
 import java.util.Collection;
 import java.util.List;
 
-import mblog.base.lang.EnumPrivacy;
 import mblog.core.data.Post;
 import mblog.core.persist.entity.PostPO;
 import mtons.modules.persist.BaseRepository;
@@ -48,7 +47,7 @@ public interface PostDao extends BaseRepository<PostPO> {
 	 * @param userId
 	 * @return
 	 */
-	List<PostPO> pagingByAuthorId(Paging paging, long userId, EnumPrivacy privacy);
+	List<PostPO> pagingByAuthorId(Paging paging, long userId);
 
 	List<PostPO> findLatests(int maxResults, long ignoreUserId);
 	List<PostPO> findHots(int maxResults, long ignoreUserId);

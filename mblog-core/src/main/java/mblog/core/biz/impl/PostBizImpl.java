@@ -9,19 +9,6 @@
 */
 package mblog.core.biz.impl;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
-
-import mblog.base.lang.EnumPrivacy;
 import mblog.base.upload.FileRepo;
 import mblog.core.biz.PostBiz;
 import mblog.core.data.Attach;
@@ -31,6 +18,13 @@ import mblog.core.persist.service.AttachService;
 import mblog.core.persist.service.FeedsService;
 import mblog.core.persist.service.PostService;
 import mtons.modules.pojos.Paging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * @author langhsu
@@ -65,9 +59,9 @@ public class PostBizImpl implements PostBiz {
 	}
 	
 	@Override
-	@Cacheable(value = "postsCaches", key = "'uhome' + #uid + '_' + #privacy.getIndex() + '_' + #paging.getPageNo()")
-	public Paging pagingByAuthorId(Paging paging, long uid, EnumPrivacy privacy) {
-		postService.pagingByAuthorId(paging, uid, privacy);
+	@Cacheable(value = "postsCaches", key = "'uhome' + #uid + '_' + #paging.getPageNo()")
+	public Paging pagingByAuthorId(Paging paging, long uid) {
+		postService.pagingByAuthorId(paging, uid);
 		return paging;
 	}
 
@@ -113,7 +107,6 @@ public class PostBizImpl implements PostBiz {
 		FeedsEvent event = new FeedsEvent("feedsEvent");
 		event.setPostId(id);
 		event.setAuthorId(post.getAuthorId());
-		event.setPrivacy(post.getPrivacy());
 		applicationContext.publishEvent(event);
 	}
 

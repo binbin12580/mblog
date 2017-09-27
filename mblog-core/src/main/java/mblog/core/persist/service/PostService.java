@@ -9,13 +9,12 @@
 */
 package mblog.core.persist.service;
 
+import mblog.core.data.Post;
+import mtons.modules.pojos.Paging;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import mblog.base.lang.EnumPrivacy;
-import mblog.core.data.Post;
-import mtons.modules.pojos.Paging;
 
 /**
  * 文章管理
@@ -39,9 +38,8 @@ public interface PostService {
 	 * 查询个人发布文章
 	 * @param paging
 	 * @param userId
-	 * @param privacy 权限
 	 */
-	void pagingByAuthorId(Paging paging, long userId, EnumPrivacy privacy);
+	void pagingByAuthorId(Paging paging, long userId);
 	
 	/**
 	 * 根据关键字搜索

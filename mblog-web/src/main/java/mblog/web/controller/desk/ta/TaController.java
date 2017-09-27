@@ -15,7 +15,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import mblog.base.lang.EnumPrivacy;
 import mblog.core.biz.PostBiz;
 import mblog.core.data.User;
 import mblog.core.persist.service.UserService;
@@ -39,7 +38,7 @@ public class TaController extends BaseController {
 	public String home(@PathVariable Long uid, Integer pn, ModelMap model) {
 		User user = userService.get(uid);
 		Paging page = wrapPage(pn);
-		page = postBiz.pagingByAuthorId(page, uid, EnumPrivacy.OPEN);
+		page = postBiz.pagingByAuthorId(page, uid);
 		
 		model.put("user", user);
 		model.put("page", page);

@@ -9,7 +9,6 @@
 */
 package mblog.core.persist.entity;
 
-import mblog.base.lang.EnumPrivacy;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
@@ -19,7 +18,6 @@ import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.NumericField;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -105,14 +103,6 @@ public class PostPO implements Serializable {
 	private Date created;
 
 	/**
-	 * 私密
-	 * @see EnumPrivacy
-	 */
-	@Field
-	@NumericField
-	private int privacy;
-
-	/**
 	 * 图片统计
 	 */
 	private int images;
@@ -141,10 +131,6 @@ public class PostPO implements Serializable {
 	 * 文章状态
 	 */
 	private int status;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn
-	private PostAttribute attribute;
 
 	public long getId() {
 		return id;
@@ -282,19 +268,4 @@ public class PostPO implements Serializable {
 		this.images = images;
 	}
 
-	public int getPrivacy() {
-		return privacy;
-	}
-
-	public void setPrivacy(int privacy) {
-		this.privacy = privacy;
-	}
-
-	public PostAttribute getAttribute() {
-		return attribute;
-	}
-
-	public void setAttribute(PostAttribute attribute) {
-		this.attribute = attribute;
-	}
 }

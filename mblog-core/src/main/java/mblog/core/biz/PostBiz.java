@@ -9,12 +9,11 @@
 */
 package mblog.core.biz;
 
+import mblog.core.data.Post;
+import mtons.modules.pojos.Paging;
+
 import java.util.Collection;
 import java.util.List;
-
-import mtons.modules.pojos.Paging;
-import mblog.base.lang.EnumPrivacy;
-import mblog.core.data.Post;
 
 /**
  * 文章业务层, 带缓存策略
@@ -42,7 +41,7 @@ public interface PostBiz {
 	 * @param uid
 	 * @return
 	 */
-	Paging pagingByAuthorId(Paging paging, long uid, EnumPrivacy privacy);
+	Paging pagingByAuthorId(Paging paging, long uid);
 	
 	/**
 	 * 走廊查询 - (只返回一张图片)

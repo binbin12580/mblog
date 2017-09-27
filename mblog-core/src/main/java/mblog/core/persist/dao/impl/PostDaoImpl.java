@@ -9,10 +9,15 @@
 */
 package mblog.core.persist.dao.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import mblog.base.lang.Consts;
+import mblog.core.data.Post;
+import mblog.core.persist.dao.PostDao;
+import mblog.core.persist.entity.PostPO;
+import mblog.core.persist.utils.BeanMapUtils;
+import mtons.modules.annotation.Repository;
+import mtons.modules.lang.Const;
+import mtons.modules.persist.impl.BaseRepositoryImpl;
+import mtons.modules.pojos.Paging;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.search.Sort;
@@ -32,16 +37,9 @@ import org.hibernate.search.SearchFactory;
 import org.hibernate.search.query.dsl.MustJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
-import mblog.base.lang.Consts;
-import mblog.base.lang.EnumPrivacy;
-import mblog.core.data.Post;
-import mblog.core.persist.dao.PostDao;
-import mblog.core.persist.entity.PostPO;
-import mblog.core.persist.utils.BeanMapUtils;
-import mtons.modules.annotation.Repository;
-import mtons.modules.lang.Const;
-import mtons.modules.persist.impl.BaseRepositoryImpl;
-import mtons.modules.pojos.Paging;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author langhsu
@@ -63,7 +61,6 @@ public class PostDaoImpl extends BaseRepositoryImpl<PostPO> implements PostDao {
 			q.desc("views");
 		}
 
-		q.add(Restrictions.eq("privacy", EnumPrivacy.OPEN.getIndex()));
 		q.desc("featured");
 		q.desc("created");
 		return q.list();
@@ -90,14 +87,10 @@ public class PostDaoImpl extends BaseRepositoryImpl<PostPO> implements PostDao {
 	}
 
 	@Override
-	public List<PostPO> pagingByAuthorId(Paging paging, long userId, EnumPrivacy privacy) {
+	public List<PostPO> pagingByAuthorId(Paging paging, long userId) {
 		PagingQuery<PostPO> q = pagingQuery(paging);
 		if (userId > 0) {
 			q.add(Restrictions.eq("authorId", userId));
-		}
-
-		if (privacy != null && privacy != EnumPrivacy.ALL) {
-			q.add(Restrictions.eq("privacy", privacy.getIndex()));
 		}
 		q.desc("created");
 		return q.list();
@@ -109,7 +102,6 @@ public class PostDaoImpl extends BaseRepositoryImpl<PostPO> implements PostDao {
 		Criteria c = createCriteria();
 		
 		c.add(Restrictions.neOrIsNotNull("title", ""));
-		c.add(Restrictions.eq("privacy", EnumPrivacy.OPEN.getIndex()));
 
 		if (ignoreUserId > 0) {
 			c.add(Restrictions.ne("authorId", ignoreUserId));
@@ -125,7 +117,6 @@ public class PostDaoImpl extends BaseRepositoryImpl<PostPO> implements PostDao {
 		Criteria c = createCriteria();
 		
 		c.add(Restrictions.neOrIsNotNull("title", ""));
-		c.add(Restrictions.eq("privacy", EnumPrivacy.OPEN.getIndex()));
 //		if (ignoreUserId > 0) {
 //			q.add(Restrictions.ne("author.id", ignoreUserId));
 //		}
@@ -161,10 +152,6 @@ public class PostDaoImpl extends BaseRepositoryImpl<PostPO> implements PostDao {
 		org.apache.lucene.search.Query luceneQuery  = null;
 
 		MustJunction term = qb.bool().must(qb.keyword().onFields("title","summary","tags").matching(q).createQuery());
-
-		term.must(qb.keyword()
-				.onField("privacy")
-				.matching(EnumPrivacy.OPEN.getIndex()).createQuery());
 
 		luceneQuery = term.createQuery();
 
@@ -210,10 +197,6 @@ public class PostDaoImpl extends BaseRepositoryImpl<PostPO> implements PostDao {
 		org.apache.lucene.search.Query luceneQuery  = null;
 
 		MustJunction term = qb.bool().must(qb.phrase().onField("tags").sentence(tag).createQuery());
-
-		term.must(qb.keyword()
-				.onField("privacy")
-				.matching(EnumPrivacy.OPEN.getIndex()).createQuery());
 
 		luceneQuery = term.createQuery();
 

@@ -9,17 +9,20 @@
 */
 package mblog.core.persist.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import mblog.base.lang.Consts;
 import mblog.base.utils.PreviewTextUtils;
+import mblog.core.data.Attach;
+import mblog.core.data.Post;
+import mblog.core.data.Tag;
+import mblog.core.data.User;
+import mblog.core.persist.dao.PostAttributeDao;
+import mblog.core.persist.dao.PostDao;
+import mblog.core.persist.entity.PostAttribute;
+import mblog.core.persist.entity.PostPO;
+import mblog.core.persist.service.*;
+import mblog.core.persist.utils.BeanMapUtils;
+import mtons.modules.lang.EntityStatus;
+import mtons.modules.pojos.Paging;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,24 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import mblog.base.lang.Consts;
-import mblog.base.lang.EnumPrivacy;
-import mblog.core.data.Attach;
-import mblog.core.data.Post;
-import mblog.core.data.Tag;
-import mblog.core.data.User;
-import mblog.core.persist.dao.PostDao;
-import mblog.core.persist.entity.PostAttribute;
-import mblog.core.persist.entity.PostPO;
-import mblog.core.persist.service.AttachService;
-import mblog.core.persist.service.FavorService;
-import mblog.core.persist.service.PostService;
-import mblog.core.persist.service.TagService;
-import mblog.core.persist.service.UserEventService;
-import mblog.core.persist.service.UserService;
-import mblog.core.persist.utils.BeanMapUtils;
-import mtons.modules.lang.EntityStatus;
-import mtons.modules.pojos.Paging;
+import java.util.*;
 
 /**
  * @author langhsu
@@ -64,6 +50,8 @@ public class PostServiceImpl implements PostService {
 	private UserEventService userEventService;
 	@Autowired
 	private FavorService favorService;
+	@Autowired
+	private PostAttributeDao postAttributeDao;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -81,8 +69,8 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public void pagingByAuthorId(Paging paging, long userId, EnumPrivacy privacy) {
-		List<PostPO> list = postDao.pagingByAuthorId(paging, userId, privacy);
+	public void pagingByAuthorId(Paging paging, long userId) {
+		List<PostPO> list = postDao.pagingByAuthorId(paging, userId);
 		paging.setResults(toPosts(list, true));
 	}
 	
@@ -205,7 +193,7 @@ public class PostServiceImpl implements PostService {
 	public long post(Post post) {
 		PostPO po = new PostPO();
 
-		BeanUtils.copyProperties(post, po);
+		BeanUtils.copyProperties(post, po, "editor", "content", "markdown");
 
 		po.setCreated(new Date());
 		po.setStatus(EntityStatus.ENABLED);
@@ -217,14 +205,12 @@ public class PostServiceImpl implements PostService {
 			po.setSummary(post.getSummary());
 		}
 
-		if (post.getAttribute() != null) {
-			// 保存扩展
-			PostAttribute extend = post.getAttribute();
-			extend.setPost(po);
-			po.setAttribute(extend);
-		}
-
 		postDao.save(po);
+
+		PostAttribute attr = new PostAttribute();
+		attr.setContent(post.getContent());
+		attr.setId(po.getId());
+		postAttributeDao.submit(attr);
 		
 		// 处理相册
 		if (post.getAlbums() != null) {
@@ -255,6 +241,11 @@ public class PostServiceImpl implements PostService {
 
 			d.setAuthor(userService.get(d.getAuthorId()));
 			d.setAlbums(attachService.findByTarget(d.getId()));
+
+			PostAttribute attr = postAttributeDao.get(po.getId());
+			if (attr != null) {
+				d.setContent(attr.getContent());
+			}
 		}
 		return d;
 	}
@@ -270,6 +261,7 @@ public class PostServiceImpl implements PostService {
 
 		if (po != null) {
 			po.setTitle(p.getTitle());//标题
+			po.setGroup(p.getGroup());
 
 			// 处理摘要
 			if (StringUtils.isBlank(p.getSummary())) {
@@ -278,9 +270,7 @@ public class PostServiceImpl implements PostService {
 				po.setSummary(p.getSummary());
 			}
 
-			po.setContent(p.getContent());//内容
 			po.setTags(p.getTags());//标签
-			po.setPrivacy(p.getPrivacy());
 
 			// 处理相册
 			if (p.getAlbums() != null && !p.getAlbums().isEmpty()) {
@@ -290,18 +280,10 @@ public class PostServiceImpl implements PostService {
 			}
 
 			// 保存扩展
-			if (p.getAttribute() != null) {
-				PostAttribute extend = po.getAttribute();
-
-				if (extend != null) {
-					extend.setVideoUrl(p.getAttribute().getVideoUrl());
-					extend.setVideoBody(p.getAttribute().getVideoBody());
-				} else {
-					extend = p.getAttribute();
-					extend.setPost(po);
-					po.setAttribute(extend);
-				}
-			}
+			PostAttribute attr = new PostAttribute();
+			attr.setContent(p.getContent());
+			attr.setId(po.getId());
+			postAttributeDao.submit(attr);
 		}
 	}
 

@@ -27,7 +27,6 @@ import mblog.web.controller.BaseController;
  *
  */
 @Controller
-@RequestMapping("/browse")
 public class SearchController extends BaseController {
 	@Autowired
 	private PostService postService;
