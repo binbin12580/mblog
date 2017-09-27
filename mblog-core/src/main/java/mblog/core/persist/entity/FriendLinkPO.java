@@ -3,6 +3,7 @@ package mblog.core.persist.entity;
 import javax.persistence.*;
 
 /**
+ * 友情链接
  * @author Beldon
  */
 @Entity

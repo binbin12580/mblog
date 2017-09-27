@@ -20,6 +20,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
+ * 模块/内容分组
  * @author langhsu
  *
  */
@@ -30,16 +31,31 @@ public class GroupPO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
+	/**
+	 * 名称
+	 */
 	private String name;
-	
+
+	/**
+	 * 别名或说明
+	 */
 	private String alias;
-	
+
+	/**
+	 * 唯一关键字
+	 */
 	@Column(name = "key_", unique = true)
 	private String key;
-	
+
+	/**
+	 * 图标
+	 */
 	private String icon;
-	
+
+	/**
+	 * 使用模板
+	 */
 	@Column(name = "template", length = 16)
 	private String template;
 

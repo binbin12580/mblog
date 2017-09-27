@@ -29,13 +29,19 @@ public class FollowPO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	/**
+	 * 所属用户Id
+	 */
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
-	private UserPO user; // 所属用户Id
+	private UserPO user;
 
+	/**
+	 * 关注用户Id
+	 */
 	@ManyToOne
 	@JoinColumn(name = "follow_id", nullable = false)
-	private UserPO follow; // 关注用户Id
+	private UserPO follow;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created;

@@ -20,6 +20,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
+ * 菜单
  * @author langhsu
  *
  */
@@ -30,14 +31,27 @@ public class MenuPO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
+	/**
+	 * 名称
+	 */
 	@Column(length = 18)
 	private String name;
+
+	/**
+	 * 地址
+	 */
 	private String url;
-	
+
+	/**
+	 * 打开窗口
+	 */
 	@Column(length = 18)
 	private String target;
-	
+
+	/**
+	 * 排序值
+	 */
 	private int weight;
 
 	private int status;

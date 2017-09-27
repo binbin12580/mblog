@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
+ * 标签
  * @author langhsu
  * 
  */

@@ -17,7 +17,7 @@ import mblog.base.lang.EnumPrivacy;
 import mblog.core.data.Post;
 
 /**
- * 文章保卫层, 带缓存策略
+ * 文章业务层, 带缓存策略
  *
  * - 如果不使用缓存, 则直接调用Service
  * 

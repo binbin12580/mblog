@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
+ * 附件
  * @author langhsu
  * 
  */
@@ -26,16 +27,31 @@ public class AttachPO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
+	/**
+	 * 存储方式: 本地/网络
+	 */
 	private int store; // 0: local, 1: network;
 
+	/**
+	 * 所属内容Id
+	 */
 	@Column(name = "to_id")
 	private long toId;
 
+	/**
+	 * 原图地址
+	 */
 	private String original;
 
+	/**
+	 * 等比预览图
+	 */
 	private String preview;
 
+	/**
+	 * 快照 225x140
+	 */
 	private String screenshot;
 
 	private int width;

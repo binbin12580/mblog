@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
+ * 评论
  * @author langhsu
  *
  */
@@ -22,12 +23,21 @@ public class CommentPO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
+	/**
+	 * 所属内容ID
+	 */
 	@Column(name = "to_id")
 	private long toId;
-	
+
+	/**
+	 * 父评论ID
+	 */
 	private long pid;
-	
+
+	/**
+	 * 评论内容
+	 */
 	@Column(name = "content")
 	private String content;
 	

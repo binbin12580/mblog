@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 内容表
  * @author langhsu
  * 
  */
@@ -39,38 +40,64 @@ public class PostPO implements Serializable {
 	@DocumentId
 	private long id;
 
+	/**
+	 * 分组/模块ID
+	 */
 	@Field
 	@NumericField
 	@Column(name = "group_", length = 5)
 	private int group;
 
+	/**
+	 * 标题
+	 */
 	@Field
 	@Column(name = "title", length = 64)
-	private String title; // 标题
-	
-	@Field
-	private String summary; // 摘要
+	private String title;
 
+	/**
+	 * 摘要
+	 */
 	@Field
-	private String tags; // 标签
+	private String summary;
+
+	/**
+	 * 标签, 多个逗号隔开
+	 */
+	@Field
+	private String tags;
 
 	@Field
 	@NumericField
 	@Column(name = "author_id")
 	private long authorId; // 作者
-	
+
+	/**
+	 * 编辑器 (ueditor/markdown)
+	 */
 	private String editor; // 编辑器
-	
+
+	/**
+	 * 内容
+	 */
 	@Lob
 	@Basic(fetch = FetchType.LAZY) 
 	@Type(type="text")
 	private String content; // 内容
-	
+
+	/**
+	 * markdown
+	 * - 如果是markdown, 保存编译前内容
+	 */
     @Lob
 	@Basic(fetch = FetchType.LAZY) 
 	@Type(type="text")
 	private String markdown; // markdown 内容
-	
+
+	/**
+	 * 文章最后AttachId
+	 * - 冗余字段
+	 */
 	@Column(name = "last_image_id")
 	private long lastImageId;
 
@@ -78,19 +105,42 @@ public class PostPO implements Serializable {
 	private Date created;
 
 	/**
+	 * 私密
 	 * @see EnumPrivacy
 	 */
 	@Field
 	@NumericField
-	private int privacy;  // 私密
+	private int privacy;
 
-	private int images; // 图片统计
-	private int featured; // 推荐状态
-	private int favors; // 喜欢数
-	private int comments; // 评论数
-	private int views; // 阅读数
+	/**
+	 * 图片统计
+	 */
+	private int images;
 
-	private int status; // 文章状态
+	/**
+	 * 推荐状态
+	 */
+	private int featured;
+
+	/**
+	 * 喜欢数
+	 */
+	private int favors;
+
+	/**
+	 * 评论数
+	 */
+	private int comments;
+
+	/**
+	 * 阅读数
+	 */
+	private int views;
+
+	/**
+	 * 文章状态
+	 */
+	private int status;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
