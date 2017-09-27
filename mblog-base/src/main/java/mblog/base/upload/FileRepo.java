@@ -99,4 +99,5 @@ public interface FileRepo {
 	 * @param storePath
 	 */
 	void deleteFile(String storePath);
+
 }

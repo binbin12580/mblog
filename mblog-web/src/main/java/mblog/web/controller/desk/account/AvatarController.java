@@ -11,9 +11,7 @@ package mblog.web.controller.desk.account;
 
 import java.io.File;
 
-import mblog.base.utils.ImageHandleUtils;
-import mblog.base.utils.ImageUtils;
-import mblog.core.persist.service.ConfigService;
+import mblog.base.upload.ImageHandleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,7 +26,6 @@ import mblog.core.persist.service.UserService;
 import mblog.web.controller.BaseController;
 import mblog.web.controller.desk.Views;
 import mtons.modules.pojos.Data;
-import mtons.modules.utils.GMagickUtils;
 
 /**
  * @author langhsu

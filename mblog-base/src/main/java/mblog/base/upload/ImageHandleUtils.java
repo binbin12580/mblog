@@ -1,6 +1,7 @@
-package mblog.base.utils;
+package mblog.base.upload;
 
 import mblog.base.context.AppContext;
+import mblog.base.utils.ImageUtils;
 import mtons.modules.utils.GMagickUtils;
 import net.coobird.thumbnailator.Thumbnails;
 import org.im4java.core.IM4JavaException;
@@ -12,11 +13,19 @@ import mblog.base.context.SpringContextHolder;
  * @author Beldon 2015/10/24
  */
 public class ImageHandleUtils {
+    private static String CONFIG_KEY = "image_processor";
 
     private static AppContext appContext;
 
+    /**
+     * 图片压缩处理方式
+     */
+    private static String PROCESSOR = "Thumbnailator";
+
     static {
         appContext = SpringContextHolder.getBean(AppContext.class);
+        if (appContext.getConfig() != null && appContext.getConfig().get(CONFIG_KEY) != null)
+            PROCESSOR = appContext.getConfig().get(CONFIG_KEY);
     }
 
     /**
@@ -29,8 +38,7 @@ public class ImageHandleUtils {
      * @throws IOException
      */
     public static boolean scaleImageByWidth(String ori, String dest, int maxSize) throws IOException, IM4JavaException, InterruptedException {
-        String imageProcessor = appContext.getConfig().get("image_processor");
-        if (imageProcessor != null && "Thumbnailator".equals(imageProcessor)) {
+        if ("Thumbnailator".equals(PROCESSOR)) {
             ImageUtils.scaleImageByWidth(ori, dest, maxSize);
         }else {
             GMagickUtils.scaleImageByWidth(ori, dest, maxSize);
@@ -39,8 +47,7 @@ public class ImageHandleUtils {
     }
 
     public static void scale(String ori, String dest, int width, int height) throws IOException, IM4JavaException, InterruptedException {
-        String imageProcessor = appContext.getConfig().get("image_processor");
-        if (imageProcessor != null && "Thumbnailator".equals(imageProcessor)) {
+        if ("Thumbnailator".equals(PROCESSOR)) {
             ImageUtils.scale(ori, dest, width, height);
         } else{
             GMagickUtils.scale(ori, dest, width,height);
@@ -58,8 +65,7 @@ public class ImageHandleUtils {
      * @throws IOException
      */
     public static boolean scaleImage(String ori, String dest, int maxSize) throws IOException, IM4JavaException, InterruptedException {
-        String imageProcessor = appContext.getConfig().get("image_processor");
-        if (imageProcessor != null && "Thumbnailator".equals(imageProcessor)) {
+        if ("Thumbnailator".equals(PROCESSOR)) {
             ImageUtils.scaleImage(ori, dest, maxSize);
         }else {
             GMagickUtils.scaleImage(ori, dest, maxSize);
@@ -83,8 +89,7 @@ public class ImageHandleUtils {
      * @throws InterruptedException 中断异常
      */
     public static boolean truncateImage(String ori, String dest, int x, int y, int width, int height) throws IOException, InterruptedException, IM4JavaException {
-        String imageProcessor = appContext.getConfig().get("image_processor");
-        if (imageProcessor != null && "Thumbnailator".equals(imageProcessor)) {
+        if ("Thumbnailator".equals(PROCESSOR)) {
             return ImageUtils.truncateImage(ori, dest, x, y, width, height);
         }else {
             return GMagickUtils.truncateImage(ori, dest, x, y, width, height);
@@ -92,8 +97,7 @@ public class ImageHandleUtils {
     }
 
     public static boolean truncateImage(String ori, String dest, int x, int y, int size) throws IOException, InterruptedException, IM4JavaException {
-        String imageProcessor = appContext.getConfig().get("image_processor");
-        if (imageProcessor != null && "Thumbnailator".equals(imageProcessor)) {
+        if ("Thumbnailator".equals(PROCESSOR)) {
             return ImageUtils.truncateImage(ori, dest, x, y, size);
         }else {
             return GMagickUtils.truncateImage(ori, dest, x, y, size);
