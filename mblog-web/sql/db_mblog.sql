@@ -11,7 +11,7 @@
  Target Server Version : 50712
  File Encoding         : utf-8
 
- Date: 09/27/2017 17:37:58 PM
+ Date: 09/29/2017 13:02:53 PM
 */
 
 SET NAMES utf8;
@@ -32,14 +32,7 @@ CREATE TABLE `mto_attachs` (
   `to_id` bigint(20) DEFAULT NULL,
   `width` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `mto_attachs`
--- ----------------------------
-BEGIN;
-INSERT INTO `mto_attachs` VALUES ('1', '0', '/store/orig/2017/0906/06104745wjj8.jpg', '/store/thumbs/2017/0906/06104745itbj.jpg', '/store/screenshot/2017/0906/06104745k8pa.jpg', '0', '0', '1', '0'), ('2', '0', '/store/orig/2017/0906/06104745szg7.png', '/store/thumbs/2017/0906/0610474538xy.png', '/store/screenshot/2017/0906/06104746k4ij.png', '0', '0', '1', '0'), ('3', '0', '/store/orig/2017/0906/06104746qmkg.jpg', '/store/thumbs/2017/0906/061047462008.jpg', '/store/screenshot/2017/0906/06104746v3yn.jpg', '0', '0', '1', '0');
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `mto_auth_menu`
@@ -63,7 +56,7 @@ CREATE TABLE `mto_auth_menu` (
 --  Records of `mto_auth_menu`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mto_auth_menu` VALUES ('1', '根目录', '', '', '1', '/', null, null), ('2', '后台管理', null, 'admin', '1', 'admin', '1', null), ('3', '我的主页', null, '', '1', '', '1', null), ('4', '文章管理', null, 'posts:view', '2', 'admin/posts/list', '2', 'fa fa-clone icon-xlarge'), ('5', '文章修改', null, 'posts:edit', '1', null, '4', null), ('6', '用户管理', null, 'users:view', '3', 'admin/users/list', '2', 'fa fa-user icon-xlarge'), ('7', '禁用用户', null, 'users:edit', '1', '', '6', null), ('8', '修改密码', null, 'users:edit', '1', null, '6', null), ('9', '评论管理', null, 'comments:view', '4', 'admin/comments/list', '2', 'fa fa-comments-o icon-xlarge'), ('10', '删除评论', null, 'comments:edit', '1', null, '9', null), ('11', '标签管理', null, 'tags:view', '5', 'admin/tags/list', '2', 'fa fa-tags icon-xlarge'), ('12', '删除标签', null, 'tags:edit', '1', null, '11', null), ('13', '修改标签', null, 'tags:edit', '2', null, '11', null), ('14', '推荐标签', null, 'tags:edit', '3', null, '11', null), ('15', '系统配置', null, 'config:view', '6', 'admin/config/', '2', 'fa fa-sun-o icon-xlarge'), ('16', '修改配置', null, 'config:edit', '1', null, '15', null), ('17', '仪表盘', null, 'admin', '1', 'admin', '2', 'fa fa-dashboard icon-xlarge'), ('18', '角色管理', null, 'roles:view', '7', 'admin/roles/list', '2', 'fa fa fa-registered icon-xlarge'), ('19', '菜单管理', null, 'authMenus:view', '8', 'admin/authMenus/list', '2', 'fa fa-reorder icon-xlarge'), ('21', '菜单修改', null, 'authMenus:edit', '0', '', '19', null), ('22', '角色修改', null, 'roles:edit', '0', null, '18', null), ('23', '文章查看', null, 'posts:view', '1', '', '4', null), ('24', '用户查看', null, 'users:view', '1', '', '6', null), ('25', '评论查看', null, 'comments:view', '1', '', '9', null), ('26', '标签查看', null, 'tags:view', '1', '', '11', null), ('27', '角色查看', null, 'roles:view', '1', '', '18', null), ('28', '菜单查看', null, 'authMenus:view', '1', '', '19', null), ('29', '友情链接', null, 'friendLink:view', '8', 'admin/friendLink/list', '2', 'fa fa-link'), ('30', '友情链接修改', null, 'friendLink:edit', '0', '', '29', null), ('31', '友情链接查看', null, 'friendLink:view', '0', '', '29', null), ('32', '栏目管理', null, 'group', '3', 'admin/group/list', '2', 'fa fa-link');
+INSERT INTO `mto_auth_menu` VALUES ('1', '根目录', '', '', '1', '/', null, null), ('2', '后台管理', null, 'admin', '1', 'admin', '1', null), ('3', '我的主页', null, '', '1', '', '1', null), ('4', '文章管理', null, 'posts:view', '2', 'admin/posts/list', '2', 'fa fa-clone icon-xlarge'), ('5', '文章修改', null, 'posts:edit', '1', null, '4', null), ('6', '用户管理', null, 'users:view', '3', 'admin/users/list', '2', 'fa fa-user icon-xlarge'), ('7', '禁用用户', null, 'users:edit', '1', '', '6', null), ('8', '修改密码', null, 'users:edit', '1', null, '6', null), ('9', '评论管理', null, 'comments:view', '4', 'admin/comments/list', '2', 'fa fa-comments-o icon-xlarge'), ('10', '删除评论', null, 'comments:edit', '1', null, '9', null), ('11', '栏目管理', null, 'group:view', '5', 'admin/group/list', '2', 'fa fa-tags icon-xlarge'), ('12', '删除栏目', null, 'group:edit', '1', null, '11', null), ('13', '修改栏目', null, 'group:edit', '2', null, '11', null), ('15', '系统配置', null, 'config:view', '6', 'admin/config/', '2', 'fa fa-sun-o icon-xlarge'), ('16', '修改配置', null, 'config:edit', '1', null, '15', null), ('17', '仪表盘', null, 'admin', '1', 'admin', '2', 'fa fa-dashboard icon-xlarge'), ('18', '角色管理', null, 'roles:view', '7', 'admin/roles/list', '2', 'fa fa fa-registered icon-xlarge'), ('19', '菜单管理', null, 'authMenus:view', '8', 'admin/authMenus/list', '2', 'fa fa-reorder icon-xlarge'), ('21', '菜单修改', null, 'authMenus:edit', '0', '', '19', null), ('22', '角色修改', null, 'roles:edit', '0', null, '18', null), ('23', '文章查看', null, 'posts:view', '1', '', '4', null), ('24', '用户查看', null, 'users:view', '1', '', '6', null), ('25', '评论查看', null, 'comments:view', '1', '', '9', null), ('26', '标签查看', null, 'tags:view', '1', '', '11', null), ('27', '角色查看', null, 'roles:view', '1', '', '18', null), ('28', '菜单查看', null, 'authMenus:view', '1', '', '19', null), ('29', '友情链接', null, 'friendLink:view', '8', 'admin/friendLink/list', '2', 'fa fa-link'), ('30', '友情链接修改', null, 'friendLink:edit', '0', '', '29', null), ('31', '友情链接查看', null, 'friendLink:view', '0', '', '29', null);
 COMMIT;
 
 -- ----------------------------
@@ -92,13 +85,13 @@ CREATE TABLE `mto_config` (
   `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK_99vo6d7ci4wlxruo3gd0q2jq8` (`key_`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `mto_config`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mto_config` VALUES ('1', 'site_name', '0', 'Mtons'), ('2', 'site_welcomes', '0', 'Mtons, 轻松分享你的兴趣'), ('3', 'site_domain', '0', 'http://mtons.com'), ('4', 'site_keywords', '0', 'mtons,博客,社区,摄影,旅游,艺术,娱乐'), ('5', 'site_description', '0', 'Mtons, 轻松分享你的兴趣. 便捷的文字、图片发布,扁平化的响应式设计,美观、大气,是您记录生活的最佳选择'), ('6', 'site_editor', '1', 'ueditor');
+INSERT INTO `mto_config` VALUES ('1', 'site_name', '0', 'Mtons'), ('2', 'site_welcomes', '0', 'Mtons, 轻松分享你的兴趣'), ('3', 'site_domain', '0', 'http://mtons.com'), ('4', 'site_keywords', '0', 'mtons,博客,社区,摄影,旅游,艺术,娱乐'), ('5', 'site_description', '0', 'Mtons, 轻松分享你的兴趣. 便捷的文字、图片发布,扁平化的响应式设计,美观、大气,是您记录生活的最佳选择'), ('6', 'site_editor', '1', 'ueditor'), ('7', 'site_metas', '0', ''), ('8', 'site_copyright', '0', ''), ('9', 'site_icp', '0', ''), ('10', 'site_advs_right', '0', '');
 COMMIT;
 
 -- ----------------------------
@@ -125,14 +118,7 @@ CREATE TABLE `mto_feeds` (
   `post_id` bigint(20) DEFAULT NULL,
   `type` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `mto_feeds`
--- ----------------------------
-BEGIN;
-INSERT INTO `mto_feeds` VALUES ('1', '1', '2017-09-06 10:47:47', '1', '1', '1');
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `mto_follows`
@@ -162,7 +148,7 @@ CREATE TABLE `mto_friend_link` (
   `sort` int(11) NOT NULL,
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `mto_group`
@@ -172,18 +158,16 @@ CREATE TABLE `mto_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `key_` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `alias` varchar(255) DEFAULT NULL,
-  `icon` varchar(255) DEFAULT NULL,
-  `template` varchar(16) DEFAULT NULL,
   `status` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_2s863lts1h6m7c30152262cvj` (`key_`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `mto_group`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mto_group` VALUES ('1', 'blog', '文章1', '写文章', 'fa fa-pencil-square', 'blog', '0'), ('5', 'tech', '科技', null, null, null, '0');
+INSERT INTO `mto_group` VALUES ('1', 'blog', '博文', '0'), ('2', 'web', 'WEB', '0'), ('3', 'tutorial', '教程', '0');
 COMMIT;
 
 -- ----------------------------
@@ -207,19 +191,12 @@ DROP TABLE IF EXISTS `mto_menu`;
 CREATE TABLE `mto_menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(18) DEFAULT NULL,
+  `status` int(11) NOT NULL,
   `target` varchar(18) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   `weight` int(11) NOT NULL,
-  `status` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `mto_menu`
--- ----------------------------
-BEGIN;
-INSERT INTO `mto_menu` VALUES ('1', '文章', '_self', 'g/blog', '0', '0'), ('4', '发现', '_self', 'tags', '0', '0'), ('5', '走廊', '_self', 'gallery?g=2', '0', '0');
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `mto_notify`
@@ -244,7 +221,6 @@ CREATE TABLE `mto_posts` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `author_id` bigint(20) DEFAULT NULL,
   `comments` int(11) NOT NULL,
-  `content` longtext,
   `created` datetime DEFAULT NULL,
   `editor` varchar(255) DEFAULT NULL,
   `favors` int(11) NOT NULL,
@@ -252,22 +228,13 @@ CREATE TABLE `mto_posts` (
   `group_` int(11) DEFAULT NULL,
   `images` int(11) NOT NULL,
   `last_image_id` bigint(20) DEFAULT NULL,
-  `markdown` longtext,
-  `privacy` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   `summary` varchar(255) DEFAULT NULL,
   `tags` varchar(255) DEFAULT NULL,
   `title` varchar(64) DEFAULT NULL,
   `views` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `mto_posts`
--- ----------------------------
-BEGIN;
-INSERT INTO `mto_posts` VALUES ('1', '1', '0', '<p>式神都是多</p>', '2017-09-06 10:47:46', 'ueditor', '0', '0', '5', '3', '3', null, '0', '0', '式神都是多', '', '测试', '1');
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `mto_posts_attribute`
@@ -275,18 +242,9 @@ COMMIT;
 DROP TABLE IF EXISTS `mto_posts_attribute`;
 CREATE TABLE `mto_posts_attribute` (
   `id` bigint(20) NOT NULL,
-  `video_body` varchar(255) DEFAULT NULL,
-  `video_url` varchar(255) DEFAULT NULL,
   `content` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Records of `mto_posts_attribute`
--- ----------------------------
-BEGIN;
-INSERT INTO `mto_posts_attribute` VALUES ('1', null, null, '<p>式神都是多</p>');
-COMMIT;
 
 -- ----------------------------
 --  Table structure for `mto_role`
@@ -320,29 +278,7 @@ CREATE TABLE `mto_role_menu` (
 --  Records of `mto_role_menu`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mto_role_menu` VALUES ('1', '1'), ('1', '2'), ('1', '4'), ('1', '5'), ('1', '23'), ('1', '6'), ('1', '7'), ('1', '8'), ('1', '24'), ('1', '9'), ('1', '10'), ('1', '25'), ('1', '11'), ('1', '12'), ('1', '13'), ('1', '14'), ('1', '26'), ('1', '15'), ('1', '16'), ('1', '17'), ('1', '18'), ('1', '22'), ('1', '27'), ('1', '19'), ('1', '21'), ('1', '28'), ('1', '29'), ('1', '30'), ('1', '31'), ('1', '32'), ('1', '3');
-COMMIT;
-
--- ----------------------------
---  Table structure for `mto_tags`
--- ----------------------------
-DROP TABLE IF EXISTS `mto_tags`;
-CREATE TABLE `mto_tags` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `featured` int(11) NOT NULL,
-  `hots` int(11) NOT NULL,
-  `last_post_id` bigint(20) DEFAULT NULL,
-  `posts` int(11) NOT NULL,
-  `locked` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- ----------------------------
---  Records of `mto_tags`
--- ----------------------------
-BEGIN;
-INSERT INTO `mto_tags` VALUES ('2', '电影', '1', '0', '0', '0', '0'), ('3', '宠物', '1', '0', '0', '0', '0'), ('4', '语录', '1', '0', '0', '0', '0'), ('5', '美女', '1', '1', '3', '2', '0'), ('6', '旅行', '1', '0', '0', '0', '0'), ('7', '北京', '1', '0', '0', '0', '0'), ('8', '艺术', '1', '0', '0', '0', '0'), ('9', '美图', '1', '0', '0', '0', '0'), ('10', '模特', '1', '0', '0', '0', '0');
+INSERT INTO `mto_role_menu` VALUES ('1', '1'), ('1', '2'), ('1', '4'), ('1', '5'), ('1', '23'), ('1', '6'), ('1', '7'), ('1', '8'), ('1', '24'), ('1', '9'), ('1', '10'), ('1', '25'), ('1', '11'), ('1', '12'), ('1', '13'), ('1', '14'), ('1', '26'), ('1', '15'), ('1', '16'), ('1', '17'), ('1', '18'), ('1', '22'), ('1', '27'), ('1', '19'), ('1', '21'), ('1', '28'), ('1', '29'), ('1', '30'), ('1', '31'), ('1', '3');
 COMMIT;
 
 -- ----------------------------
@@ -398,7 +334,7 @@ CREATE TABLE `mto_users` (
 --  Records of `mto_users`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mto_users` VALUES ('1', '2015-08-06 17:52:41', 'admin@mtons.com', '2017-09-27 17:25:09', null, '3TGCQF25BLHU9R7IQUITN0FCC5', '0', 'admin', '小豆丁', '/assets/images/ava/default.png', '2015-07-26 11:08:36', '0', '1', '0', '1', '0', '0', '0', '0', '1', null);
+INSERT INTO `mto_users` VALUES ('1', '2015-08-06 17:52:41', 'admin@mtons.com', '2017-09-29 13:01:10', null, '3TGCQF25BLHU9R7IQUITN0FCC5', '0', 'admin', '小豆丁', '/assets/images/ava/default.png', '2015-07-26 11:08:36', '0', '1', '0', '1', '0', '0', '0', '0', '4', null);
 COMMIT;
 
 -- ----------------------------

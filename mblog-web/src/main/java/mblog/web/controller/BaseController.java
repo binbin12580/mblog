@@ -19,11 +19,16 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import mblog.core.data.Post;
 import mblog.web.formatter.StringEscapeEditor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.Gson;
@@ -150,45 +155,85 @@ public class BaseController {
 		}
 	}
 	
-	protected List<Attach> handleAlbums(String[] albums) {
-		if (albums == null || albums.length == 0) {
-			return Collections.emptyList();
-		}
+//	protected List<Attach> handleAlbums(String[] albums) {
+//		if (albums == null || albums.length == 0) {
+//			return Collections.emptyList();
+//		}
+//
+//		List<Attach> rets = new ArrayList<>();
+//
+//		for (String album : albums) {
+//			if (StringUtils.isBlank(album)) {
+//				continue;
+//			}
+//
+//			String root = fileRepoFactory.select().getRoot();
+//			File temp = new File(root + album);
+//			Attach item = new Attach();
+//			try {
+//				// 保存原图
+//				String orig = fileRepoFactory.select().storeScale(temp, appContext.getOrigDir(), 750);
+//				item.setOriginal(orig);
+//
+//				// 创建缩放图片
+//				String preview = fileRepoFactory.select().storeScale(temp, appContext.getThumbsDir(), 305);
+//				item.setPreview(preview);
+//
+//				// 创建快照
+//				String screenshot = fileRepoFactory.select().storeScale(temp, appContext.getScreenshotDir(), 225, 140);
+//				item.setScreenshot(screenshot);
+//
+//				rets.add(item);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			} finally {
+//				if (temp != null) {
+//					temp.delete();
+//				}
+//			}
+//		}
+//
+//		return rets;
+//	}
 
+	protected void extractImages(Post post) {
+		Document doc = Jsoup.parse(post.getContent());
+		Elements elements = doc.select("img");
 		List<Attach> rets = new ArrayList<>();
-
-		for (String album : albums) {
-			if (StringUtils.isBlank(album)) {
-				continue;
+		for (Element el : elements) {
+			String previewHandler = el.attr("preview-handler");
+			if (previewHandler != null && "true".equals(previewHandler)) {
+				break;
 			}
 
-			String root = fileRepoFactory.select().getRoot();
-			File temp = new File(root + album);
-			Attach item = new Attach();
+			String imageUrl = el.attr("src");
+			Attach a = new Attach();
+			a.setOriginal(imageUrl);
+			a.setPreview(imageUrl);
+
 			try {
-				// 保存原图
-				String orig = fileRepoFactory.select().storeScale(temp, appContext.getOrigDir(), 750);
-				item.setOriginal(orig);
+				if (imageUrl.startsWith("/store/")) {
+					String root = fileRepoFactory.select().getRoot();
+					File temp = new File(root + imageUrl);
+					// 创建快照
+					String screenshot = fileRepoFactory.select().storeScale(temp, appContext.getScreenshotDir(), 225, 140);
+					a.setScreenshot(screenshot);
+				} else {
+					a.setScreenshot(imageUrl);
+					a.setStore(1);
+				}
 
-				// 创建缩放图片
-				String preview = fileRepoFactory.select().storeScale(temp, appContext.getThumbsDir(), 305);
-				item.setPreview(preview);
+				rets.add(a);
 
-				// 创建快照
-				String screenshot = fileRepoFactory.select().storeScale(temp, appContext.getScreenshotDir(), 225, 140);
-				item.setScreenshot(screenshot);
-
-				rets.add(item);
+				el.attr("preview-handler", "true");
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally {
-				if (temp != null) {
-					temp.delete();
-				}
 			}
 		}
 
-		return rets;
+		post.setContent(doc.html());
+		if (rets.size() > 0) {
+			post.setAlbums(rets);
+		}
 	}
-	
 }

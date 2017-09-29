@@ -5,8 +5,13 @@ package mblog.web.controller.desk.posts;
 
 import javax.servlet.http.HttpServletRequest;
 
+import mblog.core.data.Attach;
 import mtons.modules.lang.Const;
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +28,10 @@ import mblog.web.controller.BaseController;
 import mblog.web.controller.desk.Views;
 import mtons.modules.pojos.Data;
 import mtons.modules.pojos.UserProfile;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 文章操作
@@ -49,21 +58,22 @@ public class PostController extends BaseController {
 
 	/**
 	 * 提交发布
-	 * @param blog
+	 * @param p
 	 * @return
 	 */
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
-	public String post(Post blog, HttpServletRequest request) {
+	public String post(Post p, HttpServletRequest request) {
 
-		if (blog != null && StringUtils.isNotBlank(blog.getTitle())) {
+		if (p != null && StringUtils.isNotBlank(p.getTitle())) {
 			String content = request.getParameter("content");
 			UserProfile profile = getSubject().getProfile();
-			blog.setContent(content);
-			String[] ablums = request.getParameterValues("delayImages");
-			blog.setAlbums(handleAlbums(ablums));
-			blog.setAuthorId(profile.getId());
 
-			postBiz.post(blog);
+			p.setContent(content);
+			extractImages(p);
+
+			p.setAuthorId(profile.getId());
+
+			postBiz.post(p);
 		}
 		return Views.REDIRECT_HOME_POSTS;
 	}
@@ -117,10 +127,8 @@ public class PostController extends BaseController {
 		UserProfile up = getSubject().getProfile();
 		if (p != null && p.getAuthorId() == up.getId()) {
 			String content = request.getParameter("content");
-
-			String[] ablums = request.getParameterValues("delayImages");
-			p.setAlbums(handleAlbums(ablums));
 			p.setContent(content);
+			extractImages(p);
  			postBiz.update(p);
 		}
 		return Views.REDIRECT_HOME_POSTS;

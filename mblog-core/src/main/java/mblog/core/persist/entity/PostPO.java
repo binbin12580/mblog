@@ -76,23 +76,6 @@ public class PostPO implements Serializable {
 	private String editor; // 编辑器
 
 	/**
-	 * 内容
-	 */
-	@Lob
-	@Basic(fetch = FetchType.LAZY) 
-	@Type(type="text")
-	private String content; // 内容
-
-	/**
-	 * markdown
-	 * - 如果是markdown, 保存编译前内容
-	 */
-    @Lob
-	@Basic(fetch = FetchType.LAZY) 
-	@Type(type="text")
-	private String markdown; // markdown 内容
-
-	/**
 	 * 文章最后AttachId
 	 * - 冗余字段
 	 */
@@ -162,14 +145,6 @@ public class PostPO implements Serializable {
 
 	public void setSummary(String summary) {
 		this.summary = summary;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
 	}
 
 	public long getLastImageId() {
@@ -242,14 +217,6 @@ public class PostPO implements Serializable {
 
 	public void setViews(int views) {
 		this.views = views;
-	}
-
-	public String getMarkdown() {
-		return markdown;
-	}
-
-	public void setMarkdown(String markdown) {
-		this.markdown = markdown;
 	}
 
 	public String getEditor() {

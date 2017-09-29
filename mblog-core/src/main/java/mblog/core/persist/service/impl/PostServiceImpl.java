@@ -190,7 +190,7 @@ public class PostServiceImpl implements PostService {
 	public long post(Post post) {
 		PostPO po = new PostPO();
 
-		BeanUtils.copyProperties(post, po, "editor", "content", "markdown");
+		BeanUtils.copyProperties(post, po);
 
 		po.setCreated(new Date());
 		po.setStatus(EntityStatus.ENABLED);

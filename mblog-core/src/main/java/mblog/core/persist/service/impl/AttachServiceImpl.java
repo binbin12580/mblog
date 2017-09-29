@@ -97,7 +97,7 @@ public class AttachServiceImpl implements AttachService {
 		for (Attach d : albums) {
 			d.setToId(toId);
 			lastId = add(d);
-		};
+		}
 //		attachDao.batchAdd(albums);
 		return lastId;
 	}
