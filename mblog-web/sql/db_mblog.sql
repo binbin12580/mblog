@@ -11,7 +11,7 @@
  Target Server Version : 50712
  File Encoding         : utf-8
 
- Date: 09/29/2017 13:02:53 PM
+ Date: 09/29/2017 17:34:11 PM
 */
 
 SET NAMES utf8;
@@ -48,15 +48,14 @@ CREATE TABLE `mto_auth_menu` (
   `parent_id` bigint(20) DEFAULT NULL,
   `icon` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_fynq2bfwabynqmnauw69b7ulc` (`parent_id`),
-  CONSTRAINT `FK_fynq2bfwabynqmnauw69b7ulc` FOREIGN KEY (`parent_id`) REFERENCES `mto_auth_menu` (`id`)
+  KEY `FK_fynq2bfwabynqmnauw69b7ulc` (`parent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `mto_auth_menu`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mto_auth_menu` VALUES ('1', '根目录', '', '', '1', '/', null, null), ('2', '后台管理', null, 'admin', '1', 'admin', '1', null), ('3', '我的主页', null, '', '1', '', '1', null), ('4', '文章管理', null, 'posts:view', '2', 'admin/posts/list', '2', 'fa fa-clone icon-xlarge'), ('5', '文章修改', null, 'posts:edit', '1', null, '4', null), ('6', '用户管理', null, 'users:view', '3', 'admin/users/list', '2', 'fa fa-user icon-xlarge'), ('7', '禁用用户', null, 'users:edit', '1', '', '6', null), ('8', '修改密码', null, 'users:edit', '1', null, '6', null), ('9', '评论管理', null, 'comments:view', '4', 'admin/comments/list', '2', 'fa fa-comments-o icon-xlarge'), ('10', '删除评论', null, 'comments:edit', '1', null, '9', null), ('11', '栏目管理', null, 'group:view', '5', 'admin/group/list', '2', 'fa fa-tags icon-xlarge'), ('12', '删除栏目', null, 'group:edit', '1', null, '11', null), ('13', '修改栏目', null, 'group:edit', '2', null, '11', null), ('15', '系统配置', null, 'config:view', '6', 'admin/config/', '2', 'fa fa-sun-o icon-xlarge'), ('16', '修改配置', null, 'config:edit', '1', null, '15', null), ('17', '仪表盘', null, 'admin', '1', 'admin', '2', 'fa fa-dashboard icon-xlarge'), ('18', '角色管理', null, 'roles:view', '7', 'admin/roles/list', '2', 'fa fa fa-registered icon-xlarge'), ('19', '菜单管理', null, 'authMenus:view', '8', 'admin/authMenus/list', '2', 'fa fa-reorder icon-xlarge'), ('21', '菜单修改', null, 'authMenus:edit', '0', '', '19', null), ('22', '角色修改', null, 'roles:edit', '0', null, '18', null), ('23', '文章查看', null, 'posts:view', '1', '', '4', null), ('24', '用户查看', null, 'users:view', '1', '', '6', null), ('25', '评论查看', null, 'comments:view', '1', '', '9', null), ('26', '标签查看', null, 'tags:view', '1', '', '11', null), ('27', '角色查看', null, 'roles:view', '1', '', '18', null), ('28', '菜单查看', null, 'authMenus:view', '1', '', '19', null), ('29', '友情链接', null, 'friendLink:view', '8', 'admin/friendLink/list', '2', 'fa fa-link'), ('30', '友情链接修改', null, 'friendLink:edit', '0', '', '29', null), ('31', '友情链接查看', null, 'friendLink:view', '0', '', '29', null);
+INSERT INTO `mto_auth_menu` VALUES ('1', '根目录', '', '', '1', '/', '0', null), ('2', '后台管理', null, 'admin', '1', 'admin', '1', null), ('4', '文章管理', null, 'posts:view', '2', 'admin/posts/list', '2', 'fa fa-clone icon-xlarge'), ('5', '文章修改', null, 'posts:edit', '1', null, '4', null), ('6', '文章查看', null, 'posts:view', '1', '', '4', null), ('8', '评论管理', null, 'comments:view', '4', 'admin/comments/list', '2', 'fa fa-comments-o icon-xlarge'), ('9', '删除评论', null, 'comments:edit', '1', null, '8', null), ('10', '评论查看', null, 'comments:view', '1', '', '8', null), ('11', '栏目管理', null, 'group:view', '5', 'admin/group/list', '2', 'fa fa-tags icon-xlarge'), ('12', '删除栏目', null, 'group:edit', '1', null, '11', null), ('13', '修改栏目', null, 'group:edit', '2', null, '11', null), ('15', '系统配置', null, 'config:view', '6', 'admin/config/', '2', 'fa fa-sun-o icon-xlarge'), ('16', '修改配置', null, 'config:edit', '1', null, '15', null), ('17', '用户管理', null, 'users:view', '3', 'admin/users/list', '2', 'fa fa-user icon-xlarge'), ('18', '禁用用户', null, 'users:edit', '1', '', '17', null), ('19', '修改密码', null, 'users:edit', '1', null, '17', null), ('20', '用户查看', null, 'users:view', '1', '', '17', null), ('35', '角色管理', null, 'roles:view', '7', 'admin/roles/list', '2', 'fa fa fa-registered icon-xlarge'), ('36', '角色修改', null, 'roles:edit', '0', null, '35', null), ('37', '角色查看', null, 'roles:view', '1', '', '35', null), ('41', '菜单管理', null, 'authMenus:view', '8', 'admin/authMenus/list', '2', 'fa fa-reorder icon-xlarge'), ('42', '菜单修改', null, 'authMenus:edit', '0', '', '41', null), ('43', '菜单查看', null, 'authMenus:view', '1', '', '41', null), ('45', '友情链接', null, 'friendLink:view', '8', 'admin/friendLink/list', '2', 'fa fa-link'), ('46', '友情链接修改', null, 'friendLink:edit', '0', '', '45', null), ('47', '友情链接查看', null, 'friendLink:view', '0', '', '45', null);
 COMMIT;
 
 -- ----------------------------
@@ -237,6 +236,23 @@ CREATE TABLE `mto_posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+--  Table structure for `mto_posts_attach`
+-- ----------------------------
+DROP TABLE IF EXISTS `mto_posts_attach`;
+CREATE TABLE `mto_posts_attach` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `height` int(11) NOT NULL,
+  `original` varchar(255) DEFAULT NULL,
+  `preview` varchar(255) DEFAULT NULL,
+  `screenshot` varchar(255) DEFAULT NULL,
+  `status` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `to_id` bigint(20) DEFAULT NULL,
+  `width` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `mto_posts_attribute`
 -- ----------------------------
 DROP TABLE IF EXISTS `mto_posts_attribute`;
@@ -278,7 +294,7 @@ CREATE TABLE `mto_role_menu` (
 --  Records of `mto_role_menu`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mto_role_menu` VALUES ('1', '1'), ('1', '2'), ('1', '4'), ('1', '5'), ('1', '23'), ('1', '6'), ('1', '7'), ('1', '8'), ('1', '24'), ('1', '9'), ('1', '10'), ('1', '25'), ('1', '11'), ('1', '12'), ('1', '13'), ('1', '14'), ('1', '26'), ('1', '15'), ('1', '16'), ('1', '17'), ('1', '18'), ('1', '22'), ('1', '27'), ('1', '19'), ('1', '21'), ('1', '28'), ('1', '29'), ('1', '30'), ('1', '31'), ('1', '3');
+INSERT INTO `mto_role_menu` VALUES ('1', '1'), ('1', '2'), ('1', '4'), ('1', '8'), ('1', '11'), ('1', '15'), ('1', '17'), ('1', '35'), ('1', '41'), ('1', '45'), ('1', '5'), ('1', '6'), ('1', '9'), ('1', '10'), ('1', '12'), ('1', '13'), ('1', '16'), ('1', '18'), ('1', '19'), ('1', '20'), ('1', '36'), ('1', '37'), ('1', '42'), ('1', '43'), ('1', '46'), ('1', '47');
 COMMIT;
 
 -- ----------------------------
@@ -298,7 +314,7 @@ CREATE TABLE `mto_user_role` (
 --  Records of `mto_user_role`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mto_user_role` VALUES ('1', '1'), ('1', '2');
+INSERT INTO `mto_user_role` VALUES ('1', '1');
 COMMIT;
 
 -- ----------------------------
@@ -334,7 +350,7 @@ CREATE TABLE `mto_users` (
 --  Records of `mto_users`
 -- ----------------------------
 BEGIN;
-INSERT INTO `mto_users` VALUES ('1', '2015-08-06 17:52:41', 'admin@mtons.com', '2017-09-29 13:01:10', null, '3TGCQF25BLHU9R7IQUITN0FCC5', '0', 'admin', '小豆丁', '/assets/images/ava/default.png', '2015-07-26 11:08:36', '0', '1', '0', '1', '0', '0', '0', '0', '4', null);
+INSERT INTO `mto_users` VALUES ('1', '2015-08-06 17:52:41', 'admin@mtons.com', '2017-09-29 17:25:22', null, '3TGCQF25BLHU9R7IQUITN0FCC5', '0', 'admin', '小豆丁', '/assets/images/ava/default.png', '2015-07-26 11:08:36', '0', '1', '0', '1', '0', '0', '0', '0', '4', null);
 COMMIT;
 
 -- ----------------------------
