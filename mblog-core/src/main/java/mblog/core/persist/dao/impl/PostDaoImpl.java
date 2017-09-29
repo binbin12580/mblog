@@ -114,7 +114,8 @@ public class PostDaoImpl extends BaseRepositoryImpl<PostPO> implements PostDao {
 	public List<PostPO> findHots(int maxResults, long ignoreUserId) {
 		Criteria c = createCriteria();
 		
-//		if (ignoreUserId > 0) {
+//		c.add(Restrictions.neOrIsNotNull("title", ""));
+//		if (ignoreUserId > 0) {、
 //			q.add(Restrictions.ne("author.id", ignoreUserId));
 //		}
 		c.addOrder(Order.desc("views"));
