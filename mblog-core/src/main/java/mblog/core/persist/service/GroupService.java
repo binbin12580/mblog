@@ -20,7 +20,7 @@ import mblog.core.data.Group;
  *
  */
 public interface GroupService {
-	List<Group> findAll();
+	List<Group> findAll(int status);
 	Group getById(int id);
 	Group getByKey(String key);
 	void update(Group group);

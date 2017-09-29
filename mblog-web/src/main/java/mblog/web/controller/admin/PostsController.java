@@ -11,6 +11,7 @@ package mblog.web.controller.admin;
 
 import java.util.List;
 
+import mblog.core.persist.service.GroupService;
 import mtons.modules.lang.Const;
 import mtons.modules.pojos.Data;
 import mtons.modules.pojos.Paging;
@@ -43,6 +44,8 @@ public class PostsController extends BaseController {
 	private PostService postService;
 	@Autowired
 	private PostBiz postBiz;
+	@Autowired
+	private GroupService groupService;
 	
 	@RequestMapping("/list")
 	public String list(Integer pn, String title, ModelMap model, HttpServletRequest request) {
@@ -69,6 +72,7 @@ public class PostsController extends BaseController {
 	public String toUpdate(Long id, ModelMap model) {
 		Post ret = postService.get(id);
 		model.put("view", ret);
+		model.put("groups", groupService.findAll(Const.STATUS_NORMAL));
 		return "/admin/posts/update";
 	}
 	

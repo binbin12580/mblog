@@ -16,6 +16,8 @@ import mblog.core.persist.entity.GroupPO;
 import mtons.modules.annotation.Repository;
 import mtons.modules.lang.Const;
 import mtons.modules.persist.impl.BaseRepositoryImpl;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * @author langhsu
@@ -26,8 +28,13 @@ public class GroupDaoImpl extends BaseRepositoryImpl<GroupPO> implements GroupDa
 	private static final long serialVersionUID = -3510165157507261158L;
 
 	@Override
-	public List<GroupPO> findAll() {
-		return findBy("status", Const.STATUS_NORMAL);
+	public List<GroupPO> findAll(int status) {
+		Criteria criteria = createCriteria();
+
+		if (status > Const.IGNORE) {
+			criteria.add(Restrictions.eq("status", status));
+		}
+		return criteria.list();
 	}
 
 	@Override

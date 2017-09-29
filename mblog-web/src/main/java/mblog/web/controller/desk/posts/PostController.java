@@ -5,6 +5,7 @@ package mblog.web.controller.desk.posts;
 
 import javax.servlet.http.HttpServletRequest;
 
+import mtons.modules.lang.Const;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,7 @@ public class PostController extends BaseController {
 	 */
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String view(ModelMap model) {
-		model.put("groups", groupService.findAll());
+		model.put("groups", groupService.findAll(Const.STATUS_NORMAL));
 		return getView(Views.ROUTE_POST_PUBLISH);
 	}
 
@@ -101,7 +102,7 @@ public class PostController extends BaseController {
 
 		Assert.isTrue(ret.getAuthorId() == up.getId(), "该文章不属于你");
 
-		model.put("groups", groupService.findAll());
+		model.put("groups", groupService.findAll(Const.STATUS_NORMAL));
 		model.put("view", ret);
 		return getView(Views.ROUTE_POST_UPDATE);
 	}

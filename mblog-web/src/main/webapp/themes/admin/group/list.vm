@@ -10,6 +10,7 @@
     					<th width="80">#</th>
     					<th>名称</th>
     					<th>Key</th>
+						<th>状态</th>
     					<th width="200"></th>
     				</tr>
     			</thead>
@@ -19,6 +20,13 @@
                         <td class="text-center">${row.id}</td>
                         <td>${row.name}</td>
     					<td>${row.key}</td>
+						<td>
+							#if($row.status == 0)
+								显示
+							#else
+								隐藏
+							#end
+						</td>
                         <td class="text-center">
 							<a href="view?id=${row.id}" class="btn btn-mini btn-success"">
     								<i class="fa fa-edit"></i> 修改

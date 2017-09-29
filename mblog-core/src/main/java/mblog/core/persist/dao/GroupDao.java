@@ -20,6 +20,6 @@ import mblog.core.persist.entity.GroupPO;
  *
  */
 public interface GroupDao extends BaseRepository<GroupPO> {
-	List<GroupPO> findAll();
+	List<GroupPO> findAll(int status);
 	GroupPO getByKey(String key);
 }

@@ -58,9 +58,9 @@
     				</li>
 					#end
 					
-					#foreach($m in $menus)
+					#foreach($row in $groups)
 					<li>
-    					<a href="$base/${m.url}" nav="${m.name}" target="${m.target}">${m.name}</a>
+    					<a href="$base/g/${row.key}" nav="${row.name}">${row.name}</a>
     				</li>
 					#end
 					

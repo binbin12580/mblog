@@ -46,10 +46,7 @@ public interface Views {
 	String ACCOUNT_PROFILE = "/account/profile";
 	String ACCOUNT_EMAIL = "/account/email";
 
-	String BLOG_UPLOAD = "/post/upload";
-	
-	String TAGS_INDEX = "/tags/index";
-	String TAGS_TAG = "/tags/tag";
+	String TAGS_TAG = "/tag";
 	
 	String BROWSE_GALLERY = "/gallery/index";
 	String BROWSE_GALLERY_SNIPPET = "/gallery/snippet";

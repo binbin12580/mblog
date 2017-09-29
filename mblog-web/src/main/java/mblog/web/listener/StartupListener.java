@@ -18,6 +18,7 @@ import java.util.TimerTask;
 import javax.servlet.ServletContext;
 
 import mblog.core.persist.service.FriendLinkService;
+import mtons.modules.lang.Const;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,6 @@ import mblog.base.print.Printer;
 import mblog.core.data.Config;
 import mblog.core.persist.service.ConfigService;
 import mblog.core.persist.service.GroupService;
-import mblog.core.persist.service.MenuService;
 import mtons.modules.utils.GMagickUtils;
 import mtons.modules.utils.PropertiesLoader;
 
@@ -43,8 +43,6 @@ public class StartupListener implements InitializingBean, ServletContextAware {
 	private ConfigService configService;
 	@Autowired
 	private GroupService groupService;
-	@Autowired
-	private MenuService menuService;
 	@Autowired
 	private AppContext appContext;
 	@Autowired
@@ -103,10 +101,7 @@ public class StartupListener implements InitializingBean, ServletContextAware {
 
 				appContext.setConfig(configMap);
             	
-            	servletContext.setAttribute("groups", groupService.findAll());
-            	
-            	servletContext.setAttribute("menus", menuService.findAll());
-
+            	servletContext.setAttribute("groups", groupService.findAll(Const.STATUS_NORMAL));
 				servletContext.setAttribute("friendLinks", friendLinkService.findAll());
 
 				Printer.info("OK, mblog 加载完了");

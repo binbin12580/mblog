@@ -3,10 +3,6 @@
 <link rel='stylesheet' media='all' href='$base/assets/css/plugins.css'/>
 <script type="text/javascript" src="$base/assets/js/plugins.js"></script>
 
-<style type="text/css">
-    .thumb {border-radius: 2px; display: inline-block;}
-    .thumb img {max-height: 64px;}
-</style>
 <div class="panel m-t-large m-b">
 	<header class="panel-heading">文章编辑</header>
     <div class="panel panel-default">
@@ -23,22 +19,13 @@
     				</div>
     			</div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">配图</label>
-                    <div class="col-sm-8">
-                        <div class="thumb-albums">
-							#foreach($row in $view.albums)
-                                <div class="col-xs-6 col-sm-4 col-md-3 preview" row="alb">
-                                    <img src="$base${row.screenshot}">
-                                    <div class="btns">
-                                        <a href="javascript:void(0);" rel="dlalb" rowId="${row.id}" class="btn btn-danger btn-mini">删除</a>
-                                    </div>
-                                </div>
+                    <label class="col-sm-2 control-label no-padding-right">发布到</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" name="group">
+							#foreach($row in $groups)
+                                <option value="${row.id}" #if($view.group == $row.id) selected #end>${row.name}</option>
 							#end
-
-							#if(${view.albums.size()} == 0)
-                                <span>暂无图片</span>
-							#end
-                        </div>
+                        </select>
                     </div>
                 </div>
     			<div class="form-group">
@@ -55,15 +42,6 @@
     					<p class="help-block" style="font-size: 12px;">添加相关标签，用逗号或空格分隔.</p>
     				</div>
     			</div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label no-padding-right">访问权限</label>
-                    <div class="col-sm-3">
-                        <select class="form-control" name="privacy" data-select="$!{view.privacy}">
-                            <option value="0">公开</option>
-                            <option value="1">私密</option>
-                        </select>
-                    </div>
-                </div>
     			<div class="row">
     				<div class="form-group">
             			<div class="text-center">
@@ -82,20 +60,6 @@ $(function() {
 		singleField: true,
 		singleFieldNode: $('#fieldTags')
 	});
-
-    $('a[rel="dlalb"]').click(function () {
-        var that = $(this);
-        var rowId = that.attr('rowId');
-
-        if (confirm("确定删除此项吗？")) {
-            jQuery.getJSON('$base/admin/posts/album/delete.json', {id: rowId}, function (ret) {
-                alert(ret.message);
-                if (ret.code >= 0) {
-                    that.closest('div[row="alb"]').remove();
-                }
-            });
-        }
-    });
 
 	$('form').validate({
 		onKeyup : true,

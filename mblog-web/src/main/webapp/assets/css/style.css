@@ -212,7 +212,7 @@ label {font-weight: normal;}
 .blog-rank .votes, .blog-rank .views, .blog-rank .user { display: block; padding-top: 3px; width: 45px; height: 45px; -moz-border-radius: 1px; -webkit-border-radius: 1px; border-radius: 1px; }
 .blog-rank .votes { background: #f0f0f0; border: 1px solid #d9dfe9;}
 .blog-rank .user { margin-bottom: 8px; }
-.blog-rank .plus, .qus-rank .plus { background: #5EBCF2; color: #fff; }
+.blog-rank .plus, .qus-rank .plus { background: #5EBCF2; color: #fff; border-width: 0;}
 .blog-rank small , .qus-rank small { display: block; font-size: 12px; }
 .blog-rank span , .qus-rank span { display: block; width:90%; white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow: hidden; }
 

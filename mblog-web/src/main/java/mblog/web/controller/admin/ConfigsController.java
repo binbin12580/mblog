@@ -12,9 +12,9 @@ package mblog.web.controller.admin;
 import mblog.core.data.Config;
 import mblog.core.persist.service.ConfigService;
 import mblog.core.persist.service.GroupService;
-import mblog.core.persist.service.MenuService;
 import mblog.core.persist.service.PostService;
 import mblog.web.controller.BaseController;
+import mtons.modules.lang.Const;
 import mtons.modules.pojos.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -42,8 +42,6 @@ public class ConfigsController extends BaseController {
 	private ConfigService configService;
 	@Autowired
 	private GroupService groupService;
-	@Autowired
-	private MenuService menuService;
 	@Autowired
 	private ServletContext servletContext;
 	@Autowired
@@ -96,10 +94,7 @@ public class ConfigsController extends BaseController {
 		appContext.setConfig(configMap);
 
 		// 刷新文章Group
-		servletContext.setAttribute("groups", groupService.findAll());
-
-		// 刷新菜单
-		servletContext.setAttribute("menus", menuService.findAll());
+		servletContext.setAttribute("groups", groupService.findAll(Const.STATUS_NORMAL));
 		return Data.success("操作成功", Data.NOOP);
 	}
 

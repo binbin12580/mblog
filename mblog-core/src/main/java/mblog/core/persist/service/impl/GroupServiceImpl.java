@@ -35,8 +35,8 @@ public class GroupServiceImpl implements GroupService {
 	private GroupDao groupDao;
 
 	@Override
-	public List<Group> findAll() {
-		List<GroupPO> list = groupDao.findAll();
+	public List<Group> findAll(int status) {
+		List<GroupPO> list = groupDao.findAll(status);
 		List<Group> rets = new ArrayList<>();
 
 		list.forEach(po -> rets.add(BeanMapUtils.copy(po)));
