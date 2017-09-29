@@ -48,8 +48,6 @@ public interface Views {
 
 	String TAGS_TAG = "/tag";
 	
-	String BROWSE_GALLERY = "/gallery/index";
-	String BROWSE_GALLERY_SNIPPET = "/gallery/snippet";
 	String BROWSE_SEARCH = "/search";
 
 	String ROUTE_POST_PUBLISH = "/blog/post";
