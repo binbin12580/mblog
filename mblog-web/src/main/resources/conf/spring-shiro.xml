@@ -48,7 +48,7 @@
 
         <property name="rememberMeManager" ref="rememberMeManager"/>
         <property name="sessionManager" ref="sessionManager"/>
-        <property name="cacheManager" ref="ehcacheManager"/>
+        <!--<property name="cacheManager" ref="ehcacheManager"/>-->
     </bean>
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
