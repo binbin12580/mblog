@@ -1,8 +1,8 @@
 package mblog.web.controller.admin;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +39,7 @@ public class AuthMenuController extends BaseController{
 
     @RequestMapping("/list")
     public String list(ModelMap model) {
-        List<AuthMenu> list = authMenuService.tree(1L);
+        List<AuthMenu> list = authMenuService.listAll();
         model.put("list", list);
         return "/admin/authMenus/list";
     }
@@ -57,11 +57,7 @@ public class AuthMenuController extends BaseController{
     }
 
     @RequestMapping("/save")
-    public String save(@RequestParam(required = false) Long parentId,AuthMenu authMenu,Model model){
-        if(parentId!=null && parentId>0){
-            AuthMenu parent = authMenuService.get(parentId);
-            authMenu.setParent(parent);
-        }
+    public String save(AuthMenu authMenu,Model model){
         authMenuService.save(authMenu);
         return "redirect:/admin/authMenus/list";
     }
@@ -81,30 +77,28 @@ public class AuthMenuController extends BaseController{
     @RequestMapping("tree")
     @ResponseBody
     public List<AuthMenu.Node> tree(@RequestParam(required = false) Long roleId){
-        List<AuthMenu> authedMenus = null;
-        if(roleId!=null&&roleId!=0){
+        HashMap<Long, AuthMenu> map = new LinkedHashMap<>();
+
+        if (roleId != null && roleId != 0) {
             Role role = roleService.get(roleId);
-            authedMenus = role.getAuthMenus();
+            List<AuthMenu> authedMenus = role.getAuthMenus();
+
+            if (authedMenus != null)
+                authedMenus.forEach(n -> map.put(n.getId(), n));
         }
-        List<AuthMenu> list = authMenuService.tree(1L);
-        List<AuthMenu.Node> nodes = new ArrayList<>();
-        if(authedMenus!=null){
-            for(AuthMenu authMenu : list){
-                AuthMenu.Node node = authMenu.toNode();
-                for(AuthMenu authedMenu : authedMenus){
-                    if(authedMenu.getId()==authMenu.getId()){
-                        node.setChecked(true);
-                    }
-                }
-                nodes.add(node);
-            }
+        List<AuthMenu> list = authMenuService.listAll();
+
+        List<AuthMenu.Node> results = new LinkedList<>();
+
+        for(AuthMenu a: list){
+            AuthMenu.Node m = a.toNode();
+
+            if (!map.isEmpty() && map.get(m.getId()) != null)
+                m.setChecked(true);
+
+            results.add(m);
         }
-        else{
-            for(AuthMenu authMenu : list){
-                AuthMenu.Node node = authMenu.toNode();
-                nodes.add(node);
-            }
-        }
-        return nodes;
+
+        return results;
     }
 }

@@ -47,11 +47,11 @@ public class StringEscapeEditor extends PropertyEditorSupport {
             String value = text;
             if (escapeHTML) {
                 value = HtmlUtils.htmlEscape(value);
-                logger.debug("value:" + value);
+//                logger.debug("value:" + value);
             }
             if (escapeJavaScript) {
                 value = StringEscapeUtils.escapeJavaScript(value);
-                logger.debug("value:" + value);
+//                logger.debug("value:" + value);
             }
             setValue(value);
         }

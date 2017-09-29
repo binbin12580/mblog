@@ -111,5 +111,5 @@ public interface UserService {
 
 	List<AuthMenu> getMenuList(long id);
 	
-	List<User> getHotUserByfans(int maxResults);
+	List<User> findHotUserByfans(int maxResults);
 }

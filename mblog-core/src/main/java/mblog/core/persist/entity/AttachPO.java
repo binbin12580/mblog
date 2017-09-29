@@ -22,7 +22,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name = "mto_attachs")
+@Table(name = "mto_posts_attach")
 public class AttachPO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

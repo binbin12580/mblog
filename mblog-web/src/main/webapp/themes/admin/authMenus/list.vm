@@ -25,8 +25,8 @@
                     #end
                 </tr>
                     #foreach($row in $list)
-                        #if(${row.parent.id})
-                            <tr id="${row.id}" pId="${row.parent.id}">
+                        #if(${row.parentId} > 0)
+                            <tr id="${row.id}" pId="${row.parentId}">
                         #else
                             <tr id="${row.id}">
                         #end

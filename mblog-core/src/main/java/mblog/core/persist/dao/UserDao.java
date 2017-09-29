@@ -26,7 +26,7 @@ public interface UserDao extends BaseRepository<UserPO> {
 
     UserPO getByEmail(String email);
     
-    List<UserPO> getHotUserByfans(int maxResults);
+    List<UserPO> findHotUserByfans(int maxResults);
     
     List<UserPO> paging(Paging paging, String key);
 

@@ -48,6 +48,7 @@
 
         <property name="rememberMeManager" ref="rememberMeManager"/>
         <property name="sessionManager" ref="sessionManager"/>
+        <property name="cacheManager" ref="ehcacheManager"/>
     </bean>
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -72,12 +73,6 @@
                 /admin/posts/**=authc,perms[posts:view]
                 /admin/posts/update**=authc,perms[posts:edit]
                 /admin/posts/delete**=authc,perms[posts:edit]
-                /admin/tags/**=authc,perms[tags:view]
-                /admin/tags/update**=authc,perms[tags:edit]
-                /admin/tags/delete**=authc,perms[tags:edit]
-                /admin/tags/update**=authc,perms[:tags:edit]
-                /admin/tags/lock**=authc,perms[tags:edit]
-                /admin/tags/featured**=authc,perms[tags:edit]
                 /admin/comments/**=authc,perms[comments:view]
                 /admin/comments/delete**=authc,perms[comments:edit]
                 /admin/users/**=authc,perms[users:view]

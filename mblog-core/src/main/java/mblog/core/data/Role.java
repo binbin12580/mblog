@@ -17,7 +17,7 @@ public class Role implements Serializable{
 	//private List<User> users = new ArrayList<User>(); // 拥有用户列表
 	
 	@JsonIgnore
-	private List<AuthMenu> authMenus = new ArrayList<AuthMenu>(); // 拥有菜单列表
+	private List<AuthMenu> authMenus = new ArrayList<>(); // 拥有菜单列表
 
 	public long getId() {
 		return id;

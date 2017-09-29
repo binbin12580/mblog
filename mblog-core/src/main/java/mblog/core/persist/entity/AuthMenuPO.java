@@ -1,24 +1,13 @@
 package mblog.core.persist.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "mto_auth_menu")
@@ -37,9 +26,8 @@ public class AuthMenuPO {
 	
 	private String permission;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="parent_id")
-	private AuthMenuPO parent;
+	@Column(name="parent_id")
+	private long parentId;
 	
 	@Column(name="parent_ids")
 	private String parentIds;
@@ -51,10 +39,9 @@ public class AuthMenuPO {
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	private List<RolePO> roles = new ArrayList<RolePO>();
 	
-	@OneToMany(mappedBy = "parent", fetch=FetchType.LAZY)
-	@Fetch(FetchMode.SUBSELECT)
-	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	private List<AuthMenuPO> children = new ArrayList<AuthMenuPO>();
+	@ManyToMany(fetch=FetchType.LAZY)
+	@JoinTable(name = "mto_role_menu", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "menu_id") })
+	private List<AuthMenuPO> children = new ArrayList<>();
 
 	public long getId() {
 		return id;
@@ -104,14 +91,6 @@ public class AuthMenuPO {
 		this.permission = permission;
 	}
 
-	public AuthMenuPO getParent() {
-		return parent;
-	}
-
-	public void setParent(AuthMenuPO parent) {
-		this.parent = parent;
-	}
-
 	public String getParentIds() {
 		return parentIds;
 	}
@@ -134,5 +113,13 @@ public class AuthMenuPO {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	public long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(long parentId) {
+		this.parentId = parentId;
 	}
 }

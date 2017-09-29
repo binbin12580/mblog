@@ -57,7 +57,7 @@ public class UserDaoImpl extends BaseRepositoryImpl<UserPO> implements UserDao {
 	}
 	
 	@Override
-	public List<UserPO> getHotUserByfans(int maxResults) {
+	public List<UserPO> findHotUserByfans(int maxResults) {
 		Criteria c = createCriteria();
 		c.setMaxResults(maxResults);
 		c.addOrder(Order.desc("fans"));

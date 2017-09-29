@@ -99,13 +99,13 @@ public class SidebarController extends BaseController {
 	}
 	
 	/**
-	 * 我的粉丝
+	 * 热门用户
 	 * @param pn
 	 * @return
 	 */
-	@RequestMapping(value="/Userfans.json")
-	public @ResponseBody List<User>  fans(Integer pn) {
-		List<User> rets = userService.getHotUserByfans(12);
+	@RequestMapping(value="/hotusers.json")
+	public @ResponseBody List<User> hotusers(Integer pn) {
+		List<User> rets = userService.findHotUserByfans(12);
          return rets;
 	}
 }

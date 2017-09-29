@@ -10,6 +10,8 @@ public interface AuthMenuService {
 
 	List<AuthMenu> tree(Long id);
 
+	List<AuthMenu> listAll();
+
 	AuthMenu get(Long id);
 
 	void save(AuthMenu authMenu);

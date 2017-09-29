@@ -17,7 +17,7 @@ public class AuthMenu implements Serializable{
 
 	private String permission;
 
-	private AuthMenu parent;
+	private long parentId;
 
 	private String parentIds;
 
@@ -65,14 +65,6 @@ public class AuthMenu implements Serializable{
 		this.permission = permission;
 	}
 
-	public AuthMenu getParent() {
-		return parent;
-	}
-
-	public void setParent(AuthMenu parent) {
-		this.parent = parent;
-	}
-
 	public String getParentIds() {
 		return parentIds;
 	}
@@ -89,6 +81,13 @@ public class AuthMenu implements Serializable{
 		this.children = children;
 	}
 
+	public long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(long parentId) {
+		this.parentId = parentId;
+	}
 
 	public String getIcon() {
 		return icon;
@@ -135,12 +134,7 @@ public class AuthMenu implements Serializable{
 		node.setName(this.getName());
 		node.setOpen(true);
 		node.setChecked(false);
-		if(this.getParent()!=null){
-			node.setpId(this.getParent().getId());
-		}
-		else{
-			node.setpId(0L);
-		}
+		node.setpId(this.getParentId());
 		return node;
 	}
 

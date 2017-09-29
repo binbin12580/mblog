@@ -101,8 +101,6 @@ public class PostDaoImpl extends BaseRepositoryImpl<PostPO> implements PostDao {
 	public List<PostPO> findLatests(int maxResults, long ignoreUserId) {
 		Criteria c = createCriteria();
 		
-		c.add(Restrictions.neOrIsNotNull("title", ""));
-
 		if (ignoreUserId > 0) {
 			c.add(Restrictions.ne("authorId", ignoreUserId));
 		}
@@ -116,7 +114,6 @@ public class PostDaoImpl extends BaseRepositoryImpl<PostPO> implements PostDao {
 	public List<PostPO> findHots(int maxResults, long ignoreUserId) {
 		Criteria c = createCriteria();
 		
-		c.add(Restrictions.neOrIsNotNull("title", ""));
 //		if (ignoreUserId > 0) {
 //			q.add(Restrictions.ne("author.id", ignoreUserId));
 //		}

@@ -101,20 +101,9 @@ public class BeanMapUtils {
 		return r;
 	}
 
-	public static AuthMenu copy(AuthMenuPO po, String... ignore) {
+	public static AuthMenu copy(AuthMenuPO po) {
 		AuthMenu am = new AuthMenu();
-		List<AuthMenu> children = new ArrayList<>();
-		BeanUtils.copyProperties(po, am, "parent", "children");
-		List<String> ignoreList = Arrays.asList(ignore);
-		if (po.getParent() != null && !ignoreList.contains("parent")) {
-			am.setParent(BeanMapUtils.copy(po.getParent()));
-		}
-		for (AuthMenuPO child : po.getChildren()) {
-			AuthMenu childAuthMenu = BeanMapUtils.copy(child, "parent");
-			childAuthMenu.setParent(am);
-			children.add(childAuthMenu);
-		}
-		am.setChildren(children);
+		BeanUtils.copyProperties(po, am, "children");
 		return am;
 	}
 
@@ -123,7 +112,8 @@ public class BeanMapUtils {
 		BeanUtils.copyProperties(po, r, "users", "authMenus");
 		List<AuthMenu> authMenus = new ArrayList<>();
 		for (AuthMenuPO authMenuPO : po.getAuthMenus()) {
-			AuthMenu authMenu = BeanMapUtils.copy(authMenuPO);
+			AuthMenu authMenu = new AuthMenu();
+			BeanUtils.copyProperties(authMenuPO, authMenu, "roles", "children");
 			authMenus.add(authMenu);
 		}
 		r.setAuthMenus(authMenus);

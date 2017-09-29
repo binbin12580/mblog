@@ -183,11 +183,11 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<User> getHotUserByfans(int maxResults){
+	public List<User> findHotUserByfans(int maxResults){
 		List<User> rets = new ArrayList<>();
-		List<UserPO> list = userDao.getHotUserByfans(maxResults);
+		List<UserPO> list = userDao.findHotUserByfans(maxResults);
 		for (UserPO po : list) {
-			User u = BeanMapUtils.copy(po , 1);
+			User u = BeanMapUtils.copy(po , 0);
 			rets.add(u);
 		}
 		return rets;
@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService {
 		UserPO po = userDao.getByUsername(username);
 		User ret = null;
 		if (po != null) {
-			ret = BeanMapUtils.copy(po, 1);
+			ret = BeanMapUtils.copy(po, 0);
 		}
 		return ret;
 	}

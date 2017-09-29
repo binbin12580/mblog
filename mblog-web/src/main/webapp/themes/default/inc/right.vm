@@ -40,7 +40,7 @@ seajs.use('sidebox', function (sidebox) {
         latestUrl : '$base/api/latests.json',
     	hotUrl : '$base/api/hots.json',
 		hotTagUrl : '$base/api/hot_tags.json',
-		hotUserUrl:'$base/api/Userfans.json',
+		hotUserUrl:'$base/api/hotusers.json',
 
     	maxResults :10,
         // callback
