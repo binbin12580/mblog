@@ -101,16 +101,16 @@ public class BeanMapUtils {
 		return r;
 	}
 
-	public static AuthMenu copy(AuthMenuPO po,String... ignore){
+	public static AuthMenu copy(AuthMenuPO po, String... ignore) {
 		AuthMenu am = new AuthMenu();
-		List<AuthMenu> children = new ArrayList<AuthMenu>();
-		BeanUtils.copyProperties(po, am,"parent","children");
+		List<AuthMenu> children = new ArrayList<>();
+		BeanUtils.copyProperties(po, am, "parent", "children");
 		List<String> ignoreList = Arrays.asList(ignore);
-		if(po.getParent()!=null && !ignoreList.contains("parent")){
+		if (po.getParent() != null && !ignoreList.contains("parent")) {
 			am.setParent(BeanMapUtils.copy(po.getParent()));
 		}
-		for(AuthMenuPO child :po.getChildren()){
-			AuthMenu childAuthMenu = BeanMapUtils.copy(child,"parent");
+		for (AuthMenuPO child : po.getChildren()) {
+			AuthMenu childAuthMenu = BeanMapUtils.copy(child, "parent");
 			childAuthMenu.setParent(am);
 			children.add(childAuthMenu);
 		}
@@ -118,11 +118,11 @@ public class BeanMapUtils {
 		return am;
 	}
 
-	public static Role copy(RolePO po){
+	public static Role copy(RolePO po) {
 		Role r = new Role();
-		BeanUtils.copyProperties(po, r,"users","authMenus");
-		List<AuthMenu> authMenus = new ArrayList<AuthMenu>();
-		for(AuthMenuPO authMenuPO : po.getAuthMenus()){
+		BeanUtils.copyProperties(po, r, "users", "authMenus");
+		List<AuthMenu> authMenus = new ArrayList<>();
+		for (AuthMenuPO authMenuPO : po.getAuthMenus()) {
 			AuthMenu authMenu = BeanMapUtils.copy(authMenuPO);
 			authMenus.add(authMenu);
 		}
