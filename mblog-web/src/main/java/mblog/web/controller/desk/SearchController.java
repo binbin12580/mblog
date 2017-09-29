@@ -9,17 +9,14 @@
 */
 package mblog.web.controller.desk;
 
+import mblog.core.persist.service.PostService;
+import mblog.web.controller.BaseController;
 import mtons.modules.pojos.Paging;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import mblog.core.persist.service.PostService;
-import mblog.core.persist.service.TagService;
-import mblog.web.controller.BaseController;
 
 /**
  * 文章搜索
@@ -30,16 +27,13 @@ import mblog.web.controller.BaseController;
 public class SearchController extends BaseController {
 	@Autowired
 	private PostService postService;
-	@Autowired
-	private TagService tagService;
-	
+
 	@RequestMapping("/search")
 	public String search(Integer pn, String q, ModelMap model) {
 		Paging page = wrapPage(pn);
 		try {
 			if (StringUtils.isNotEmpty(q)) {
 				postService.search(page, q);
-				tagService.identityHots(q);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -95,33 +95,6 @@ public class BeanMapUtils {
 		return ret;
 	}
 
-	public static Tag copy(TagPO po) {
-		if (po == null) {
-			return null;
-		}
-		Tag ret = new Tag();
-		BeanUtils.copyProperties(po, ret);
-		return ret;
-	}
-
-	public static List<Tag> convertTags(long postId, String tags) {
-		if (StringUtils.isBlank(tags)) {
-			return Collections.emptyList();
-		}
-		List<Tag> ret = new ArrayList<>();
-		String[] ts = StringUtils.split(tags, Consts.SEPARATOR);
-
-		for (String t : ts) {
-			Tag tag = new Tag();
-			tag.setName(t);
-			tag.setLastPostId(postId);
-			tag.setPosts(1);
-			ret.add(tag);
-		}
-
-		return ret;
-	}
-
 	public static Group copy(GroupPO po) {
 		Group r = new Group();
 		BeanUtils.copyProperties(po, r);

@@ -11,13 +11,6 @@
 </div>
 
 <div class="widget-box shadow-box">
-    <div class="title"><h3><i class="fa fa-tags"></i> 热门标签</h3></div>
-    <ul class="tags m10" id="hottags" style="float: none;">
-        <li class="text-center"><img src="$base/assets/images/spinner.gif"></li>
-    </ul>
-</div>
-
-<div class="widget-box shadow-box">
 	<div class="title">
 		<h3><i class="fa fa-area-chart"></i> 热门文章</h3>
 	</div>
@@ -40,9 +33,7 @@
 var hot_li_template = '<li><div class="li-out"><span class="last"><i>{0}</i></span><span class="name"><a  href="{1}">{2}</a></span><span class="nums">{3}</span></div></li>'
 var latest_li_template = '<li><div class="li-out"><span class="name"><a  href="{1}">{2}</a></span><span class="nums">{3}</span></div></li>'
 
-var tag_li_template	= '<li class="mb6"><a href="$base/tag/{0}/" class="tag" title="有{1}篇文章">{2}</a></li>';
-
-var hotUser_li_template = '<li class="img"><a  href="{1}"><img src="$base{0}" class="img-circle"/></a></li>';
+var hotUser_li_template = '<li class="img"><a  href="{1}"><img src="$base{0}" class=""/></a></li>';
 
 seajs.use('sidebox', function (sidebox) {
 	sidebox.init({
@@ -61,10 +52,6 @@ seajs.use('sidebox', function (sidebox) {
         onLoadLatest : function (i, data) {
         	var url = '$base/view/' + data.id;
       		var item = jQuery.format(latest_li_template, i + 1, url, data.title, numberScale(data.views));
-      		return item;
-        },
-		onLoadHotTag : function (i, data) {
-      		var item = jQuery.format(tag_li_template, data.name, data.posts, data.name);
       		return item;
         },
         onLoadHotUser : function (i, data) {

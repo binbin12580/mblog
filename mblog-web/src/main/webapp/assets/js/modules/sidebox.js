@@ -78,25 +78,6 @@ define(function(require, exports, module) {
 				} );
 			}
 
-			if (opts.hotTagUrl) {
-				J.ajax( {
-					url: opts.hotTagUrl,
-					data: {maxResults : opts.maxResults},
-					cache : true,
-					success: function (ret) {
-						$('#hottags').empty();
-						if (ret && ret.length > 0) {
-							jQuery.each(ret, function (i, n) {
-								var item = opts.onLoadHotTag.call(that, i, n);
-								$('#hottags').append(item);
-							});
-						} else {
-							$('#hottags').append('<li class="cat-item cat-item-6"><span>沒有相关记录</span></li>');
-						}
-					}
-				} );
-			}
-			
 			if (opts.hotUserUrl) {
 				J.ajax( {
 					url: opts.hotUserUrl,

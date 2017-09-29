@@ -9,8 +9,13 @@
 */
 package mblog.web.controller.api;
 
-import java.util.List;
-
+import mblog.core.biz.PostBiz;
+import mblog.core.data.Post;
+import mblog.core.data.User;
+import mblog.core.persist.service.UserService;
+import mblog.web.controller.BaseController;
+import mtons.modules.pojos.Data;
+import mtons.modules.pojos.UserProfile;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -24,15 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import mblog.core.biz.PostBiz;
-import mblog.core.data.Post;
-import mblog.core.data.Tag;
-import mblog.core.data.User;
-import mblog.core.persist.service.TagService;
-import mblog.core.persist.service.UserService;
-import mblog.web.controller.BaseController;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.UserProfile;
+import java.util.List;
 
 /**
  * 侧边栏数据加载
@@ -45,8 +42,6 @@ import mtons.modules.pojos.UserProfile;
 public class SidebarController extends BaseController {
 	@Autowired
 	private PostBiz postBiz;
-	@Autowired
-	private TagService tagService;
 
 	@Autowired
 	private UserService userService;
@@ -103,21 +98,13 @@ public class SidebarController extends BaseController {
 		return rets;
 	}
 	
-	@RequestMapping("/hot_tags.json")
-	public @ResponseBody List<Tag> hotTags() {
-		List<Tag> rets = tagService.topTags(12, false);
-		return rets;
-	}
-	
 	/**
 	 * 我的粉丝
 	 * @param pn
-	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/Userfans.json")
 	public @ResponseBody List<User>  fans(Integer pn) {
-		
 		List<User> rets = userService.getHotUserByfans(12);
          return rets;
 	}

@@ -13,7 +13,6 @@ import mblog.base.lang.Consts;
 import mblog.base.utils.PreviewTextUtils;
 import mblog.core.data.Attach;
 import mblog.core.data.Post;
-import mblog.core.data.Tag;
 import mblog.core.data.User;
 import mblog.core.persist.dao.PostAttributeDao;
 import mblog.core.persist.dao.PostDao;
@@ -42,8 +41,6 @@ public class PostServiceImpl implements PostService {
 	private PostDao postDao;
 	@Autowired
 	private AttachService attachService;
-	@Autowired
-	private TagService tagService;
 	@Autowired
 	private UserService userService;
 	@Autowired
@@ -219,12 +216,6 @@ public class PostServiceImpl implements PostService {
 			po.setImages(post.getAlbums().size());
 		}
 		
-		// 处理标签
-		if (StringUtils.isNotBlank(post.getTags())) {
-			List<Tag> tags = BeanMapUtils.convertTags(po.getId(), post.getTags());
-			tagService.batchPost(tags);
-		}
-
 		// 更新文章统计
 		userEventService.identityPost(Collections.singletonList(po.getAuthorId()), po.getId(), true);
 
