@@ -104,9 +104,9 @@ label {font-weight: normal;}
 /* bootstrap extend end */
 
 .search-box { position: relative;}
-.search-box input {  background-color: #f2f2f2; border-radius: 15px; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease;
+.search-box input {  background-color: #f2f2f2; border-radius: 25px; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease;
 	-o-transition: all 0.3s ease; -ms-transition: all 0.3s ease; transition: all 0.3s ease;}
-.search-box .search-btn {position: absolute; right: 18px; top: 12px; font-size: 18px; color: #999; background-color: transparent;
+.search-box .search-btn {position: absolute; right: 18px; top: 10px; font-size: 18px; color: #999; background-color: transparent;
 	border: none; outline: none;}
 .search-box .search-btn:hover {color: #5F8FDC; }
 .search-box input:hover {background-color: #fff;}
