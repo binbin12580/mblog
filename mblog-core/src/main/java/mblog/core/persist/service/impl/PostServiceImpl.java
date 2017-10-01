@@ -10,6 +10,7 @@
 package mblog.core.persist.service.impl;
 
 import mblog.base.lang.Consts;
+import mblog.base.lang.EntityStatus;
 import mblog.base.utils.PreviewTextUtils;
 import mblog.core.data.Attach;
 import mblog.core.data.Post;
@@ -20,15 +21,18 @@ import mblog.core.persist.entity.PostAttribute;
 import mblog.core.persist.entity.PostPO;
 import mblog.core.persist.service.*;
 import mblog.core.persist.utils.BeanMapUtils;
-import mtons.modules.lang.EntityStatus;
-import mtons.modules.pojos.Paging;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
 import java.util.*;
 
 /**
@@ -52,57 +56,118 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public void paging(Paging paging, int group, String ord, boolean whetherHasAlbums) {
-		List<PostPO> list = postDao.paging(paging, group, ord);
-		paging.setResults(toPosts(list, whetherHasAlbums));
+	public Page<Post> paging(Pageable pageable, int group, String ord, boolean whetherHasAlbums) {
+		Page<PostPO> page = postDao.findAll((root, query, builder) -> {
+
+			List<Order> orders = new ArrayList<>();
+			orders.add(builder.desc(root.<Long>get("featured")));
+			orders.add(builder.desc(root.<Long>get("created")));
+
+			Predicate predicate = builder.conjunction();
+
+			if (group > Consts.ZERO) {
+				predicate.getExpressions().add(
+						builder.equal(root.get("group").as(Integer.class), group));
+			}
+
+			if (Consts.order.HOTTEST.equals(ord)) {
+				orders.add(builder.desc(root.<Long>get("views")));
+			}
+
+			query.orderBy(orders);
+
+			return predicate;
+		}, pageable);
+
+		return new PageImpl<>(toPosts(page.getContent(), whetherHasAlbums), pageable, page.getTotalElements());
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public void paging4Admin(Paging paging, long id, String title, int group) {
-		List<PostPO> list = postDao.paging4Admin(paging, id, title, group);
-		paging.setResults(toPosts(list, false));
+	public Page<Post> paging4Admin(Pageable pageable, long id, String title, int group) {
+		Page<PostPO> page = postDao.findAll((root, query, builder) -> {
+            query.orderBy(
+					builder.desc(root.<Long>get("featured")),
+					builder.desc(root.<Long>get("created"))
+			);
+
+            Predicate predicate = builder.conjunction();
+
+			if (group > Consts.ZERO) {
+				predicate.getExpressions().add(
+						builder.equal(root.get("group").as(Integer.class), group));
+			}
+
+			if (StringUtils.isNotBlank(title)) {
+				predicate.getExpressions().add(
+						builder.like(root.get("title").as(String.class), "%" + title + "%"));
+			}
+
+			if (id > Consts.ZERO) {
+				predicate.getExpressions().add(
+						builder.equal(root.get("id").as(Integer.class), id));
+			}
+
+            return predicate;
+        }, pageable);
+
+		return new PageImpl<>(toPosts(page.getContent(), false), pageable, page.getTotalElements());
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public void pagingByAuthorId(Paging paging, long userId) {
-		List<PostPO> list = postDao.pagingByAuthorId(paging, userId);
-		paging.setResults(toPosts(list, true));
+	public Page<Post> pagingByAuthorId(Pageable pageable, long userId) {
+		Page<PostPO> page = postDao.findAllByAuthorIdOrderByCreatedDesc(pageable, userId);
+		return new PageImpl<>(toPosts(page.getContent(), true), pageable, page.getTotalElements());
 	}
 	
 	@Override
 	@Transactional(readOnly = true)
-	public void search(Paging paging, String q) throws Exception {
-		List<Post> list = postDao.search(paging, q);
+	public Page<Post> search(Pageable pageable, String q) throws Exception {
+		Page<Post> page = postDao.search(pageable, q);
 
 		HashSet<Long> ids = new HashSet<>();
 		HashSet<Long> uids = new HashSet<>();
 
-		for (Post po : list) {
+		for (Post po : page.getContent()) {
 			ids.add(po.getId());
 			uids.add(po.getAuthorId());
 		}
 
 		// 加载相册
-		buildAttachs(list, ids);
+		buildAttachs(page.getContent(), ids);
 
 		// 加载用户信息
-		buildUsers(list, uids);
+		buildUsers(page.getContent(), uids);
 
-		paging.setResults(list);
+		return page;
 	}
 	
 	@Override
 	@Transactional(readOnly = true)
-	public void searchByTag(Paging paigng, String tag) {
-		paigng.setResults(toPosts(postDao.searchByTag(paigng, tag), true));
+	public Page<Post> searchByTag(Pageable pageable, String tag) {
+		Page<Post> page = postDao.searchByTag(pageable, tag);
+
+		HashSet<Long> ids = new HashSet<>();
+		HashSet<Long> uids = new HashSet<>();
+
+		for (Post po : page.getContent()) {
+			ids.add(po.getId());
+			uids.add(po.getAuthorId());
+		}
+
+		// 加载相册
+		buildAttachs(page.getContent(), ids);
+
+		// 加载用户信息
+		buildUsers(page.getContent(), uids);
+		return page;
 	}
 	
 	@Override
 	@Transactional(readOnly = true)
 	public List<Post> findLatests(int maxResults, long ignoreUserId) {
-		List<PostPO> list = postDao.findLatests(maxResults, ignoreUserId);
+		List<PostPO> list = postDao.findTop12ByOrderByCreatedDesc();
 		List<Post> rets = new ArrayList<>();
 
 		list.forEach(po -> rets.add(BeanMapUtils.copy(po, 0)));
@@ -113,7 +178,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Post> findHots(int maxResults, long ignoreUserId) {
-		List<PostPO> list = postDao.findHots(maxResults, ignoreUserId);
+		List<PostPO> list = postDao.findTop12ByOrderByViewsDesc();
 		List<Post> rets = new ArrayList<>();
 
 		list.forEach(po -> rets.add(BeanMapUtils.copy(po, 0)));
@@ -127,7 +192,7 @@ public class PostServiceImpl implements PostService {
 			return Collections.emptyMap();
 		}
 
-		List<PostPO> list = postDao.findByIds(ids);
+		List<PostPO> list = postDao.findAllByIdIn(ids);
 		Map<Long, Post> rets = new HashMap<>();
 
 		HashSet<Long> imageIds = new HashSet<>();
@@ -166,7 +231,7 @@ public class PostServiceImpl implements PostService {
 			return Collections.emptyMap();
 		}
 
-		List<PostPO> list = postDao.findByIds(ids);
+		List<PostPO> list = postDao.findAllByIdIn(ids);
 		Map<Long, Post> rets = new HashMap<>();
 
 		HashSet<Long> uids = new HashSet<>();
@@ -207,7 +272,7 @@ public class PostServiceImpl implements PostService {
 		PostAttribute attr = new PostAttribute();
 		attr.setContent(post.getContent());
 		attr.setId(po.getId());
-		postAttributeDao.submit(attr);
+		submitAttr(attr);
 		
 		// 处理相册
 		if (post.getAlbums() != null) {
@@ -217,7 +282,7 @@ public class PostServiceImpl implements PostService {
 		}
 		
 		// 更新文章统计
-		userEventService.identityPost(Collections.singletonList(po.getAuthorId()), po.getId(), true);
+		userEventService.identityPost(po.getAuthorId(), po.getId(), true);
 
 		return po.getId();
 	}
@@ -225,7 +290,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public Post get(long id) {
-		PostPO po = postDao.get(id);
+		PostPO po = postDao.findOne(id);
 		Post d = null;
 		if (po != null) {
 			d = BeanMapUtils.copy(po, 1);
@@ -233,7 +298,7 @@ public class PostServiceImpl implements PostService {
 			d.setAuthor(userService.get(d.getAuthorId()));
 			d.setAlbums(attachService.findByTarget(d.getId()));
 
-			PostAttribute attr = postAttributeDao.get(po.getId());
+			PostAttribute attr = postAttributeDao.findOne(po.getId());
 			if (attr != null) {
 				d.setContent(attr.getContent());
 			}
@@ -248,7 +313,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void update(Post p){
-		PostPO po = postDao.get(p.getId());
+		PostPO po = postDao.findOne(p.getId());
 
 		if (po != null) {
 			po.setTitle(p.getTitle());//标题
@@ -274,14 +339,14 @@ public class PostServiceImpl implements PostService {
 			PostAttribute attr = new PostAttribute();
 			attr.setContent(p.getContent());
 			attr.setId(po.getId());
-			postAttributeDao.submit(attr);
+			submitAttr(attr);
 		}
 	}
 
 	@Override
 	@Transactional
 	public void updateFeatured(long id, int featured) {
-		PostPO po = postDao.get(id);
+		PostPO po = postDao.findOne(id);
 
 		if (po != null) {
 			int max = featured;
@@ -295,7 +360,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void delete(long id) {
-		PostPO po = postDao.get(id);
+		PostPO po = postDao.findOne(id);
 		if (po != null) {
 			attachService.deleteByToId(id);
 			postDao.delete(po);
@@ -305,7 +370,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void delete(long id, long authorId) {
-		PostPO po = postDao.get(id);
+		PostPO po = postDao.findOne(id);
 		if (po != null) {
 			// 判断文章是否属于当前登录用户
 			Assert.isTrue(po.getAuthorId() == authorId, "认证失败");
@@ -318,7 +383,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void identityViews(long id) {
-		PostPO po = postDao.get(id);
+		PostPO po = postDao.findOne(id);
 		if (po != null) {
 			po.setViews(po.getViews() + Consts.IDENTITY_STEP);
 		}
@@ -327,7 +392,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void identityComments(long id) {
-		PostPO po = postDao.get(id);
+		PostPO po = postDao.findOne(id);
 		if (po != null) {
 			po.setComments(po.getComments() + Consts.IDENTITY_STEP);
 		}
@@ -336,7 +401,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void favor(long userId, long postId) {
-		PostPO po = postDao.get(postId);
+		PostPO po = postDao.findOne(postId);
 
 		Assert.notNull(po, "文章不存在");
 
@@ -348,7 +413,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void unfavor(long userId, long postId) {
-		PostPO po = postDao.get(postId);
+		PostPO po = postDao.findOne(postId);
 
 		Assert.notNull(po, "文章不存在");
 
@@ -405,6 +470,10 @@ public class PostServiceImpl implements PostService {
 		Map<Long, User> userMap = userService.findMapByIds(uids);
 
 		posts.forEach(p -> p.setAuthor(userMap.get(p.getAuthorId())));
+	}
+
+	private void submitAttr(PostAttribute attr) {
+		postAttributeDao.save(attr);
 	}
 
 }

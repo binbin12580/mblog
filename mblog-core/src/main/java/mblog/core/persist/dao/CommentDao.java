@@ -9,23 +9,25 @@
 */
 package mblog.core.persist.dao;
 
-import mtons.modules.persist.BaseRepository;
-import mtons.modules.pojos.Paging;
+import mblog.core.persist.entity.CommentPO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import mblog.core.persist.entity.CommentPO;
-
 /**
  * @author langhsu
  *
  */
-public interface CommentDao extends BaseRepository<CommentPO> {
-	List<CommentPO> paging(Paging paging, String key);
-	List<CommentPO> paging(Paging paging, long toId, long authorId, boolean desc);
-	List<CommentPO> findByIds(Set<Long> ids);
+public interface CommentDao extends JpaRepository<CommentPO, Long>, JpaSpecificationExecutor<CommentPO> {
+	Page<CommentPO> findAll(Pageable pageable);
+	Page<CommentPO> findAllByToIdAndAuthorIdOrderByCreatedDesc(Pageable pageable, long toId, long authorId);
+	List<CommentPO> findByIdIn(Set<Long> ids);
+	List<CommentPO> findAllByAuthorIdAndToId(long authorId, long toId);
 
-	int deleteByIds(Collection<Long> ids);
+	int deleteAllByIdIn(Collection<Long> ids);
 }

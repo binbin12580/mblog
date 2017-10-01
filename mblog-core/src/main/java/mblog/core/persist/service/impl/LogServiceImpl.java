@@ -41,11 +41,4 @@ public class LogServiceImpl implements LogService {
 		logDao.save(po);
 	}
 	
-	@Override
-	@Transactional(readOnly = true)
-	public int statsByDay(int logType, long userId, long targetId, String ip, Date day) {
-		List<LogPO> list = logDao.findByDay(logType, userId, targetId, ip, day);
-		return list != null ? list.size() : 0;
-	}
-
 }

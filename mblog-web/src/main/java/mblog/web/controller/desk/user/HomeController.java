@@ -9,16 +9,14 @@
 */
 package mblog.web.controller.desk.user;
 
-import mblog.core.data.AccountProfile;
-import mblog.core.data.User;
+import mblog.core.data.*;
 import mblog.core.persist.service.*;
 import mblog.shiro.authc.AccountSubject;
 import mblog.web.controller.BaseController;
 import mblog.web.controller.desk.Views;
-import mtons.modules.lang.Const;
-import mtons.modules.pojos.Paging;
-import mtons.modules.pojos.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,18 +45,17 @@ public class HomeController extends BaseController {
 
 	/**
 	 * 用户主页
-	 * @param pn
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/home")
-	public String home(Integer pn, ModelMap model) {
-		Paging paging = wrapPage(pn);
+	public String home(ModelMap model) {
+		Pageable pageable = wrapPageable();
 		AccountSubject subject = getSubject();
 
-		feedsService.findUserFeeds(paging, subject.getProfile().getId(), Const.ZERO, Const.ZERO);
+		Page<Feeds> page = feedsService.findUserFeeds(pageable, subject.getProfile().getId());
 
-		model.put("page", paging);
+		model.put("page", page);
 		initUser(model);
 
 		return getView(Views.HOME_FEEDS);
@@ -66,15 +63,14 @@ public class HomeController extends BaseController {
 
 	/**
 	 * 我发布的文章
-	 * @param pn
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/home", params = "method=posts")
-	public String posts(Integer pn, ModelMap model) {
-		Paging page = wrapPage(pn);
-		UserProfile up = getSubject().getProfile();
-		postService.pagingByAuthorId(page, up.getId());
+	public String posts(ModelMap model) {
+		Pageable pageable = wrapPageable();
+		AccountProfile up = getSubject().getProfile();
+		Page<Post> page = postService.pagingByAuthorId(pageable, up.getId());
 
 		model.put("page", page);
 		initUser(model);
@@ -84,15 +80,14 @@ public class HomeController extends BaseController {
 
 	/**
 	 * 我发表的评论
-	 * @param pn
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/home", params = "method=comments")
-	public String comments(Integer pn, ModelMap model) {
-		Paging page = wrapPage(pn);
+	public String comments(ModelMap model) {
+		Pageable pageable = wrapPageable();
 		AccountSubject subject = getSubject();
-		page = commentService.paging4Home(page, subject.getProfile().getId());
+		Page<Comment> page = commentService.paging4Home(pageable, subject.getProfile().getId());
 
 		model.put("page", page);
 		initUser(model);
@@ -102,15 +97,14 @@ public class HomeController extends BaseController {
 
 	/**
 	 * 我喜欢过的文章
-	 * @param pn
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/home/favors")
-	public String favors(Integer pn, ModelMap model) {
-		Paging page = wrapPage(pn);
-		UserProfile profile = getSubject().getProfile();
-		favorService.pagingByOwnId(page, profile.getId());
+	public String favors(ModelMap model) {
+		Pageable pageable = wrapPageable();
+		AccountProfile profile = getSubject().getProfile();
+		Page<Favor> page = favorService.pagingByOwnId(pageable, profile.getId());
 
 		model.put("page", page);
 		initUser(model);
@@ -120,15 +114,14 @@ public class HomeController extends BaseController {
 
 	/**
 	 * 我的关注
-	 * @param pn
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/home/follows")
-	public String follows(Integer pn, ModelMap model) {
-		Paging page = wrapPage(pn);
-		UserProfile profile = getSubject().getProfile();
-		followService.follows(page, profile.getId());
+	public String follows(ModelMap model) {
+		Pageable pageable = wrapPageable();
+		AccountProfile profile = getSubject().getProfile();
+		Page<User> page = followService.follows(pageable, profile.getId());
 
 		model.put("page", page);
 		initUser(model);
@@ -138,15 +131,14 @@ public class HomeController extends BaseController {
 
 	/**
 	 * 我的粉丝
-	 * @param pn
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/home/fans")
-	public String fans(Integer pn, ModelMap model) {
-		Paging page = wrapPage(pn);
-		UserProfile profile = getSubject().getProfile();
-		followService.fans(page, profile.getId());
+	public String fans(ModelMap model) {
+		Pageable pageable = wrapPageable();
+		AccountProfile profile = getSubject().getProfile();
+		Page<User> page = followService.fans(pageable, profile.getId());
 
 		model.put("page", page);
 		initUser(model);
@@ -156,15 +148,14 @@ public class HomeController extends BaseController {
 
 	/**
 	 * 我的通知
-	 * @param pn
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value="/home/notifies")
-	public String notifies(Integer pn, ModelMap model) {
-		Paging page = wrapPage(pn);
-		UserProfile profile = getSubject().getProfile();
-		notifyService.findByOwnId(page, profile.getId());
+	public String notifies(ModelMap model) {
+		Pageable pageable = wrapPageable();
+		AccountProfile profile = getSubject().getProfile();
+		Page<Notify> page = notifyService.findByOwnId(pageable, profile.getId());
 		// 标记已读
 		notifyService.readed4Me(profile.getId());
 
@@ -177,7 +168,7 @@ public class HomeController extends BaseController {
 	}
 
 	private void initUser(ModelMap model) {
-		UserProfile up = getSubject().getProfile();
+		AccountProfile up = getSubject().getProfile();
 		User user = userService.get(up.getId());
 
 		model.put("user", user);

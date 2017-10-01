@@ -1,13 +1,12 @@
 package mblog.web.controller.desk;
 
-import mblog.base.data.DataExt;
+import mblog.base.data.Data;
 import mblog.base.email.EmailSender;
 import mblog.base.lang.Consts;
 import mblog.core.data.User;
 import mblog.core.persist.service.UserService;
 import mblog.core.persist.service.VerifyService;
 import mblog.web.controller.BaseController;
-import mtons.modules.pojos.Data;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +32,7 @@ public class ForgotController extends BaseController {
 
     @RequestMapping("/apply")
     public String apply(String username, ModelMap model) {
-        DataExt data = null;
+        Data data = null;
 
         if (StringUtils.isNotBlank(username)) {
             User user = userService.getByUsername(username);
@@ -47,12 +46,12 @@ public class ForgotController extends BaseController {
 
                 emailSender.sendTemplete(user.getEmail(), "找回密码", Consts.EMAIL_TEMPLATE_FORGOT, context);
 
-                data = DataExt.success("邮件发送成功", Data.NOOP);
+                data = Data.success("邮件发送成功", Data.NOOP);
 
                 model.put("data", data);
                 return getView(Views.REG_RESULT);
             } else {
-                data = DataExt.failure("查无此用户");
+                data = Data.failure("查无此用户");
             }
         }
         model.put("data", data);
@@ -61,7 +60,7 @@ public class ForgotController extends BaseController {
 
     @RequestMapping("/reset")
     public String reset(Long userId, String token, String password, ModelMap model) {
-        DataExt data;
+        Data data;
 
         try {
             Assert.notNull(userId, "缺少必要的参数");
@@ -70,11 +69,11 @@ public class ForgotController extends BaseController {
             verifyService.verifyToken(userId, Consts.VERIFY_FORGOT, token);
             userService.updatePassword(userId, password);
 
-            data = DataExt.success("恭喜您! 密码重置成功。", Data.NOOP);
+            data = Data.success("恭喜您! 密码重置成功。", Data.NOOP);
             data.addLink("login", "去登陆");
 
         } catch (Exception e) {
-            data = DataExt.failure(e.getMessage());
+            data = Data.failure(e.getMessage());
         }
 
         model.put("data", data);

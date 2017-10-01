@@ -12,8 +12,7 @@ package mblog.base.utils;
 import java.io.IOException;
 import java.util.Map;
 
-import mtons.modules.exception.MtonsException;
-
+import mblog.base.lang.MtonsException;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;

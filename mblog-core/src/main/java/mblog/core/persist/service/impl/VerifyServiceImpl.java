@@ -10,11 +10,11 @@
 package mblog.core.persist.service.impl;
 
 import mblog.base.lang.Consts;
+import mblog.base.lang.EntityStatus;
+import mblog.base.lang.MtonsException;
 import mblog.core.persist.dao.VerifyDao;
 import mblog.core.persist.entity.VerifyPO;
 import mblog.core.persist.service.VerifyService;
-import mtons.modules.exception.MtonsException;
-import mtons.modules.lang.EntityStatus;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class VerifyServiceImpl implements VerifyService {
     @Override
     @Transactional
     public String generateCode(long userId, int type, String target) {
-        VerifyPO po = verifyDao.getByUserId(userId);
+        VerifyPO po = verifyDao.findByUserId(userId);
 
         String code = RandomStringUtils.randomNumeric(10);
         Date now = new Date();
@@ -77,7 +77,7 @@ public class VerifyServiceImpl implements VerifyService {
     public String verify(long userId, int type, String code) {
         Assert.hasLength(code, "验证码不能为空");
 
-        VerifyPO po = verifyDao.get(userId, type);
+        VerifyPO po = verifyDao.findByUserIdAndType(userId, type);
 
         Assert.notNull(po, "您没有进行过类型验证");
 
@@ -102,7 +102,7 @@ public class VerifyServiceImpl implements VerifyService {
     public void verifyToken(long userId, int type, String token) {
         Assert.hasLength(token, "验证码不能为空");
 
-        VerifyPO po = verifyDao.get(userId, type);
+        VerifyPO po = verifyDao.findByUserIdAndType(userId, type);
 
         Assert.notNull(po, "您没有进行过类型验证");
 

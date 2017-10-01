@@ -9,13 +9,13 @@
 */
 package mblog.web.controller.api;
 
+import mblog.base.data.Data;
 import mblog.core.biz.PostBiz;
+import mblog.core.data.AccountProfile;
 import mblog.core.data.Post;
 import mblog.core.data.User;
 import mblog.core.persist.service.UserService;
 import mblog.web.controller.BaseController;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.UserProfile;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -28,6 +28,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sun.plugin.util.UserProfile;
 
 import java.util.List;
 
@@ -47,7 +48,8 @@ public class SidebarController extends BaseController {
 	private UserService userService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public @ResponseBody Data login(String username, String password, ModelMap model) {
+	public @ResponseBody
+	Data login(String username, String password, ModelMap model) {
 		Data data = Data.failure("操作失败");
 
 		if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
@@ -78,7 +80,7 @@ public class SidebarController extends BaseController {
 
 	@RequestMapping("/latests.json")
 	public @ResponseBody List<Post> latests() {
-		UserProfile up = getSubject().getProfile();
+		AccountProfile up = getSubject().getProfile();
 		long ignoreUserId = 0;
 		if (up != null) {
 			ignoreUserId = up.getId();
@@ -89,7 +91,7 @@ public class SidebarController extends BaseController {
 	
 	@RequestMapping("/hots.json")
 	public @ResponseBody List<Post> hots() {
-		UserProfile up = getSubject().getProfile();
+		AccountProfile up = getSubject().getProfile();
 		long ignoreUserId = 0;
 		if (up != null) {
 			ignoreUserId = up.getId();
@@ -105,7 +107,7 @@ public class SidebarController extends BaseController {
 	 */
 	@RequestMapping(value="/hotusers.json")
 	public @ResponseBody List<User> hotusers(Integer pn) {
-		List<User> rets = userService.findHotUserByfans(12);
+		List<User> rets = userService.findHotUserByfans();
          return rets;
 	}
 }

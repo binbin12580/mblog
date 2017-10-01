@@ -15,7 +15,7 @@ public class AuthMenuDaoTest extends SpringTransactionalContextTests{
 	
 	@Test
 	public void testFindByParentId(){
-		List<AuthMenuPO> list = authMenuDao.findByParentId(2L);
+		List<AuthMenuPO> list = authMenuDao.findAll();
 		System.out.println(list);
 	}
 

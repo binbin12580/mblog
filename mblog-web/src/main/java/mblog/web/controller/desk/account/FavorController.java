@@ -1,19 +1,18 @@
 package mblog.web.controller.desk.account;
 
-import javax.servlet.http.HttpServletRequest;
-
+import mblog.base.data.Data;
+import mblog.base.lang.Consts;
+import mblog.core.biz.PostBiz;
+import mblog.core.data.AccountProfile;
+import mblog.core.event.NotifyEvent;
+import mblog.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import mblog.base.lang.Consts;
-import mblog.core.biz.PostBiz;
-import mblog.core.event.NotifyEvent;
-import mblog.web.controller.BaseController;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.UserProfile;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author langhsu on 2015/8/31.
@@ -33,11 +32,12 @@ public class FavorController extends BaseController {
      * @return
      */
     @RequestMapping("/favor")
-    public @ResponseBody Data favor(Long id, HttpServletRequest request) {
+    public @ResponseBody
+    Data favor(Long id, HttpServletRequest request) {
         Data data = Data.failure("操作失败");
         if (id != null) {
             try {
-                UserProfile up = getSubject().getProfile();
+                AccountProfile up = getSubject().getProfile();
                 postBiz.favor(up.getId(), id);
 
                 sendNotify(up.getId(), id);
@@ -61,7 +61,7 @@ public class FavorController extends BaseController {
         Data data = Data.failure("操作失败");
         if (id != null) {
             try {
-                UserProfile up = getSubject().getProfile();
+                AccountProfile up = getSubject().getProfile();
                 postBiz.unfavor(up.getId(), id);
                 data = Data.success("操作成功!", Data.NOOP);
             } catch (Exception e) {

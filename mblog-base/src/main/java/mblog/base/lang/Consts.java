@@ -24,7 +24,18 @@ public interface Consts {
 	int IDENTITY_STEP = 1; // 自增步进
 
 	int TIME_MIN = 1000; // 最小时间单位, 1秒
-	
+
+	// 忽略值
+	int IGNORE = -1;
+
+	int ZERO = 0;
+
+	// 禁用状态
+	int STATUS_CLOSED = 1;
+
+	// 删除状态
+	int STATUS_REMOVED = 2;
+
 	/* 状态-初始 */
 	int STATUS_NORMAL = 0;
 

@@ -40,8 +40,8 @@ public class ConfigServiceImpl implements ConfigService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Config> findAll() {
-		List<ConfigPO> list = configDao.list();
-		List<Config> rets = new ArrayList<Config>();
+		List<ConfigPO> list = configDao.findAll();
+		List<Config> rets = new ArrayList<>();
 		
 		for (ConfigPO po : list) {
 			Config r = new Config();
@@ -59,12 +59,11 @@ public class ConfigServiceImpl implements ConfigService {
 		}
 		
 		for (Config st :  settings) {
-			ConfigPO entity = configDao.findByName(st.getKey());
+			ConfigPO entity = configDao.findByKey(st.getKey());
 
 			// 修改
 			if (entity != null) {
 				entity.setValue(st.getValue());
-				configDao.update(entity);
 			}
 			// 添加
 			else {
@@ -90,7 +89,7 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 
 	public String findConfigValueByName(String key) {
-		ConfigPO entity = configDao.findByName(key);
+		ConfigPO entity = configDao.findByKey(key);
 		if (entity != null) {
 			return entity.getValue();
 		}

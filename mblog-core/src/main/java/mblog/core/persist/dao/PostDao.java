@@ -9,54 +9,39 @@
 */
 package mblog.core.persist.dao;
 
+import mblog.core.persist.dao.custom.PostDaoCustom;
+import mblog.core.persist.entity.PostPO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+
 import java.util.Collection;
 import java.util.List;
-
-import mblog.core.data.Post;
-import mblog.core.persist.entity.PostPO;
-import mtons.modules.persist.BaseRepository;
-import mtons.modules.pojos.Paging;
 
 /**
  * @author langhsu
  *
  */
-public interface PostDao extends BaseRepository<PostPO> {
-	/**
-	 * 前台查询
-	 * @param paging
-	 * @param group
-	 * @param ord
-	 * @return
-	 */
-	List<PostPO> paging(Paging paging, int group, String ord);
-
-	/**
-	 * 后台查询
-	 * @param paging
-	 * @param id
-	 * @param title
-	 * @param group
-	 * @return
-	 */
-	List<PostPO> paging4Admin(Paging paging, long id, String title, int group);
-
+public interface PostDao extends JpaRepository<PostPO, Long>, JpaSpecificationExecutor<PostPO>, PostDaoCustom {
 	/**
 	 * 查询指定用户
-	 * @param paging
-	 * @param userId
+	 * @param pageable
+	 * @param authorId
 	 * @return
 	 */
-	List<PostPO> pagingByAuthorId(Paging paging, long userId);
+	Page<PostPO> findAllByAuthorIdOrderByCreatedDesc(Pageable pageable, long authorId);
 
-	List<PostPO> findLatests(int maxResults, long ignoreUserId);
-	List<PostPO> findHots(int maxResults, long ignoreUserId);
-	List<PostPO> findByIds(Collection<Long> ids);
+	// findLatests
+	List<PostPO> findTop12ByOrderByCreatedDesc();
 
+	// findHots
+	List<PostPO> findTop12ByOrderByViewsDesc();
+
+	List<PostPO> findAllByIdIn(Collection<Long> id);
+
+	@Query("select coalesce(max(p.featured), 0) from PostPO p")
 	int maxFeatured();
 	
-	List<Post> search(Paging paging, String q) throws Exception;
-	List<PostPO> searchByTag(Paging paigng, String tag);
-	void resetIndexs();
-
 }

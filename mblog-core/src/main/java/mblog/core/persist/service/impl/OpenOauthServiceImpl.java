@@ -9,7 +9,7 @@
 */
 package mblog.core.persist.service.impl;
 
-import mtons.modules.security.MD5;
+import mblog.base.utils.MD5;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,15 +38,15 @@ public class OpenOauthServiceImpl implements OpenOauthService {
     @Override
     @Transactional
     public User getUserByOauthToken(String oauth_token) {
-        OpenOauthPO thirdToken = openOauthDao.getOauthToken(oauth_token);
-        UserPO userPO = userDao.get(thirdToken.getId());
+        OpenOauthPO thirdToken = openOauthDao.findByAccessToken(oauth_token);
+        UserPO userPO = userDao.findOne(thirdToken.getId());
         return BeanMapUtils.copy(userPO, 0);
     }
 
     @Override
     @Transactional
     public OpenOauth getOauthByToken(String oauth_token) {
-        OpenOauthPO po = openOauthDao.getOauthToken(oauth_token);
+        OpenOauthPO po = openOauthDao.findByAccessToken(oauth_token);
         OpenOauth vo = null;
         if (po != null) {
             vo = new OpenOauth();
@@ -58,7 +58,7 @@ public class OpenOauthServiceImpl implements OpenOauthService {
     @Override
     @Transactional
     public OpenOauth getOauthByUid(long userId) {
-        OpenOauthPO po = openOauthDao.getOauthToken(userId);
+        OpenOauthPO po = openOauthDao.findByUserId(userId);
         OpenOauth vo = null;
         if (po != null) {
             vo = new OpenOauth();
@@ -70,9 +70,9 @@ public class OpenOauthServiceImpl implements OpenOauthService {
     @Override
     @Transactional
     public boolean checkIsOriginalPassword(long userId) {
-        OpenOauthPO po = openOauthDao.getOauthToken(userId);
+        OpenOauthPO po = openOauthDao.findByUserId(userId);
         if (po != null) {
-            UserPO upo = userDao.get(userId);
+            UserPO upo = userDao.findOne(userId);
 
             String pwd = MD5.md5(po.getAccessToken());
             // 判断用户密码 和 登录状态
@@ -94,7 +94,7 @@ public class OpenOauthServiceImpl implements OpenOauthService {
 	@Override
 	@Transactional
 	public OpenOauth getOauthByOauthUserId(String oauthUserId) {
-		OpenOauthPO po = openOauthDao.getOauthUserId(oauthUserId);
+		OpenOauthPO po = openOauthDao.findByOauthUserId(oauthUserId);
         OpenOauth vo = null;
         if (po != null) {
             vo = new OpenOauth();

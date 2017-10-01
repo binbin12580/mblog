@@ -18,15 +18,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import mtons.modules.pojos.Data;
-
+import com.alibaba.fastjson.JSON;
+import mblog.base.data.Data;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.servlet.OncePerRequestFilter;
 import org.apache.shiro.web.util.WebUtils;
-
-import com.google.gson.Gson;
 
 /**
  * @version 1.0.0
@@ -62,8 +60,7 @@ public class AuthenticatedFilter extends OncePerRequestFilter {
         
         if (isAjaxRequest((HttpServletRequest) request)) {
         	response.setContentType("application/json;charset=UTF-8");
-			Gson gson = new Gson();
-			response.getWriter().print(gson.toJson(Data.failure("您还没有登录!")));
+			response.getWriter().print(JSON.toJSONString(Data.failure("您还没有登录!")));
         } else {
         	response.getWriter().write(new Formatter().format(JS, url).toString());
         }

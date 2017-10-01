@@ -1,5 +1,6 @@
 package mblog.web.controller.admin;
 
+import mblog.base.data.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import mblog.core.persist.service.AttachService;
 import mblog.web.controller.BaseController;
-import mtons.modules.pojos.Data;
 
 /**
  * @author langhsu on 2015/9/5.
@@ -19,7 +19,8 @@ public class AttachController extends BaseController {
     private AttachService attachService;
 
     @RequestMapping("/delete")
-    public @ResponseBody Data delete(Long id) {
+    public @ResponseBody
+    Data delete(Long id) {
         Data data = Data.failure("操作失败");
         if (id != null) {
             try {

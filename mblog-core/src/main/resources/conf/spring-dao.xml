@@ -2,62 +2,92 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:task="http://www.springframework.org/schema/task"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
-    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd 
-    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
 	default-autowire="byName">
 
 	<context:annotation-config />
 	<context:component-scan base-package="mblog.*"/>
 
 	<!-- Persistent related config -->
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="${jdbc.driverClassName}" />
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
-		<property name="connectionProperties">
-			<props>
-				<prop key="useUnicode">true</prop>
-				<prop key="characterEncoding">${jdbc.characterEncoding}</prop>
-			</props>
-		</property>
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="initialPoolSize" value="5" />
+		<property name="minPoolSize" value="2" />
+		<property name="maxPoolSize" value="100" />
+		<property name="idleConnectionTestPeriod" value="1200" />
+		<property name="preferredTestQuery" value="${jdbc.preferredTestQuery}" />
+		<property name="testConnectionOnCheckin" value="true" />
 	</bean>
 
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="hibernateProperties">
+	<!-- Hibernate对Jpa的实现 -->
+	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+
+	<!-- 定义实体管理工厂 -->
+	<bean id="entityManagerFactory"
+		  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<!-- 指定数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 指定Jpa持久化实现，使用Hibernate实现 -->
+		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
+		<!-- 指定Entity实体类包路径 -->
+		<property name="packagesToScan">
+			<array>
+				<value>mblog.core.persist.entity</value>
+			</array>
+		</property>
+		<!-- 指定JPA属性；如Hibernate中指定是否显示SQL的是否显示、方言等 -->
+		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.dialect">${jdbc.hibernate.dialect}</prop>
 				<prop key="hibernate.jdbc.fetch_size">20</prop>
 				<prop key="hibernate.jdbc.batch_size">20</prop>
 				<prop key="hibernate.show_sql">false</prop>
+				<!-- 开启后sql更清晰 -->
+				<prop key="hibernate.format_sql">false</prop>
+				<!-- 表与实体验证或创建(create/update/validate) -->
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
+
 				<prop key="hibernate.order_updates">true</prop>
+
+				<!-- 驼峰自动转换, 此配置会忽略 @Column 中的name-->
+				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+
+				<!-- 开启后不需要在实体内配置hibernate的 @cache标记，只要打上JPA的@cacheable标记即可默认开启该实体的2级缓存。  -->
+				<!-- 选项：ENABLE_SELECTIVE、DISABLE_SELECTIVE、NONE、ALL -->
+				<!-- 如果为ALL，实体连@cacheable都不要标记 -->
+				<prop key="javax.persistence.sharedCache.mode">ENABLE_SELECTIVE</prop>
+
+				<prop key="hibernate.generate_statistics">false</prop>
+
+				<!-- 如用把ehcache用在hibernate二级缓存上，service或以上层则不方便在使用ehcache，可使用memcache代替或redis等 -->
 				<prop key="hibernate.cache.use_second_level_cache">false</prop>
 				<prop key="hibernate.cache.use_query_cache">false</prop>
-				<prop key="hibernate.search.default.directory_provider">
-    				${hibernate.search.store}
-    			</prop>
-    			<prop key="hibernate.search.default.indexBase">${store.root}/indexs</prop>
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+
+				<prop key="hibernate.search.lucene_version">LUCENE_CURRENT</prop>
+				<prop key="hibernate.search.default.directory_provider">${hibernate.search.store}</prop>
+				<prop key="hibernate.search.default.indexBase">${store.root}/indexs</prop>
 			</props>
 		</property>
-		<!-- Entity package -->
-		<property name="packagesToScan">
-			<list>
-				<value>mblog.core.persist.entity</value>
-			</list>
-		</property>
-		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<!-- Transaction config -->
-	<bean id="txManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" autowire="byName">
-		<property name="sessionFactory" ref="sessionFactory"/>
+	<!-- Jpa 事务管理器  -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
-	
-	<tx:annotation-driven transaction-manager="txManager" />
-	
+
+	<!-- 启用扫描并自动创建代理的功能  -->
+	<jpa:repositories base-package="mblog.core" transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
+
+	<!-- 开启注解事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+
 </beans>

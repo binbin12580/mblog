@@ -1,11 +1,11 @@
 package mblog.web.controller.desk.account;
 
+import mblog.base.data.Data;
 import mblog.base.lang.Consts;
+import mblog.core.data.AccountProfile;
 import mblog.core.event.NotifyEvent;
 import mblog.core.persist.service.FollowService;
 import mblog.web.controller.BaseController;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -24,11 +24,12 @@ public class FollowController extends BaseController {
     private ApplicationContext applicationContext;
 
     @RequestMapping("/follow")
-    public @ResponseBody Data follow(Long id) {
+    public @ResponseBody
+    Data follow(Long id) {
         Data data = Data.failure("操作失败");
         if (id != null) {
             try {
-                UserProfile up = getSubject().getProfile();
+                AccountProfile up = getSubject().getProfile();
 
                 followService.follow(up.getId(), id);
 
@@ -47,7 +48,7 @@ public class FollowController extends BaseController {
         Data data = Data.failure("操作失败");
         if (id != null) {
             try {
-                UserProfile up = getSubject().getProfile();
+                AccountProfile up = getSubject().getProfile();
 
                 followService.unfollow(up.getId(), id);
 
@@ -64,7 +65,7 @@ public class FollowController extends BaseController {
         Data data = Data.failure("操作失败");
         if (id != null) {
             try {
-                UserProfile up = getSubject().getProfile();
+                AccountProfile up = getSubject().getProfile();
 
                 boolean check = followService.checkFollow(up.getId(), id);
 

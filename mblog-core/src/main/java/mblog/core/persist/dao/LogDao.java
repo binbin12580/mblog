@@ -9,16 +9,13 @@
 */
 package mblog.core.persist.dao;
 
-import java.util.Date;
-import java.util.List;
-
 import mblog.core.persist.entity.LogPO;
-import mtons.modules.persist.BaseRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * @author langhsu
  *
  */
-public interface LogDao extends BaseRepository<LogPO> {
-	List<LogPO> findByDay(int logType, long userId, long targetId, String ip, Date day);
+public interface LogDao extends JpaRepository<LogPO, Long>, JpaSpecificationExecutor<LogPO> {
 }

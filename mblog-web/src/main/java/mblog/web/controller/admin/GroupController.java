@@ -9,11 +9,11 @@
 */
 package mblog.web.controller.admin;
 
+import mblog.base.data.Data;
+import mblog.base.lang.Consts;
 import mblog.core.data.Group;
 import mblog.core.persist.service.GroupService;
 import mblog.web.controller.BaseController;
-import mtons.modules.lang.Const;
-import mtons.modules.pojos.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -32,7 +32,7 @@ public class GroupController extends BaseController {
 	
 	@RequestMapping("/list")
 	public String list(ModelMap model) {
-		model.put("list", groupService.findAll(Const.IGNORE));
+		model.put("list", groupService.findAll(Consts.IGNORE));
 		return "/admin/group/list";
 	}
 	

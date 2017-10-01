@@ -1,6 +1,8 @@
 package mblog.core.persist.service;
 
-import mtons.modules.pojos.Paging;
+import mblog.core.data.Favor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author langhsu on 2015/8/31.
@@ -17,8 +19,8 @@ public interface FavorService {
 
     /**
      * 分页查询用户的喜欢记录
-     * @param paging
+     * @param pageable
      * @param ownId
      */
-    void pagingByOwnId(Paging paging, long ownId);
+    Page<Favor> pagingByOwnId(Pageable pageable, long ownId);
 }

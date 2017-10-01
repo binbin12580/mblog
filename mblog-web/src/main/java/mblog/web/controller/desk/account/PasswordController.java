@@ -9,8 +9,8 @@
 */
 package mblog.web.controller.desk.account;
 
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.UserProfile;
+import mblog.base.data.Data;
+import mblog.core.data.AccountProfile;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +41,7 @@ public class PasswordController extends BaseController {
 	public String post(String oldPassword, String password, ModelMap model) {
 		Data data;
 		try {
-			UserProfile profile = getSubject().getProfile();
+			AccountProfile profile = getSubject().getProfile();
 			userService.updatePassword(profile.getId(), oldPassword, password);
 			
 			data = Data.success("操作成功", Data.NOOP);

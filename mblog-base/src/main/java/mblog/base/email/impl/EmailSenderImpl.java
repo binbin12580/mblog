@@ -14,6 +14,7 @@ import java.util.Properties;
 
 import javax.mail.internet.MimeMessage;
 
+import mblog.base.lang.MtonsException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -27,7 +28,6 @@ import mblog.base.context.AppContext;
 import mblog.base.email.EmailEngine;
 import mblog.base.email.EmailSender;
 import mblog.base.lang.SiteConfig;
-import mtons.modules.exception.MtonsException;
 
 /**
  * @author langhsu on 2015/8/14.

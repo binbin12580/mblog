@@ -9,38 +9,27 @@
 */
 package mblog.core.persist.dao;
 
-import mtons.modules.persist.BaseRepository;
-import mtons.modules.pojos.Paging;
+import mblog.core.persist.entity.UserPO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 import java.util.Set;
 
-import mblog.core.data.User;
-import mblog.core.persist.entity.UserPO;
-
 /**
  * @author langhsu
  */
-public interface UserDao extends BaseRepository<UserPO> {
-    UserPO getByUsername(String username);
+public interface UserDao extends JpaRepository<UserPO, Long>, JpaSpecificationExecutor<UserPO> {
+    UserPO findByUsername(String username);
 
-    UserPO getByEmail(String email);
+    UserPO findByEmail(String email);
     
-    List<UserPO> findHotUserByfans(int maxResults);
-    
-    List<UserPO> paging(Paging paging, String key);
+    List<UserPO> findTop12ByOrderByFansDesc();
 
-    List<UserPO> findByIds(Set<Long> ids);
+    Page<UserPO> findAllByOrderByIdDesc(Pageable pageable);
 
-    void identityPost(List<Long> userIds, boolean identity);
+    List<UserPO> findAllByIdIn(Set<Long> ids);
 
-    void identityComment(List<Long> userIds, boolean identity);
-
-    void identityFollow(List<Long> userIds, boolean identity);
-
-    void identityFans(List<Long> userIds, boolean identity);
-
-    void identityFavors(List<Long> userIds, boolean identity);
-
-	
 }

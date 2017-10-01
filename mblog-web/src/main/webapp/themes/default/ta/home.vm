@@ -43,7 +43,7 @@
 					<div class="col-xs-12 col-md-12">
 						<div class="shadow-box mt20">
 							<div class="stream-list">
-								#foreach($row in $page.results)
+								#foreach($row in $page.content)
 								<div class="stream-item" id="loop-${row.id}">
 									<div class="blog-rank">
 										<div class="votes #if(${row.favors} > 0) plus #end">
@@ -95,7 +95,7 @@
 								</div>
 								#end
 
-								#if($page.results.size() == 0)
+								#if($page.content.size() == 0)
 								<div class="stream-item">
 									<i class="fa fa-info-circle fa-lg"></i> TA还没发表过文章!
 								</div>

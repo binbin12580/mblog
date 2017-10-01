@@ -9,8 +9,6 @@
 */
 package mblog.core.persist.service;
 
-import java.util.List;
-
 /**
  * @author langhsu on 2015/8/6.
  */
@@ -20,28 +18,28 @@ public interface UserEventService {
      * @param userId
      * @param postId
      */
-    void identityPost(List<Long> userId, long postId, boolean identity);
+    void identityPost(Long userId, long postId, boolean identity);
 
     /**
      * 自增评论数
      * @param userId
      * @param commentId
      */
-    void identityComment(List<Long> userId, long commentId, boolean identity);
+    void identityComment(Long userId, long commentId, boolean identity);
 
     /**
      * 自增关注数
      * @param userId
      * @param followId
      */
-    void identityFollow(List<Long> userId, long followId, boolean identity);
+    void identityFollow(Long userId, long followId, boolean identity);
 
     /**
      * 自增粉丝数
      * @param userId
      * @param fansId
      */
-    void identityFans(List<Long> userId, long fansId, boolean identity);
+    void identityFans(Long userId, long fansId, boolean identity);
 
     /**
      * 自增收藏数
@@ -49,5 +47,5 @@ public interface UserEventService {
      * @param targetType
      * @param targetId
      */
-    void identityFavors(List<Long> userId, boolean identity, int targetType, long targetId);
+    void identityFavors(Long userId, boolean identity, int targetType, long targetId);
 }

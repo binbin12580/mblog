@@ -17,14 +17,16 @@ import mblog.core.event.FeedsEvent;
 import mblog.core.persist.service.AttachService;
 import mblog.core.persist.service.FeedsService;
 import mblog.core.persist.service.PostService;
-import mtons.modules.pojos.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author langhsu
@@ -46,53 +48,23 @@ public class PostBizImpl implements PostBiz {
 	/**
 	 * 分页查询文章, 带缓存
 	 * - 缓存key规则: list_分组ID排序方式_页码_每页条数
-	 * @param paging
+	 * @param pageable
 	 * @param group
 	 * @param ord
 	 * @return
 	 */
 	@Override
-	@Cacheable(value = "postsCaches", key = "'list_' + #group + #ord + '_' + #paging.getPageNo() + '_' + #paging.getMaxResults()")
-	public Paging paging(Paging paging, int group, String ord) {
-		postService.paging(paging, group, ord, true);
-		return paging;
+	@Cacheable(value = "postsCaches", key = "'list_' + #group + #ord + '_' + #pageable.getPageNumber() + '_' + #pageable.getPageSize()")
+	public Page<Post> paging(Pageable pageable, int group, String ord) {
+		return postService.paging(pageable, group, ord, true);
 	}
 	
 	@Override
-	@Cacheable(value = "postsCaches", key = "'uhome' + #uid + '_' + #paging.getPageNo()")
-	public Paging pagingByAuthorId(Paging paging, long uid) {
-		postService.pagingByAuthorId(paging, uid);
-		return paging;
+	@Cacheable(value = "postsCaches", key = "'uhome' + #uid + '_' + #pageable.getPageNumber()")
+	public Page<Post> pagingByAuthorId(Pageable pageable, long uid) {
+		return postService.pagingByAuthorId(pageable, uid);
 	}
 
-	@Override
-	@Cacheable(value = "postsCaches", key = "'gallery_' + #group + #ord + '_' + #paging.getPageNo() + '_' + #paging.getMaxResults()")
-	@SuppressWarnings("unchecked")
-	public Paging gallery(Paging paging, int group, String ord) {
-		postService.paging(paging, group, ord, false);
-		
-		// 查询图片, 这里只加载文章的最后一张图片
-		List<Post> results = (List<Post>) paging.getResults();
-		Set<Long> imageIds = new HashSet<Long>();
-
-		results.forEach(p -> {
-			if (p.getLastImageId() > 0) {
-				imageIds.add(p.getLastImageId());
-			}
-		});
-
-		if (!imageIds.isEmpty()) {
-			Map<Long, Attach> ats = attachService.findByIds(imageIds);
-
-			results.forEach(p -> {
-				if (p.getLastImageId() > 0) {
-					p.setAlbum(ats.get(p.getLastImageId()));
-				}
-			});
-		}
-		return paging;
-	}
-	
 	@Override
 	@Cacheable(value = "postsCaches", key = "'view_' + #id")
 	public Post getPost(long id) {

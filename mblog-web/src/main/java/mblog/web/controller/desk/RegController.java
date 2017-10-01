@@ -3,15 +3,14 @@
  */
 package mblog.web.controller.desk;
 
-import mblog.base.data.DataExt;
+import mblog.base.data.Data;
 import mblog.base.email.EmailSender;
 import mblog.base.lang.Consts;
+import mblog.core.data.AccountProfile;
 import mblog.core.data.User;
 import mblog.core.persist.service.UserService;
 import mblog.core.persist.service.VerifyService;
 import mblog.web.controller.BaseController;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,7 +35,7 @@ public class RegController extends BaseController {
 	
 	@RequestMapping(value = "/reg", method = RequestMethod.GET)
 	public String view() {
-		UserProfile profile = getSubject().getProfile();
+		AccountProfile profile = getSubject().getProfile();
 		if (profile != null) {
 			return "redirect:/home";
 		}
@@ -45,7 +44,7 @@ public class RegController extends BaseController {
 	
 	@RequestMapping(value = "/reg", method = RequestMethod.POST)
 	public String reg(User post, ModelMap model) {
-		DataExt data;
+		Data data;
 		String ret = getView(Views.REG);
 		
 		try {
@@ -54,14 +53,14 @@ public class RegController extends BaseController {
 
 			sendEmail(user);
 
-			data = DataExt.success("恭喜您! 注册成功, 已经给您的邮箱发了验证码, 赶紧去完成邮箱绑定吧。", Data.NOOP);
+			data = Data.success("恭喜您! 注册成功, 已经给您的邮箱发了验证码, 赶紧去完成邮箱绑定吧。", Data.NOOP);
 			data.addLink("login", "先去登陆尝尝鲜");
 
 			ret = getView(Views.REG_RESULT);
 			
 		} catch (Exception e) {
             model.addAttribute("post", post);
-			data = DataExt.failure(e.getMessage());
+			data = Data.failure(e.getMessage());
 		}
 		model.put("data", data);
 		return ret;

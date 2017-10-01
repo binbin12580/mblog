@@ -34,7 +34,7 @@ public class AttachServiceImpl implements AttachService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Attach> findByTarget(long toId) {
-		List<AttachPO> list = attachDao.findByTarget(toId);
+		List<AttachPO> list = attachDao.findAllByToId(toId);
 		List<Attach> rets = new ArrayList<>();
 		list.forEach(po -> rets.add(BeanMapUtils.copy(po)));
 		return rets;
@@ -47,7 +47,7 @@ public class AttachServiceImpl implements AttachService {
 			return Collections.emptyMap();
 		}
 
-		List<AttachPO> list = attachDao.findByTarget(toIds);
+		List<AttachPO> list = attachDao.findAllByIdIn(toIds);
 		Map<Long, List<Attach>> ret = new HashMap<>();
 
 		list.forEach(po -> {
@@ -72,7 +72,7 @@ public class AttachServiceImpl implements AttachService {
 			return Collections.emptyMap();
 		}
 
-		List<AttachPO> list = attachDao.findByIds(ids);
+		List<AttachPO> list = attachDao.findAllByToIdIn(ids);
 		Map<Long, Attach> ret = new HashMap<>();
 
 		list.forEach(po -> ret.put(po.getId(), BeanMapUtils.copy(po)));
@@ -105,13 +105,13 @@ public class AttachServiceImpl implements AttachService {
 	@Override
 	@Transactional
 	public void deleteByToId(long toId) {
-		attachDao.deleteByToId(toId);
+		attachDao.deleteAllByToId(toId);
 	}
 
 	@Override
 	@Transactional
 	public void delete(long id) {
-		attachDao.deleteById(id);
+		attachDao.delete(id);
 	}
 
 }

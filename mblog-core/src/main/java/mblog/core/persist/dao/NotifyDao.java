@@ -1,27 +1,30 @@
 package mblog.core.persist.dao;
 
-import mtons.modules.persist.BaseRepository;
-import mtons.modules.pojos.Paging;
-
-import java.util.List;
-
 import mblog.core.persist.entity.NotifyPO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * @author langhsu on 2015/8/31.
  */
-public interface NotifyDao extends BaseRepository<NotifyPO> {
-    List<NotifyPO> findByOwnId(Paging paging, long ownId);
+public interface NotifyDao extends JpaRepository<NotifyPO, Long>, JpaSpecificationExecutor<NotifyPO> {
+    Page<NotifyPO> findAllByOwnIdOrderByIdDesc(Pageable pageable, long ownId);
     /**
      * 查询我的未读消息
      * @param ownId
      * @return
      */
-    int unread4Me(long ownId);
+    int countByOwnIdAndStatus(long ownId, int status);
 
     /**
      * 标记我的消息为已读
-     * @param ownId
      */
-    void readed4Me(long ownId);
+    @Modifying
+    @Query("update NotifyPO n set n.status = 1 where n.status = 0 and n.ownId = :id")
+    int updateReadedByOwnId(@Param("id") Long id);
 }

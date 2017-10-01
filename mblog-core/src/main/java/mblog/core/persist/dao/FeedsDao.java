@@ -9,30 +9,19 @@
 */
 package mblog.core.persist.dao;
 
-import mtons.modules.persist.BaseRepository;
-import mtons.modules.pojos.Paging;
-
-import java.util.List;
-
-import mblog.core.data.Feeds;
+import mblog.core.persist.dao.custom.FeedsDaoCustom;
 import mblog.core.persist.entity.FeedsPO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * @author langhsu
  *
  */
-public interface FeedsDao extends BaseRepository<FeedsPO> {
-	/**
-	 * 添加动态, 同时会分发给粉丝
-	 * 
-	 * @param feeds
-	 * @return
-	 */
-	int batchAdd(Feeds feeds);
-	
-	int deleteByAuthorId(long ownId, long authorId);
-	
-	List<FeedsPO> findUserFeeds(Paging paging, long ownId, long authorId, long ignoreId);
-	
-	void deleteByTarget(long postId);
+public interface FeedsDao extends JpaRepository<FeedsPO, Long>, JpaSpecificationExecutor<FeedsPO>, FeedsDaoCustom {
+	Page<FeedsPO> findAllByOwnIdOrderByIdDesc(Pageable pageable, long ownId);
+	int deleteAllByOwnIdAndAuthorId(long ownId, long authorId);
+	void deleteAllByPostId(long postId);
 }

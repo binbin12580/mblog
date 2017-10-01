@@ -9,13 +9,13 @@
 */
 package mblog.web.controller.admin;
 
+import mblog.base.data.Data;
+import mblog.base.lang.Consts;
 import mblog.core.data.Config;
 import mblog.core.persist.service.ConfigService;
 import mblog.core.persist.service.GroupService;
 import mblog.core.persist.service.PostService;
 import mblog.web.controller.BaseController;
-import mtons.modules.lang.Const;
-import mtons.modules.pojos.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.stereotype.Controller;
@@ -75,7 +75,8 @@ public class ConfigsController extends BaseController {
 	}
 	
 	@RequestMapping("/flush_cache")
-	public @ResponseBody Data flushCache() {
+	public @ResponseBody
+	Data flushCache() {
 		ehcacheManager.getCacheManager().clearAll();
 		return Data.success("操作成功", Data.NOOP);
 	}
@@ -94,7 +95,7 @@ public class ConfigsController extends BaseController {
 		appContext.setConfig(configMap);
 
 		// 刷新文章Group
-		servletContext.setAttribute("groups", groupService.findAll(Const.STATUS_NORMAL));
+		servletContext.setAttribute("groups", groupService.findAll(Consts.STATUS_NORMAL));
 		return Data.success("操作成功", Data.NOOP);
 	}
 

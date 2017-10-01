@@ -1,6 +1,6 @@
 #set($title = "搜索")
 
-#set($results = $page.results)
+#set($results = $page.content)
 
 <div class="shadow-box">
 	<div class="filter">
@@ -10,13 +10,13 @@
 			</div>
 		#else
 			<div class="alert" style="margin-bottom:0">
-				 搜索 <strong>$!{q}</strong>, 共 ${page.totalCount} 个结果.
+				 搜索 <strong>$!{q}</strong>, 共 ${page.totalElements} 个结果.
 			</div>
 		#end
 	</div>
 	<!-- tab panes -->
 	<div class="stream-list p-stream">
-		#foreach($row in $page.results)
+		#foreach($row in $results)
 			#showBlog($row)
 		#end
 	</div>

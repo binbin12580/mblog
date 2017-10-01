@@ -33,31 +33,29 @@ public class FriendLinkServiceImpl implements FriendLinkService {
 
         BeanUtils.copyProperties(friendLink, friendLinkPO);
 
-        friendLinkDao.saveOrUpdate(friendLinkPO);
+        friendLinkDao.save(friendLinkPO);
 
         servletContext.setAttribute("friendLinks", findAll());
     }
 
     @Override
     public void delete(long id) {
-        FriendLinkPO friendLinkPO = friendLinkDao.get(id);
+        FriendLinkPO friendLinkPO = friendLinkDao.findOne(id);
         friendLinkDao.delete(friendLinkPO);
         servletContext.setAttribute("friendLinks", findAll());
     }
 
     @Override
     public FriendLink findById(long id) {
-        FriendLink friendLink = BeanMapUtils.copy(friendLinkDao.get(id));
+        FriendLink friendLink = BeanMapUtils.copy(friendLinkDao.findOne(id));
         return friendLink;
     }
 
     @Override
     public List<FriendLink> findAll() {
-//        List<FriendLinkPO> linkPOs = friendLinkDao.list();
-
         List<FriendLinkPO> linkPOs = friendLinkDao.findAll();
 
-        List<FriendLink> rets = new ArrayList<FriendLink>();
+        List<FriendLink> rets = new ArrayList<>();
         for (FriendLinkPO po : linkPOs) {
             FriendLink m = new FriendLink();
             BeanUtils.copyProperties(po, m);

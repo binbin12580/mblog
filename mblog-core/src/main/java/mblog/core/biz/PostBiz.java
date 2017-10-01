@@ -10,7 +10,8 @@
 package mblog.core.biz;
 
 import mblog.core.data.Post;
-import mtons.modules.pojos.Paging;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,31 +28,21 @@ public interface PostBiz {
 	/**
 	 * 分页查询文章
 	 * 
-	 * @param paging
+	 * @param pageable
 	 * @param group
 	 * @param ord
 	 * @return
 	 */
-	Paging paging(Paging paging, int group, String ord);
+	Page<Post> paging(Pageable pageable, int group, String ord);
 	
 	/**
 	 * 查询指定用户的文章
 	 * 
-	 * @param paging
+	 * @param pageable
 	 * @param uid
 	 * @return
 	 */
-	Paging pagingByAuthorId(Paging paging, long uid);
-	
-	/**
-	 * 走廊查询 - (只返回一张图片)
-	 * 
-	 * @param paging
-	 * @param group
-	 * @param ord
-	 * @return
-	 */
-	Paging gallery(Paging paging, int group, String ord);
+	Page<Post> pagingByAuthorId(Pageable pageable, long uid);
 	
 	/**
 	 * 从缓存中获取文章

@@ -9,17 +9,13 @@
 */
 package mblog.web.controller;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import mblog.base.context.AppContext;
+import mblog.base.upload.FileRepoFactory;
+import mblog.base.utils.MD5;
+import mblog.core.data.AccountProfile;
+import mblog.core.data.Attach;
 import mblog.core.data.Post;
+import mblog.shiro.authc.AccountSubject;
 import mblog.web.formatter.StringEscapeEditor;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -30,19 +26,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.google.gson.Gson;
-
-import mblog.base.context.AppContext;
-import mblog.base.upload.FileRepoFactory;
-import mblog.core.data.AccountProfile;
-import mblog.core.data.Attach;
-import mblog.shiro.authc.AccountSubject;
-import mtons.modules.pojos.Paging;
-import mtons.modules.security.MD5;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Controller 基类
@@ -88,17 +87,11 @@ public class BaseController {
 		return new UsernamePasswordToken(username, MD5.md5(password));
 	}
 
-	/**
-	 * 包装分页对象
-	 * 
-	 * @param pn 页码
-	 * @return
-	 */
-	protected Paging wrapPage(Integer pn) {
-		if (pn == null || pn == 0) {
-			pn = 1;
-		}
-		return wrapPage(pn, 10);
+	protected Pageable wrapPageable() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		int pageSize = ServletRequestUtils.getIntParameter(request, "pageSize", 10);
+		int pageNo = ServletRequestUtils.getIntParameter(request, "pn", 1);
+		return new PageRequest(pageNo - 1, pageSize);
 	}
 
 	/**
@@ -108,23 +101,19 @@ public class BaseController {
 	 * @param pn 页码
 	 * @return
 	 */
-	protected Paging wrapPage(Integer pn, Integer maxResults) {
+	protected Pageable wrapPageable(Integer pn, Integer pageSize) {
 		if (pn == null || pn == 0) {
 			pn = 1;
 		}
-		if (maxResults == null || maxResults == 0) {
-			maxResults = 10;
+		if (pageSize == null || pageSize == 0) {
+			pageSize = 10;
 		}
-		return new Paging(pn, maxResults);
+		return new PageRequest(pn - 1, pageSize);
 	}
 
 	protected String getSuffix(String name) {
 		int pos = name.lastIndexOf(".");
 		return name.substring(pos);
-	}
-
-	public String toJson(Object obj) {
-		return new Gson().toJson(obj);
 	}
 
 	protected String getView(String view) {

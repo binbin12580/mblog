@@ -10,7 +10,8 @@
 package mblog.core.persist.service;
 
 import mblog.core.data.Post;
-import mtons.modules.pojos.Paging;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
@@ -25,36 +26,36 @@ public interface PostService {
 	/**
 	 * 分页查询所有文章
 	 * 
-	 * @param paging
+	 * @param pageable
 	 * @param group 分组Id
 	 * @param ord   排序
 	 * @param whetherHasAlbums 是否加载图片
 	 */
-	void paging(Paging paging, int group, String ord, boolean whetherHasAlbums);
+	Page<Post> paging(Pageable pageable, int group, String ord, boolean whetherHasAlbums);
 
-	void paging4Admin(Paging paging, long id, String title, int group);
+	Page<Post> paging4Admin(Pageable pageable, long id, String title, int group);
 	
 	/**
 	 * 查询个人发布文章
-	 * @param paging
+	 * @param pageable
 	 * @param userId
 	 */
-	void pagingByAuthorId(Paging paging, long userId);
+	Page<Post> pagingByAuthorId(Pageable pageable, long userId);
 	
 	/**
 	 * 根据关键字搜索
-	 * @param paging
+	 * @param pageable
 	 * @param q
 	 * @throws Exception 
 	 */
-	void search(Paging paging, String q) throws Exception;
+	Page<Post> search(Pageable pageable, String q) throws Exception;
 	
 	/**
 	 * 搜索 Tag
-	 * @param paging
+	 * @param pageable
 	 * @param tag
 	 */
-	void searchByTag(Paging paging, String tag);
+	Page<Post> searchByTag(Pageable pageable, String tag);
 	
 	/**
 	 * 查询最近更新 - 按发布时间排序

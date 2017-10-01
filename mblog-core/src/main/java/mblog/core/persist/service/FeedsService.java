@@ -10,7 +10,8 @@
 package mblog.core.persist.service;
 
 import mblog.core.data.Feeds;
-import mtons.modules.pojos.Paging;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author langhsu
@@ -34,7 +35,7 @@ public interface FeedsService {
 	 */
 	int deleteByAuthorId(long ownId, long authorId);
 
-	void findUserFeeds(Paging paging, long ownId, long authorId, long ignoreId);
+	Page<Feeds> findUserFeeds(Pageable pageable, long ownId);
 
 	/**
 	 * 删除文章时触发动态删除

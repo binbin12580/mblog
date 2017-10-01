@@ -9,7 +9,7 @@
 	</div>
 	<!-- tab panes -->
 	<div class="stream-list p-stream no-bg">
-		#foreach($row in $page.results)
+		#foreach($row in $page.content)
 			<div class="stream-item comment-item" el="loop-${row.id}">
 				<h2 class="title" style="color:#F36C52">我说：$row.content</h2>
 				<div class="foot-block clearfix">
@@ -33,7 +33,7 @@
 			#end
 		#end
 
-		#if($page.results.size() == 0)
+		#if($page.content.size() == 0)
 		<div class="stream-item">
 			<i class="fa fa-info-circle fa-lg"></i> 您还没发表过评论!
 		</div>

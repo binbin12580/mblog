@@ -9,29 +9,30 @@
 */
 package mblog.core.persist.service;
 
+import mblog.core.data.Comment;
+import mblog.core.persist.entity.CommentPO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import mblog.core.data.Comment;
-import mblog.core.persist.entity.CommentPO;
-import mtons.modules.pojos.Paging;
 
 /**
  * @author langhsu
  *
  */
 public interface CommentService {
-	void paging4Admin(Paging paging, String key);
+	Page<Comment> paging4Admin(Pageable pageable);
 
-	Paging paging4Home(Paging paging, long authorId);
+	Page<Comment> paging4Home(Pageable pageable, long authorId);
 
 	/**
 	 * 查询评论列表
-	 * @param paging
+	 * @param pageable
 	 * @param toId
 	 */
-	Paging paging(Paging paging, long toId);
+	Page<Comment> paging(Pageable pageable, long toId);
 
 	Map<Long, Comment> findByIds(Set<Long> ids);
 	
@@ -51,5 +52,5 @@ public interface CommentService {
 	 */
 	void delete(long id, long authorId);
 
-	List<CommentPO> findByHql(String hql);
+	List<CommentPO> findAllByAuthorIdAndToId(long authorId, long toId);
 }

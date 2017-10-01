@@ -1,8 +1,8 @@
 package mblog.base.upload;
 
 import mblog.base.context.AppContext;
+import mblog.base.utils.GMagickUtils;
 import mblog.base.utils.ImageUtils;
-import mtons.modules.utils.GMagickUtils;
 import net.coobird.thumbnailator.Thumbnails;
 import org.im4java.core.IM4JavaException;
 import java.io.IOException;

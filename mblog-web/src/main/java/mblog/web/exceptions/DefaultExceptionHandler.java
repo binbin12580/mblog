@@ -16,8 +16,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mtons.modules.pojos.Data;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
+import mblog.base.data.Data;
 import org.apache.log4j.Logger;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
@@ -25,8 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.google.gson.Gson;
 
 /**
  * 异常处理
@@ -55,8 +54,7 @@ public class DefaultExceptionHandler implements HandlerExceptionResolver {
 		if (isAjax(handler)) {
 			try {
 				response.setContentType("application/json;charset=UTF-8");
-				Gson gson = new Gson();
-				response.getWriter().print(gson.toJson(Data.failure(ret)));
+				response.getWriter().print(JSON.toJSONString(Data.failure(ret)));
 			} catch (IOException e) {
 				// do something
 			}

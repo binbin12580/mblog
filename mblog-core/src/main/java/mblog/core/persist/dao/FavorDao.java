@@ -1,23 +1,22 @@
 package mblog.core.persist.dao;
 
-import mtons.modules.persist.BaseRepository;
-import mtons.modules.pojos.Paging;
-
-import java.util.List;
-
 import mblog.core.persist.entity.FavorPO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * @author langhsu on 2015/8/31.
  */
-public interface FavorDao extends BaseRepository<FavorPO> {
+public interface FavorDao extends JpaRepository<FavorPO, Long>, JpaSpecificationExecutor<FavorPO> {
     /**
      * 指定查询
      * @param ownId
      * @param postId
      * @return
      */
-    FavorPO find(long ownId, long postId);
+    FavorPO findByOwnIdAndPostId(long ownId, long postId);
 
-    List<FavorPO> paingByOwnId(Paging paging, long ownId);
+    Page<FavorPO> findAllByOwnIdOrderByCreatedDesc(Pageable pageable, long ownId);
 }

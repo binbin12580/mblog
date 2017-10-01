@@ -3,15 +3,15 @@
  */
 package mblog.web.controller.desk.posts;
 
-import javax.servlet.http.HttpServletRequest;
-
-import mblog.core.data.Attach;
-import mtons.modules.lang.Const;
+import mblog.base.data.Data;
+import mblog.base.lang.Consts;
+import mblog.core.biz.PostBiz;
+import mblog.core.data.AccountProfile;
+import mblog.core.data.Post;
+import mblog.core.persist.service.GroupService;
+import mblog.web.controller.BaseController;
+import mblog.web.controller.desk.Views;
 import org.apache.commons.lang.StringUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,17 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import mblog.core.biz.PostBiz;
-import mblog.core.data.Post;
-import mblog.core.persist.service.GroupService;
-import mblog.web.controller.BaseController;
-import mblog.web.controller.desk.Views;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.UserProfile;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 文章操作
@@ -52,7 +42,7 @@ public class PostController extends BaseController {
 	 */
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String view(ModelMap model) {
-		model.put("groups", groupService.findAll(Const.STATUS_NORMAL));
+		model.put("groups", groupService.findAll(Consts.STATUS_NORMAL));
 		return getView(Views.ROUTE_POST_PUBLISH);
 	}
 
@@ -66,7 +56,7 @@ public class PostController extends BaseController {
 
 		if (p != null && StringUtils.isNotBlank(p.getTitle())) {
 			String content = request.getParameter("content");
-			UserProfile profile = getSubject().getProfile();
+			AccountProfile profile = getSubject().getProfile();
 
 			p.setContent(content);
 			extractImages(p);
@@ -84,10 +74,11 @@ public class PostController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/delete/{id}")
-	public @ResponseBody Data delete(@PathVariable Long id) {
+	public @ResponseBody
+	Data delete(@PathVariable Long id) {
 		Data data = Data.failure("操作失败");
 		if (id != null) {
-			UserProfile up = getSubject().getProfile();
+			AccountProfile up = getSubject().getProfile();
 			try {
 				postBiz.delete(id, up.getId());
 				data = Data.success("操作成功", Data.NOOP);
@@ -105,14 +96,14 @@ public class PostController extends BaseController {
 	 */
 	@RequestMapping("/to_update/{id}")
 	public String toUpdate(@PathVariable Long id, ModelMap model) {
-		UserProfile up = getSubject().getProfile();
+		AccountProfile up = getSubject().getProfile();
 		Post ret = postBiz.getPost(id);
 
 		Assert.notNull(ret, "该文章已被删除");
 
 		Assert.isTrue(ret.getAuthorId() == up.getId(), "该文章不属于你");
 
-		model.put("groups", groupService.findAll(Const.STATUS_NORMAL));
+		model.put("groups", groupService.findAll(Consts.STATUS_NORMAL));
 		model.put("view", ret);
 		return getView(Views.ROUTE_POST_UPDATE);
 	}
@@ -124,7 +115,7 @@ public class PostController extends BaseController {
 	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String subUpdate(Post p, HttpServletRequest request) {
-		UserProfile up = getSubject().getProfile();
+		AccountProfile up = getSubject().getProfile();
 		if (p != null && p.getAuthorId() == up.getId()) {
 			String content = request.getParameter("content");
 			p.setContent(content);

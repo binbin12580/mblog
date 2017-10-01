@@ -3,12 +3,14 @@
  */
 package mblog.web.controller.desk.posts;
 
+import mblog.core.data.Post;
 import mblog.core.persist.service.PostService;
 import mblog.web.controller.BaseController;
 import mblog.web.controller.desk.Views;
-import mtons.modules.pojos.Paging;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,16 +27,17 @@ public class TagController extends BaseController {
     private PostService postService;
 
     @RequestMapping("/tag/{tag}")
-    public String tag(@PathVariable String tag, Integer pn, ModelMap model) {
-        Paging page = wrapPage(pn);
+    public String tag(@PathVariable String tag, ModelMap model) {
+        Pageable pageable = wrapPageable();
         try {
             if (StringUtils.isNotEmpty(tag)) {
-                postService.searchByTag(page, tag);
+                Page<Post> page = postService.searchByTag(pageable, tag);
+                model.put("page", page);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        model.put("page", page);
+
         model.put("tag", tag);
         return getView(Views.TAGS_TAG);
     }

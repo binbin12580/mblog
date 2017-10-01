@@ -5,9 +5,12 @@ package mblog.velocity.directive;
 
 import mblog.base.context.SpringContextHolder;
 import mblog.core.biz.PostBiz;
+import mblog.core.data.Post;
 import mblog.velocity.BaseDirective;
 import mblog.velocity.handler.RenderHandler;
-import mtons.modules.pojos.Paging;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.ServletRequestUtils;
 
 import javax.servlet.ServletRequest;
@@ -37,9 +40,9 @@ public class AuthorContentsDirective extends BaseDirective {
         // 标签中获取参数
         long uid = handler.getIntParameter(0);
         String alias = handler.getStringParameter(1);
-        
-        Paging paging = wrapPaing(pn);
-		Paging result = postPlanet.pagingByAuthorId(paging, uid);
+
+		Pageable pageable = new PageRequest(pn - 1, 10);
+		Page<Post> result = postPlanet.pagingByAuthorId(pageable, uid);
 		
 		handler.put(alias, result);
 		handler.doRender();

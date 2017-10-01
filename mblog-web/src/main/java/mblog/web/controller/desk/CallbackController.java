@@ -3,6 +3,7 @@ package mblog.web.controller.desk;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import mblog.base.lang.MtonsException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -33,7 +34,6 @@ import mblog.core.data.User;
 import mblog.core.persist.service.OpenOauthService;
 import mblog.core.persist.service.UserService;
 import mblog.web.controller.BaseController;
-import mtons.modules.exception.MtonsException;
 
 /**
  * 第三方登录回调
@@ -83,8 +83,7 @@ public class CallbackController extends BaseController {
      * @param code
      * @param request
      * @return
-     * @throws WeiboException
-     * @throws QQConnectException
+     * @throws Exception
      */
     @RequestMapping("/weibo")
     public String callback4Weibo(String code, String state, HttpServletRequest request, ModelMap model) throws Exception {

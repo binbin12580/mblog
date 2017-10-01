@@ -3,12 +3,19 @@
  */
 package mblog.web.controller.desk.comment;
 
-import javax.servlet.http.HttpServletRequest;
-
+import mblog.base.data.Data;
+import mblog.base.lang.Consts;
+import mblog.core.data.AccountProfile;
+import mblog.core.data.Comment;
+import mblog.core.event.NotifyEvent;
+import mblog.core.persist.service.CommentService;
+import mblog.web.controller.BaseController;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,14 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.HtmlUtils;
 
-import mblog.base.lang.Consts;
-import mblog.core.data.Comment;
-import mblog.core.event.NotifyEvent;
-import mblog.core.persist.service.CommentService;
-import mblog.web.controller.BaseController;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.Paging;
-import mtons.modules.pojos.UserProfile;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author langhsu
@@ -38,14 +38,15 @@ public class CommentController extends BaseController {
 	private ApplicationContext applicationContext;
 
 	@RequestMapping("/list/{toId}")
-	public @ResponseBody Paging view(Integer pn, @PathVariable Long toId) {
-		Paging page = wrapPage(pn);
-		page = commentService.paging(page, toId);
+	public @ResponseBody Page<Comment> view(@PathVariable Long toId) {
+		Pageable pageable = wrapPageable();
+		Page<Comment> page = commentService.paging(pageable, toId);
 		return page;
 	}
 	
 	@RequestMapping("/submit")
-	public @ResponseBody Data post(Long toId, String text, HttpServletRequest request) {
+	public @ResponseBody
+	Data post(Long toId, String text, HttpServletRequest request) {
 		Data data = Data.failure("操作失败");
 		
 		long pid = ServletRequestUtils.getLongParameter(request, "pid", 0);
@@ -56,7 +57,7 @@ public class CommentController extends BaseController {
 			return data;
 		}
 		if (toId > 0 && StringUtils.isNotEmpty(text)) {
-			UserProfile up = getSubject().getProfile();
+			AccountProfile up = getSubject().getProfile();
 			
 			Comment c = new Comment();
 			c.setToId(toId);
@@ -80,7 +81,7 @@ public class CommentController extends BaseController {
 	public @ResponseBody Data delete(Long id) {
 		Data data = Data.failure("操作失败");
 		if (id != null) {
-			UserProfile up = getSubject().getProfile();
+			AccountProfile up = getSubject().getProfile();
 			try {
 				commentService.delete(id, up.getId());
 				data = Data.success("操作成功", Data.NOOP);

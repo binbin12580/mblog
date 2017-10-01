@@ -25,7 +25,7 @@ public class AuthMenuServiceImpl implements AuthMenuService {
 	public List<AuthMenu> findByParentId(long parentId) {
 		// TODO Auto-generated method stub
 		List<AuthMenu> authMenus = new ArrayList<>();
-		List<AuthMenuPO> authMenuPOs = authMenuDao.findByParentId(parentId);
+		List<AuthMenuPO> authMenuPOs = authMenuDao.findAllByParentIdOrderBySortAsc(parentId);
 		if(authMenuPOs!=null){
 			for(AuthMenuPO po : authMenuPOs){
 				AuthMenu authMenu = BeanMapUtils.copy(po);
@@ -39,7 +39,7 @@ public class AuthMenuServiceImpl implements AuthMenuService {
 	public List<AuthMenu> tree(Long id) {
 
 		List<AuthMenu> menus = new ArrayList<>();
-		AuthMenuPO authMenuPO = authMenuDao.get(id);
+		AuthMenuPO authMenuPO = authMenuDao.findOne(id);
 		AuthMenu authMenu = BeanMapUtils.copy(authMenuPO);
 		menus.add(authMenu);
 		if(authMenu.getChildren()!=null){
@@ -65,7 +65,7 @@ public class AuthMenuServiceImpl implements AuthMenuService {
 
 	@Override
 	public AuthMenu get(Long id) {
-		AuthMenu authMenu = BeanMapUtils.copy(authMenuDao.get(id));
+		AuthMenu authMenu = BeanMapUtils.copy(authMenuDao.findOne(id));
 		return authMenu;
 	}
 
@@ -73,12 +73,12 @@ public class AuthMenuServiceImpl implements AuthMenuService {
 	public void save(AuthMenu authMenu) {
 		AuthMenuPO po = new AuthMenuPO();
 		BeanUtils.copyProperties(authMenu, po);
-		authMenuDao.saveOrUpdate(po);
+		authMenuDao.save(po);
 	}
 
 	@Override
 	public void delete(Long id) {
-		AuthMenuPO authMenuPO = authMenuDao.get(id);
+		AuthMenuPO authMenuPO = authMenuDao.findOne(id);
 		if(authMenuPO.getChildren()!=null){
 			for(AuthMenuPO po : authMenuPO.getChildren()){
 				delete(po.getId());

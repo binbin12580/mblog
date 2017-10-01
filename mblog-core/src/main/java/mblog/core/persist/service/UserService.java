@@ -9,14 +9,15 @@
 */
 package mblog.core.persist.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import mblog.core.data.AccountProfile;
 import mblog.core.data.AuthMenu;
 import mblog.core.data.User;
-import mtons.modules.pojos.Paging;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author langhsu
@@ -103,13 +104,13 @@ public interface UserService {
 
 	/**
 	 * 分页查询
-	 * @param paging
+	 * @param pageable
 	 */
-	void paging(Paging paging, String key);
+	Page<User> paging(Pageable pageable);
 
 	Map<Long, User> findMapByIds(Set<Long> ids);
 
 	List<AuthMenu> getMenuList(long id);
 	
-	List<User> findHotUserByfans(int maxResults);
+	List<User> findHotUserByfans();
 }

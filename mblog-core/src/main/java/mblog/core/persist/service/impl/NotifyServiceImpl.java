@@ -1,17 +1,6 @@
 package mblog.core.persist.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import mblog.base.lang.Consts;
 import mblog.core.data.Notify;
 import mblog.core.data.Post;
 import mblog.core.data.User;
@@ -21,7 +10,15 @@ import mblog.core.persist.service.NotifyService;
 import mblog.core.persist.service.PostService;
 import mblog.core.persist.service.UserService;
 import mblog.core.persist.utils.BeanMapUtils;
-import mtons.modules.pojos.Paging;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 /**
  * @author langhsu on 2015/8/31.
@@ -37,15 +34,15 @@ public class NotifyServiceImpl implements NotifyService {
 
     @Override
     @Transactional(readOnly = true)
-    public void findByOwnId(Paging paging, long ownId) {
-        List<NotifyPO> list = notifyDao.findByOwnId(paging, ownId);
+    public Page<Notify> findByOwnId(Pageable pageable, long ownId) {
+        Page<NotifyPO> page = notifyDao.findAllByOwnIdOrderByIdDesc(pageable, ownId);
         List<Notify> rets = new ArrayList<>();
 
         Set<Long> postIds = new HashSet<>();
         Set<Long> fromUserIds = new HashSet<>();
 
         // 筛选
-        list.forEach(po -> {
+        page.getContent().forEach(po -> {
             Notify no = BeanMapUtils.copy(po);
 
             rets.add(no);
@@ -72,8 +69,7 @@ public class NotifyServiceImpl implements NotifyService {
             }
         });
 
-        paging.setResults(rets);
-
+        return new PageImpl<>(rets, pageable, page.getTotalElements());
     }
 
     @Override
@@ -93,12 +89,12 @@ public class NotifyServiceImpl implements NotifyService {
     @Override
     @Transactional(readOnly = true)
     public int unread4Me(long ownId) {
-        return notifyDao.unread4Me(ownId);
+        return notifyDao.countByOwnIdAndStatus(ownId, Consts.UNREAD);
     }
 
     @Override
     @Transactional
     public void readed4Me(long ownId) {
-        notifyDao.readed4Me(ownId);
+        notifyDao.updateReadedByOwnId(ownId);
     }
 }

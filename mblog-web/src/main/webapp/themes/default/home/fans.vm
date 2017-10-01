@@ -10,7 +10,7 @@
     </div>
     <!-- tab panes -->
     <div class="stream-list">
-        #foreach($row in $page.results)
+        #foreach($row in $page.content)
             <div class="stream-item" id="loop-${row.id}">
                 <div class="blog-rank">
                     <div class="user" title="${row.name}">
@@ -31,7 +31,7 @@
             </div>
         #end
 
-        #if($page.results.size() == 0)
+        #if($page.content.size() == 0)
         <div class="stream-item">
             <i class="fa fa-info-circle fa-lg"></i> 还没有人关注您!
         </div>

@@ -2,6 +2,7 @@ package mblog.shiro.realm;
 
 import java.util.List;
 
+import mblog.base.lang.Consts;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -20,7 +21,6 @@ import mblog.core.data.AuthMenu;
 import mblog.core.data.User;
 import mblog.core.persist.service.UserService;
 import mblog.shiro.authc.AccountAuthenticationInfo;
-import mtons.modules.lang.Const;
 
 public class AccountRealm extends AuthorizingRealm {
 	@Autowired
@@ -70,7 +70,7 @@ public class AccountRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         AccountProfile profile = getAccount(userService, token);
 
-        if(profile.getStatus() == Const.STATUS_CLOSED){
+        if(profile.getStatus() == Consts.STATUS_CLOSED){
             throw new LockedAccountException(profile.getName());
         }
 

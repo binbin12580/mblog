@@ -6,6 +6,8 @@ package mblog.web.controller.desk.account;
 import java.util.HashMap;
 import java.util.Map;
 
+import mblog.base.data.Data;
+import mblog.core.data.AccountProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,8 +22,6 @@ import mblog.core.persist.service.UserService;
 import mblog.core.persist.service.VerifyService;
 import mblog.web.controller.BaseController;
 import mblog.web.controller.desk.Views;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.UserProfile;
 
 /**
  * @author langhsu
@@ -39,7 +39,7 @@ public class ProfileController extends BaseController {
 
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public String view(ModelMap model) {
-		UserProfile profile = getSubject().getProfile();
+		AccountProfile profile = getSubject().getProfile();
 		User view = userService.get(profile.getId());
 		model.put("view", view);
 		return getView(Views.ACCOUNT_PROFILE);
@@ -48,7 +48,7 @@ public class ProfileController extends BaseController {
 	@RequestMapping(value = "/profile", method = RequestMethod.POST)
 	public String post(String name, String signature, ModelMap model) {
 		Data data;
-		UserProfile profile = getSubject().getProfile();
+		AccountProfile profile = getSubject().getProfile();
 		
 		try {
 			User user = new User();
@@ -78,7 +78,7 @@ public class ProfileController extends BaseController {
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
 	public String emailPost(String email, ModelMap model) {
 		Data data;
-		UserProfile profile = getSubject().getProfile();
+		AccountProfile profile = getSubject().getProfile();
 
 		try {
 			Assert.notNull(email, "缺少必要的参数");

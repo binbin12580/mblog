@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -33,7 +34,7 @@ public class HidenContentPugin implements GroupVidewControllerHook.GroupViewCont
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, HandlerMethod handler, ModelAndView modelAndView) throws Exception {
         Post ret = (Post) modelAndView.getModelMap().get("ret");
-        if (check(ret.getId(),ret.getAuthor().getId())) {
+        if (check(ret.getId(), ret.getAuthor().getId())) {
             Post post = new Post();
             BeanUtils.copyProperties(ret, post);
             post.setContent(replace(post.getContent()));
@@ -57,7 +58,7 @@ public class HidenContentPugin implements GroupVidewControllerHook.GroupViewCont
         return c;
     }
 
-    private boolean check(long id,long userId) {
+    private boolean check(long id, long userId) {
         Subject subject = SecurityUtils.getSubject();
         Object o = subject.getSession().getAttribute("profile");
         if (o != null) {
@@ -65,7 +66,7 @@ public class HidenContentPugin implements GroupVidewControllerHook.GroupViewCont
             if (profile.getId() == userId) {
                 return false;
             }
-            List l = commentService.findByHql("from mblog.core.persist.entity.CommentPO where authorId = '"+profile.getId()+"' and toId = '"+id+"'");
+            List l = commentService.findAllByAuthorIdAndToId(profile.getId(), id);
             if (l.size() > 0) {
                 return false;
             }

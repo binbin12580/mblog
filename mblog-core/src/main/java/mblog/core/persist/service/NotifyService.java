@@ -1,14 +1,15 @@
 package mblog.core.persist.service;
 
 import mblog.core.data.Notify;
-import mtons.modules.pojos.Paging;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author langhsu on 2015/8/31.
  */
 public interface NotifyService {
 
-    void findByOwnId(Paging paging, long ownId);
+    Page<Notify> findByOwnId(Pageable pageable, long ownId);
 
     /**
      * 发送通知

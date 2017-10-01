@@ -30,7 +30,7 @@
     				</tr>
     			</thead>
     			<tbody>
-    				#foreach($row in $page.results)
+    				#foreach($row in $page.content)
     				<tr>
     					<td>
 							<input type="checkbox" name="id" value="${row.id}">

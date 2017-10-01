@@ -16,9 +16,11 @@ import mblog.core.persist.entity.FeedsPO;
 import mblog.core.persist.service.FeedsService;
 import mblog.core.persist.service.PostService;
 import mblog.core.persist.utils.BeanMapUtils;
-import mtons.modules.pojos.Paging;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,19 +55,19 @@ public class FeedsServiceImpl implements FeedsService {
 	@Override
 	@Transactional
 	public int deleteByAuthorId(long ownId, long authorId) {
-		return feedsDao.deleteByAuthorId(ownId, authorId);
+		return feedsDao.deleteAllByOwnIdAndAuthorId(ownId, authorId);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public void findUserFeeds(Paging paging, long ownId, long authorId, long ignoreId) {
-		List<FeedsPO> list = feedsDao.findUserFeeds(paging, ownId, authorId, ignoreId);
+	public Page<Feeds> findUserFeeds(Pageable pageable, long ownId) {
+		Page<FeedsPO> page = feedsDao.findAllByOwnIdOrderByIdDesc(pageable, ownId);
 
 		List<Feeds> rets = new ArrayList<>();
 
 		Set<Long> postIds = new HashSet<>();
 
-		for (FeedsPO po : list) {
+		for (FeedsPO po : page.getContent()) {
 			Feeds f = BeanMapUtils.copy(po);
 			rets.add(f);
 
@@ -78,13 +80,13 @@ public class FeedsServiceImpl implements FeedsService {
 		for (Feeds f : rets) {
 			f.setPost(postMap.get(f.getPostId()));
 		}
-		paging.setResults(rets);
+		return new PageImpl<>(rets, pageable, page.getTotalElements());
 	}
 
 	@Override
 	@Transactional
 	public void deleteByTarget(long postId) {
-		feedsDao.deleteByTarget(postId);
+		feedsDao.deleteAllByPostId(postId);
 	}
 
 }

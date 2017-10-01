@@ -9,6 +9,7 @@
 */
 package mblog.core.persist.service.impl;
 
+import mblog.core.persist.entity.UserPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,31 +29,51 @@ public class UserEventServiceImpl implements UserEventService {
 
     @Override
     @Transactional
-    public void identityPost(List<Long> userId, long postId, boolean identity) {
-        userDao.identityPost(userId, identity);
+    public void identityPost(Long userId, long postId, boolean identity) {
+        UserPO po = userDao.findOne(userId);
+
+        if (po != null) {
+            po.setPosts(po.getPosts() + ((identity) ? 1 : -1));
+        }
     }
 
     @Override
     @Transactional
-    public void identityComment(List<Long> userId, long commentId, boolean identity) {
-        userDao.identityComment(userId, identity);
+    public void identityComment(Long userId, long commentId, boolean identity) {
+        UserPO po = userDao.findOne(userId);
+
+        if (po != null) {
+            po.setComments(po.getComments() + ((identity) ? 1 : -1));
+        }
     }
 
     @Override
     @Transactional
-    public void identityFollow(List<Long> userId, long followId, boolean identity) {
-        userDao.identityFollow(userId, identity);
+    public void identityFollow(Long userId, long followId, boolean identity) {
+        UserPO po = userDao.findOne(userId);
+
+        if (po != null) {
+            po.setFollows(po.getFollows() + ((identity) ? 1 : -1));
+        }
     }
 
     @Override
     @Transactional
-    public void identityFans(List<Long> userId, long fansId, boolean identity) {
-        userDao.identityFans(userId, identity);
+    public void identityFans(Long userId, long fansId, boolean identity) {
+        UserPO po = userDao.findOne(userId);
+
+        if (po != null) {
+            po.setFans(po.getFans() + ((identity) ? 1 : -1));
+        }
     }
 
     @Override
     @Transactional
-    public void identityFavors(List<Long> userId, boolean identity, int targetType, long targetId) {
-        userDao.identityFavors(userId, identity);
+    public void identityFavors(Long userId, boolean identity, int targetType, long targetId) {
+        UserPO po = userDao.findOne(userId);
+
+        if (po != null) {
+            po.setFavors(po.getFavors() + ((identity) ? 1 : -1));
+        }
     }
 }

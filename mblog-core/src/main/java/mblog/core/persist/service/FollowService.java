@@ -9,7 +9,9 @@
 */
 package mblog.core.persist.service;
 
-import mtons.modules.pojos.Paging;
+import mblog.core.data.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author langhsu
@@ -34,18 +36,18 @@ public interface FollowService {
 	/**
 	 * 查询我的关注
 	 *
-	 * @param paging
+	 * @param pageable
 	 * @param userId
 	 */
-	void follows(Paging paging, long userId);
+	Page<User> follows(Pageable pageable, long userId);
 
 	/**
 	 * 查询关注我的 (我的粉丝)
 	 *
-	 * @param paging
+	 * @param pageable
 	 * @param userId
 	 */
-	void fans(Paging paging, long userId);
+	Page<User> fans(Pageable pageable, long userId);
 
 	/**
 	 * 检查是否已关注

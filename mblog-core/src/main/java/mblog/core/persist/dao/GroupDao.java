@@ -9,17 +9,17 @@
 */
 package mblog.core.persist.dao;
 
-import mtons.modules.persist.BaseRepository;
+import mblog.core.persist.entity.GroupPO;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
-
-import mblog.core.persist.entity.GroupPO;
 
 /**
  * @author langhsu
  *
  */
-public interface GroupDao extends BaseRepository<GroupPO> {
-	List<GroupPO> findAll(int status);
-	GroupPO getByKey(String key);
+public interface GroupDao extends JpaRepository<GroupPO, Integer>, JpaSpecificationExecutor<GroupPO> {
+	List<GroupPO> findAllByStatus(int status);
+	GroupPO findByKey(String key);
 }

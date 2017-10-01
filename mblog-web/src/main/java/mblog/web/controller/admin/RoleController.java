@@ -1,19 +1,19 @@
 package mblog.web.controller.admin;
 
+import mblog.core.data.AuthMenu;
+import mblog.core.data.Role;
+import mblog.core.persist.service.AuthMenuService;
+import mblog.core.persist.service.RoleService;
+import mblog.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import mblog.core.data.AuthMenu;
-import mblog.core.data.Role;
-import mblog.core.persist.service.AuthMenuService;
-import mblog.core.persist.service.RoleService;
-import mblog.web.controller.BaseController;
-import mtons.modules.pojos.Paging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +37,10 @@ public class RoleController extends BaseController {
 	}
 
 	@RequestMapping("/list")
-	public String list(Integer pn, String key, ModelMap model) {
-		Paging page = wrapPage(pn);
-		roleService.paging(page, key);
+	public String list(ModelMap model) {
+		Pageable pageable = wrapPageable();
+		Page<Role> page = roleService.paging(pageable);
 		model.put("page", page);
-		model.put("key", key);
 		return "/admin/roles/list";
 	}
 

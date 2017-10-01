@@ -10,12 +10,13 @@
 package mblog.core.persist.dao;
 
 import mblog.core.persist.entity.ConfigPO;
-import mtons.modules.persist.BaseRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * @author langhsu
  *
  */
-public interface ConfigDao extends BaseRepository<ConfigPO> {
-	ConfigPO findByName(String key);
+public interface ConfigDao extends JpaRepository<ConfigPO, Long>, JpaSpecificationExecutor<ConfigPO> {
+	ConfigPO findByKey(String key);
 }

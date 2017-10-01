@@ -11,12 +11,12 @@ package mblog.web.controller.admin;
 
 import java.util.List;
 
+import mblog.base.data.Data;
 import mblog.core.persist.service.GroupService;
-import mtons.modules.lang.Const;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.Paging;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -48,13 +48,12 @@ public class PostsController extends BaseController {
 	private GroupService groupService;
 	
 	@RequestMapping("/list")
-	public String list(Integer pn, String title, ModelMap model, HttpServletRequest request) {
-		long id = ServletRequestUtils.getLongParameter(request, "id", Const.ZERO);
-		int group = ServletRequestUtils.getIntParameter(request, "group", Const.ZERO);
+	public String list(String title, ModelMap model, HttpServletRequest request) {
+		long id = ServletRequestUtils.getLongParameter(request, "id", Consts.ZERO);
+		int group = ServletRequestUtils.getIntParameter(request, "group", Consts.ZERO);
 
-		Paging page = wrapPage(pn);
-
-		postService.paging4Admin(page, id, title, group);
+		Pageable pageable = wrapPageable();
+		Page<Post> page = postService.paging4Admin(pageable, id, title, group);
 		model.put("page", page);
 		model.put("title", title);
 		model.put("id", id);
@@ -72,7 +71,7 @@ public class PostsController extends BaseController {
 	public String toUpdate(Long id, ModelMap model) {
 		Post ret = postService.get(id);
 		model.put("view", ret);
-		model.put("groups", groupService.findAll(Const.STATUS_NORMAL));
+		model.put("groups", groupService.findAll(Consts.STATUS_NORMAL));
 		return "/admin/posts/update";
 	}
 	
@@ -93,7 +92,8 @@ public class PostsController extends BaseController {
 	}
 
 	@RequestMapping("/featured")
-	public @ResponseBody Data featured(Long id, HttpServletRequest request) {
+	public @ResponseBody
+	Data featured(Long id, HttpServletRequest request) {
 		Data data = Data.failure("操作失败");
 		int featured = ServletRequestUtils.getIntParameter(request, "featured", Consts.FEATURED_ACTIVE);
 		if (id != null) {

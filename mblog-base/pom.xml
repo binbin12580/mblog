@@ -10,14 +10,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.mtons</groupId>
-			<artifactId>mtons-lang</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.mtons</groupId>
-			<artifactId>mtons-persist</artifactId>
-			<scope>compile</scope>
+			<groupId>org.im4java</groupId>
+			<artifactId>im4java</artifactId>
+			<version>1.4.0</version>
 		</dependency>
 
 		<dependency>

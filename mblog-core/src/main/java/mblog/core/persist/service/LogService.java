@@ -17,5 +17,4 @@ import java.util.Date;
  */
 public interface LogService {
 	void add(int logType, long userId, long targetId, String ip);
-	int statsByDay(int logType, long userId, long targetId, String ip, Date day);
 }

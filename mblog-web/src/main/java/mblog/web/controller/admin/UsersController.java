@@ -9,7 +9,11 @@
 */
 package mblog.web.controller.admin;
 
+import mblog.base.data.Data;
+import mblog.base.lang.Consts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +24,6 @@ import mblog.core.data.User;
 import mblog.core.persist.service.RoleService;
 import mblog.core.persist.service.UserService;
 import mblog.web.controller.BaseController;
-import mtons.modules.lang.Const;
-import mtons.modules.pojos.Data;
-import mtons.modules.pojos.Paging;
 
 /**
  * @author langhsu
@@ -38,11 +39,10 @@ public class UsersController extends BaseController {
 	private RoleService roleService;
 
 	@RequestMapping("/list")
-	public String list(Integer pn, String key, ModelMap model) {
-		Paging page = wrapPage(pn);
-		userService.paging(page, key);
+	public String list(ModelMap model) {
+		Pageable pageable = wrapPageable();
+		Page<User> page = userService.paging(pageable);
 		model.put("page", page);
-		model.put("key", key);
 		return "/admin/users/list";
 	}
 
@@ -88,15 +88,16 @@ public class UsersController extends BaseController {
 	}
 
 	@RequestMapping("/open")
-	public @ResponseBody Data open(Long id) {
-		userService.updateStatus(id, Const.STATUS_NORMAL);
+	public @ResponseBody
+	Data open(Long id) {
+		userService.updateStatus(id, Consts.STATUS_NORMAL);
 		Data data = Data.success("操作成功", Data.NOOP);
 		return data;
 	}
 
 	@RequestMapping("/close")
 	public @ResponseBody Data close(Long id) {
-		userService.updateStatus(id, Const.STATUS_CLOSED);
+		userService.updateStatus(id, Consts.STATUS_CLOSED);
 		Data data = Data.success("操作成功", Data.NOOP);
 		return data;
 	}

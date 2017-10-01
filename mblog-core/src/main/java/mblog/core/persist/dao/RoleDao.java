@@ -1,13 +1,12 @@
 package mblog.core.persist.dao;
 
-import java.util.List;
-
 import mblog.core.persist.entity.RolePO;
-import mtons.modules.persist.BaseRepository;
-import mtons.modules.pojos.Paging;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface RoleDao extends BaseRepository<RolePO>{
-
-	List<RolePO> paging(Paging paging, String key);
+public interface RoleDao extends JpaRepository<RolePO, Long>, JpaSpecificationExecutor<RolePO> {
+	Page<RolePO> findAllByOrderByIdDesc(Pageable pageable);
 
 }

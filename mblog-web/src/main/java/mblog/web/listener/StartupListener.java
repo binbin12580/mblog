@@ -9,29 +9,22 @@
 */
 package mblog.web.listener;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.servlet.ServletContext;
-
+import mblog.base.context.AppContext;
+import mblog.base.lang.Consts;
+import mblog.base.print.Printer;
+import mblog.base.utils.GMagickUtils;
+import mblog.base.utils.PropertiesLoader;
+import mblog.core.data.Config;
+import mblog.core.persist.service.ConfigService;
 import mblog.core.persist.service.FriendLinkService;
-import mtons.modules.lang.Const;
+import mblog.core.persist.service.GroupService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.ServletContextAware;
 
-import mblog.base.context.AppContext;
-import mblog.base.lang.Consts;
-import mblog.base.print.Printer;
-import mblog.core.data.Config;
-import mblog.core.persist.service.ConfigService;
-import mblog.core.persist.service.GroupService;
-import mtons.modules.utils.GMagickUtils;
-import mtons.modules.utils.PropertiesLoader;
+import javax.servlet.ServletContext;
+import java.util.*;
 
 /**
  * @author langhsu
@@ -101,7 +94,7 @@ public class StartupListener implements InitializingBean, ServletContextAware {
 
 				appContext.setConfig(configMap);
             	
-            	servletContext.setAttribute("groups", groupService.findAll(Const.STATUS_NORMAL));
+            	servletContext.setAttribute("groups", groupService.findAll(Consts.STATUS_NORMAL));
 				servletContext.setAttribute("friendLinks", friendLinkService.findAll());
 
 				Printer.info("OK, mblog 加载完了");

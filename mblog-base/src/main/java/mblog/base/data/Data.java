@@ -9,21 +9,24 @@
 */
 package mblog.base.data;
 
-import mtons.modules.pojos.Data;
-
 import java.util.ArrayList;
 
 /**
  * @author langhsu on 2015/8/15.
  */
-public class DataExt {
+public class Data {
+    public static int CODE_SUCCESS = 0;
+    public static int CODE_FAILURED = -1;
+    public static Object NOOP = new Object();
+    public static String[] NOOP_ARRAY = new String[]{};
+    public static String NOOP_STRING = "";
 
     private int code; // 处理状态：0: 成功
     private String message;
     private Object data; // 返回数据
     private ArrayList<Button> links = new ArrayList<>();
 
-    private DataExt(int code, String message, Object data){
+    private Data(int code, String message, Object data){
         this.code = code;
         this.message = message;
         this.data = data;
@@ -34,8 +37,8 @@ public class DataExt {
      * @param data
      * @return
      */
-    public static final DataExt success(Object data){
-        return new DataExt(Data.CODE_SUCCESS, "操作成功", data);
+    public static final Data success(Object data){
+        return new Data(Data.CODE_SUCCESS, "操作成功", data);
     }
 
     /**
@@ -44,12 +47,12 @@ public class DataExt {
      * @return
      * @deprecated with 1.0.3
      */
-    public static final DataExt success(String message){
-        return new DataExt(Data.CODE_SUCCESS, message, Data.NOOP);
+    public static final Data success(String message){
+        return new Data(Data.CODE_SUCCESS, message, Data.NOOP);
     }
 
-    public static final DataExt success(String message, Object data){
-        return new DataExt(Data.CODE_SUCCESS, message, data);
+    public static final Data success(String message, Object data){
+        return new Data(Data.CODE_SUCCESS, message, data);
     }
 
     /**
@@ -57,11 +60,11 @@ public class DataExt {
      * @param code
      * @return
      */
-    public static final DataExt failure(int code, String message){
-        return new DataExt(code, message, Data.NOOP);
+    public static final Data failure(int code, String message){
+        return new Data(code, message, Data.NOOP);
     }
 
-    public static final DataExt failure(String message){
+    public static final Data failure(String message){
         return failure(Data.CODE_FAILURED, message);
     }
 
@@ -88,7 +91,7 @@ public class DataExt {
         this.data = data;
     }
 
-    public DataExt addLink(String link, String text) {
+    public Data addLink(String link, String text) {
         links.add(new Button(link, text));
         return this;
     }

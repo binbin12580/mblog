@@ -9,13 +9,7 @@
 */
 package mblog.core.persist.service.impl;
 
-import mtons.modules.exception.MtonsException;
-import mtons.modules.pojos.Paging;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
+import mblog.base.lang.MtonsException;
 import mblog.core.data.User;
 import mblog.core.persist.dao.FollowDao;
 import mblog.core.persist.entity.FollowPO;
@@ -23,9 +17,15 @@ import mblog.core.persist.entity.UserPO;
 import mblog.core.persist.service.FollowService;
 import mblog.core.persist.service.UserEventService;
 import mblog.core.persist.utils.BeanMapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class FollowServiceImpl implements FollowService {
 
 		Assert.state(userId != followId, "您不能关注自己");
 
-		FollowPO po = followDao.checkFollow(userId, followId);
+		FollowPO po = followDao.findByUserAndFollow(new UserPO(userId), new UserPO(followId));
 
 		if (po == null) {
 			po = new FollowPO();
@@ -59,8 +59,8 @@ public class FollowServiceImpl implements FollowService {
 
 			ret = po.getId();
 
-			userEventService.identityFollow(Collections.singletonList(userId), followId, true);
-			userEventService.identityFans(Collections.singletonList(followId), userId, true);
+			userEventService.identityFollow(userId, followId, true);
+			userEventService.identityFans(followId, userId, true);
 		} else {
 			throw new MtonsException("您已经关注过此用户了");
 		}
@@ -70,50 +70,52 @@ public class FollowServiceImpl implements FollowService {
 	@Override
 	@Transactional
 	public void unfollow(long userId, long followId) {
-		int ret = followDao.unfollow(userId, followId);
+		int ret = followDao.deleteByUserAndFollow(new UserPO(userId), new UserPO(followId));
 
 		if (ret <= 0) {
 			throw new MtonsException("取消关注失败");
 		} else {
-			userEventService.identityFollow(Collections.singletonList(userId), followId, false);
-			userEventService.identityFans(Collections.singletonList(followId), userId, false);
+			userEventService.identityFollow(userId, followId, false);
+			userEventService.identityFans(followId, userId, false);
 		}
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public void follows(Paging paging, long userId) {
-		List<FollowPO> list = followDao.following(paging, userId);
+	public Page<User> follows(Pageable pageable, long userId) {
+		Page<FollowPO> page = followDao.findAllByFollow(pageable, new UserPO(userId));
 		List<User> rets = new ArrayList<>();
 
-		for (FollowPO po : list) {
+		for (FollowPO po : page.getContent()) {
 			rets.add(BeanMapUtils.copy(po.getFollow(), 0));
 		}
-		paging.setResults(rets);
+		return new PageImpl<>(rets, pageable, page.getTotalElements());
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public void fans(Paging paging, long userId) {
-		List<FollowPO> list = followDao.fans(paging, userId);
+	public Page<User> fans(Pageable pageable, long userId) {
+		Page<FollowPO> page = followDao.findAllByUser(pageable, new UserPO(userId));
 		List<User> rets = new ArrayList<>();
 
-		for (FollowPO po : list) {
+		for (FollowPO po : page.getContent()) {
 			rets.add(BeanMapUtils.copy(po.getUser(), 0));
 		}
-		paging.setResults(rets);
+
+		return new PageImpl<>(rets, pageable, page.getTotalElements());
 	}
 
 	@Override
 	@Transactional
 	public boolean checkFollow(long userId, long followId) {
-		return (followDao.checkFollow(userId, followId) != null);
+		return (followDao.findByUserAndFollow(new UserPO(userId), new UserPO(followId)) != null);
 	}
 
 	@Override
 	@Transactional
 	public boolean checkCrossFollow(long userId, long targetUserId) {
-		return followDao.checkCrossFollow(userId, targetUserId);
+		List<FollowPO> list = followDao.findAllCrossFollow(userId, targetUserId);
+		return  list != null && list.size() > 0;
 	}
 
 }

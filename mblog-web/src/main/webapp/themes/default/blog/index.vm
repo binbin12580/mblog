@@ -1,6 +1,6 @@
 #set($title = ${group.name})
 
-#contents(${group.id}, 'paging')
+#contents(${group.id}, 'page')
 <div class="shadow-box">
 	<!-- tab -->
 	<div class="filter">
@@ -15,11 +15,11 @@
 	<!-- tab end -->
 	<!-- tab panes -->
 	<div class="stream-list p-stream">
-		#foreach($row in $paging.results)
+		#foreach($row in $page.content)
 			#showBlog($row)
 		#end
 
-		#if($paging.results.size() == 0)
+		#if($page.content.size() == 0)
 		<div class="stream-item">
 			该目录下还没有内容!
 		</div>

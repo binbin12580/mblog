@@ -3,8 +3,6 @@
  */
 package mblog.base.lang;
 
-import mtons.modules.exception.MtonsException;
-
 public enum EnumOauthType {
 	TYPE_QQ("QQ登录", 2),
 	TYPE_SINA("微博登陆", 1);

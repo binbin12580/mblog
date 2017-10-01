@@ -9,16 +9,7 @@
 */
 package mblog.core.persist.service.impl;
 
-import mtons.modules.lang.Const;
-import mtons.modules.pojos.Paging;
-import org.hibernate.Query;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
+import mblog.base.lang.Consts;
 import mblog.core.data.Comment;
 import mblog.core.data.Post;
 import mblog.core.data.User;
@@ -29,6 +20,15 @@ import mblog.core.persist.service.PostService;
 import mblog.core.persist.service.UserEventService;
 import mblog.core.persist.service.UserService;
 import mblog.core.persist.utils.BeanMapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.*;
 
@@ -49,34 +49,34 @@ public class CommentServiceImpl implements CommentService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public void paging4Admin(Paging paging, String key) {
-		List<CommentPO> list = commentDao.paging(paging, key);
+	public Page<Comment> paging4Admin(Pageable pageable) {
+		Page<CommentPO> page = commentDao.findAll(pageable);
 		List<Comment> rets = new ArrayList<>();
 
 		HashSet<Long> uids= new HashSet<>();
 
-		list.forEach(po -> {
+		page.getContent().forEach(po -> {
 			uids.add(po.getAuthorId());
 			rets.add(BeanMapUtils.copy(po));
 		});
 
 		buildUsers(rets, uids);
 
-		paging.setResults(rets);
+		return new PageImpl<>(rets, pageable, page.getTotalElements());
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(value = "commentsCaches", key = "'lth_' + #authorId + '_' + #paging.getPageNo() + '_' + #paging.getMaxResults()")
-	public Paging paging4Home(Paging paging, long authorId) {
-		List<CommentPO> list = commentDao.paging(paging, Const.ZERO, authorId, true);
+	@Cacheable(value = "commentsCaches", key = "'lth_' + #authorId + '_' + #pageable.getPageNumber() + '_' + #pageable.getPageSize()")
+	public Page<Comment> paging4Home(Pageable pageable, long authorId) {
+		Page<CommentPO> page = commentDao.findAllByToIdAndAuthorIdOrderByCreatedDesc(pageable, Consts.ZERO, authorId);
 
 		List<Comment> rets = new ArrayList<>();
 		Set<Long> parentIds = new HashSet<>();
 		Set<Long> uids = new HashSet<>();
 		Set<Long> postIds = new HashSet<>();
 
-		list.forEach(po -> {
+		page.getContent().forEach(po -> {
 			Comment c = BeanMapUtils.copy(po);
 
 			if (c.getPid() > 0) {
@@ -102,22 +102,20 @@ public class CommentServiceImpl implements CommentService {
 		buildUsers(rets, uids);
 		buildPosts(rets, postIds);
 
-		paging.setResults(rets);
-		
-		return paging;
+		return new PageImpl<>(rets, pageable, page.getTotalElements());
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(value = "commentsCaches", key = "'lt_' + #toId + '_' + #paging.getPageNo() + '_' + #paging.getMaxResults()")
-	public Paging paging(Paging paging, long toId) {
-		List<CommentPO> list = commentDao.paging(paging, toId, Const.ZERO, true);
+	@Cacheable(value = "commentsCaches", key = "'lt_' + #toId + '_' + #pageable.getPageNumber() + '_' + #pageable.getPageSize()")
+	public Page<Comment> paging(Pageable pageable, long toId) {
+		Page<CommentPO> page = commentDao.findAllByToIdAndAuthorIdOrderByCreatedDesc(pageable, toId, Consts.ZERO);
 		
 		List<Comment> rets = new ArrayList<>();
 		Set<Long> parentIds = new HashSet<>();
 		Set<Long> uids = new HashSet<>();
 
-		list.forEach(po -> {
+		page.getContent().forEach(po -> {
 			Comment c = BeanMapUtils.copy(po);
 
 			if (c.getPid() > 0) {
@@ -141,15 +139,13 @@ public class CommentServiceImpl implements CommentService {
 
 		buildUsers(rets, uids);
 
-		paging.setResults(rets);
-		
-		return paging;
+		return new PageImpl<>(rets, pageable, page.getTotalElements());
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Map<Long, Comment> findByIds(Set<Long> ids) {
-		List<CommentPO> list = commentDao.findByIds(ids);
+		List<CommentPO> list = commentDao.findByIdIn(ids);
 		Map<Long, Comment> ret = new HashMap<>();
 		Set<Long> uids = new HashSet<>();
 
@@ -175,7 +171,7 @@ public class CommentServiceImpl implements CommentService {
 		po.setPid(comment.getPid());
 		commentDao.save(po);
 
-		userEventService.identityComment(Collections.singletonList(comment.getAuthorId()), po.getId(), true);
+		userEventService.identityComment(comment.getAuthorId(), po.getId(), true);
 		return po.getId();
 	}
 
@@ -183,14 +179,14 @@ public class CommentServiceImpl implements CommentService {
 	@Transactional
 	@CacheEvict(value = "commentsCaches", allEntries = true)
 	public void delete(List<Long> ids) {
-		commentDao.deleteByIds(ids);
+		commentDao.deleteAllByIdIn(ids);
 	}
 
 	@Override
 	@Transactional
 	@CacheEvict(value = "commentsCaches", allEntries = true)
 	public void delete(long id, long authorId) {
-		CommentPO po = commentDao.get(id);
+		CommentPO po = commentDao.findOne(id);
 		if (po != null) {
 			// 判断文章是否属于当前登录用户
 			Assert.isTrue(po.getAuthorId() == authorId, "认证失败");
@@ -200,9 +196,8 @@ public class CommentServiceImpl implements CommentService {
 
 	@Transactional
 	@Override
-	public List<CommentPO> findByHql(String hql) {
-		Query query = commentDao.createQuery(hql);
-		return query.list();
+	public List<CommentPO> findAllByAuthorIdAndToId(long authorId, long toId) {
+		return commentDao.findAllByAuthorIdAndToId(authorId, toId);
 	}
 
 	private void buildUsers(Collection<Comment> posts, Set<Long> uids) {
@@ -216,4 +211,5 @@ public class CommentServiceImpl implements CommentService {
 
 		comments.forEach(p -> p.setPost(postMap.get(p.getToId())));
 	}
+
 }

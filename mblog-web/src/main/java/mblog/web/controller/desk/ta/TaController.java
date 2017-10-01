@@ -9,18 +9,19 @@
 */
 package mblog.web.controller.desk.ta;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import mblog.core.biz.PostBiz;
+import mblog.core.data.Post;
 import mblog.core.data.User;
 import mblog.core.persist.service.UserService;
 import mblog.web.controller.BaseController;
 import mblog.web.controller.desk.Views;
-import mtons.modules.pojos.Paging;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 访问他人主页
@@ -35,10 +36,10 @@ public class TaController extends BaseController {
 	private UserService userService;
 	
 	@RequestMapping("/ta/{uid}")
-	public String home(@PathVariable Long uid, Integer pn, ModelMap model) {
+	public String home(@PathVariable Long uid, ModelMap model) {
 		User user = userService.get(uid);
-		Paging page = wrapPage(pn);
-		page = postBiz.pagingByAuthorId(page, uid);
+		Pageable pageable = wrapPageable();
+		Page<Post> page = postBiz.pagingByAuthorId(pageable, uid);
 		
 		model.put("user", user);
 		model.put("page", page);
