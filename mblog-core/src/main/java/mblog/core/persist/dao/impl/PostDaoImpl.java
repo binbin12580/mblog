@@ -39,24 +39,19 @@ import java.util.List;
  *
  */
 public class PostDaoImpl implements PostDaoCustom {
-	private static final long serialVersionUID = -8144066308316359853L;
 	@Autowired
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Page<Post> search(Pageable pageable, String q) throws Exception {
 		FullTextEntityManager fullTextSession = org.hibernate.search.jpa.Search.getFullTextEntityManager(entityManager);
 
 		SearchFactory sf = fullTextSession.getSearchFactory();
 		QueryBuilder qb = sf.buildQueryBuilder().forEntity(PostPO.class).get();
 
-		org.apache.lucene.search.Query luceneQuery  = null;
-
-		MustJunction term = qb.bool().must(qb.keyword().onFields("title","summary","tags").matching(q).createQuery());
-
-		luceneQuery = term.createQuery();
+		org.apache.lucene.search.Query luceneQuery  = qb.keyword().onFields("title","summary","tags")
+				.matching(q).createQuery();
 
 		org.hibernate.search.jpa.FullTextQuery query = fullTextSession.createFullTextQuery(luceneQuery);
 		query.setFirstResult(pageable.getOffset());

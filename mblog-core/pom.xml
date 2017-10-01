@@ -17,7 +17,7 @@
 			<groupId>com.mtons.mblog</groupId>
 			<artifactId>mblog-base</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -43,7 +43,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
-	
+
 		<!-- spring aop aspectj -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -58,7 +58,7 @@
 			<artifactId>cglib</artifactId>
 		</dependency>
 		<!-- spring aop aspectj /end -->
-		
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-search-orm</artifactId>
@@ -67,7 +67,11 @@
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-highlighter</artifactId>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-smartcn</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>

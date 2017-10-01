@@ -9,13 +9,11 @@
 */
 package mblog.core.persist.entity;
 
+import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
-import org.hibernate.search.annotations.DocumentId;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.NumericField;
+import org.hibernate.search.annotations.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,8 +26,8 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "mto_posts")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Indexed(index = "posts")
+@Analyzer(impl = SmartChineseAnalyzer.class)
 public class PostPO implements Serializable {
 	private static final long serialVersionUID = 7144425803920583495L;
 
