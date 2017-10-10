@@ -4,7 +4,7 @@
 
 * JDK8
 * 数据库MySQL
-* SSH (Spring、SpringMVC、Hibernate）
+* 主框架 (Spring、SpringMVC、Spring-data-jpa）
 * 安全权限 Shiro
 * 搜索工具 Lucene
 * 缓存 Ehcache
