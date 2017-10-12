@@ -12,8 +12,7 @@ define(function(require, exports, module) {
 	J = jQuery;
 	require('plugins');
 	require('validate');
-	require('dmuploader');
-	
+
 	var PostView = function () {};
 	
 	PostView.prototype = {

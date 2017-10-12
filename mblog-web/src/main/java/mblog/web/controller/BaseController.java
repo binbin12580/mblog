@@ -189,6 +189,9 @@ public class BaseController {
 		Document doc = Jsoup.parse(post.getContent());
 		Elements elements = doc.select("img");
 		List<Attach> rets = new ArrayList<>();
+
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
 		for (Element el : elements) {
 			String previewHandler = el.attr("preview-handler");
 			if (previewHandler != null && "true".equals(previewHandler)) {
@@ -196,6 +199,10 @@ public class BaseController {
 			}
 
 			String imageUrl = el.attr("src");
+
+			if (imageUrl.startsWith(request.getContextPath())) {
+				imageUrl = imageUrl.replace(request.getContextPath(), "/");
+			}
 			Attach a = new Attach();
 			a.setOriginal(imageUrl);
 			a.setPreview(imageUrl);
