@@ -69,7 +69,7 @@ public class ForgotController extends BaseController {
             verifyService.verifyToken(userId, Consts.VERIFY_FORGOT, token);
             userService.updatePassword(userId, password);
 
-            data = Data.success("恭喜您! 密码重置成功。", Data.NOOP);
+            data = Data.success("恭喜您! 密码重置成功。");
             data.addLink("login", "去登陆");
 
         } catch (Exception e) {

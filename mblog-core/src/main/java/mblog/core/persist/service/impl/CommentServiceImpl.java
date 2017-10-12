@@ -69,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
 	@Transactional(readOnly = true)
 	@Cacheable(value = "commentsCaches", key = "'lth_' + #authorId + '_' + #pageable.getPageNumber() + '_' + #pageable.getPageSize()")
 	public Page<Comment> paging4Home(Pageable pageable, long authorId) {
-		Page<CommentPO> page = commentDao.findAllByToIdAndAuthorIdOrderByCreatedDesc(pageable, Consts.ZERO, authorId);
+		Page<CommentPO> page = commentDao.findAllByAuthorIdOrderByCreatedDesc(pageable, authorId);
 
 		List<Comment> rets = new ArrayList<>();
 		Set<Long> parentIds = new HashSet<>();
@@ -109,7 +109,7 @@ public class CommentServiceImpl implements CommentService {
 	@Transactional(readOnly = true)
 	@Cacheable(value = "commentsCaches", key = "'lt_' + #toId + '_' + #pageable.getPageNumber() + '_' + #pageable.getPageSize()")
 	public Page<Comment> paging(Pageable pageable, long toId) {
-		Page<CommentPO> page = commentDao.findAllByToIdAndAuthorIdOrderByCreatedDesc(pageable, toId, Consts.ZERO);
+		Page<CommentPO> page = commentDao.findAllByToIdOrderByCreatedDesc(pageable, toId);
 		
 		List<Comment> rets = new ArrayList<>();
 		Set<Long> parentIds = new HashSet<>();
@@ -197,7 +197,7 @@ public class CommentServiceImpl implements CommentService {
 	@Transactional
 	@Override
 	public List<CommentPO> findAllByAuthorIdAndToId(long authorId, long toId) {
-		return commentDao.findAllByAuthorIdAndToId(authorId, toId);
+		return commentDao.findAllByAuthorIdAndToIdOrderByCreatedDesc(authorId, toId);
 	}
 
 	private void buildUsers(Collection<Comment> posts, Set<Long> uids) {

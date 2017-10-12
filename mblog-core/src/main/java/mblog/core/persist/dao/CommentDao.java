@@ -25,9 +25,10 @@ import java.util.Set;
  */
 public interface CommentDao extends JpaRepository<CommentPO, Long>, JpaSpecificationExecutor<CommentPO> {
 	Page<CommentPO> findAll(Pageable pageable);
-	Page<CommentPO> findAllByToIdAndAuthorIdOrderByCreatedDesc(Pageable pageable, long toId, long authorId);
+	Page<CommentPO> findAllByToIdOrderByCreatedDesc(Pageable pageable, long toId);
+	Page<CommentPO> findAllByAuthorIdOrderByCreatedDesc(Pageable pageable, long authorId);
 	List<CommentPO> findByIdIn(Set<Long> ids);
-	List<CommentPO> findAllByAuthorIdAndToId(long authorId, long toId);
+	List<CommentPO> findAllByAuthorIdAndToIdOrderByCreatedDesc(long authorId, long toId);
 
 	int deleteAllByIdIn(Collection<Long> ids);
 }

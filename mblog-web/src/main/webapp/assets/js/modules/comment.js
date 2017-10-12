@@ -112,9 +112,9 @@ define(function(require, exports, module) {
 
         	J.getJSON(opts.load_url, {maxResults : opts.maxResults, pn: pn}, function (ret) {
         		
-        		$('#chat_count').html(ret.totalCount);
+        		$('#chat_count').html(ret.totalElements);
         		
-          		jQuery.each(ret.results, function(i, n) {
+          		jQuery.each(ret.content, function(i, n) {
     				var item = opts.onLoad.call(this, i, n);
 
     				html += item;
@@ -125,7 +125,7 @@ define(function(require, exports, module) {
 	    		if (ret.size < 1) {
 	    			$list.append('<li><p>还没有评论, 快来占沙发吧!</p></li>');
 	    		}
-	    		if (ret.pageCount > 1) {
+	    		if (ret.totalPages > 1) {
 	    			$("#pager").page(ret, J.proxy(that, 'pageCallback'));
 	    		}
         	});

@@ -200,7 +200,7 @@ public class BaseController {
 
 			String imageUrl = el.attr("src");
 
-			if (imageUrl.startsWith(request.getContextPath())) {
+			if (request.getContextPath().length() > 1 && imageUrl.startsWith(request.getContextPath())) {
 				imageUrl = imageUrl.replace(request.getContextPath(), "/");
 			}
 			Attach a = new Attach();

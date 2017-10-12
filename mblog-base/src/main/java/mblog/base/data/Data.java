@@ -9,22 +9,25 @@
 */
 package mblog.base.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * @author langhsu on 2015/8/15.
  */
-public class Data {
+public class Data implements Serializable {
+    private static final long serialVersionUID = -1491499610244557029L;
+
     public static int CODE_SUCCESS = 0;
     public static int CODE_FAILURED = -1;
-    public static Object NOOP = new Object();
-    public static String[] NOOP_ARRAY = new String[]{};
-    public static String NOOP_STRING = "";
+
+    public static String NOOP = "";
 
     private int code; // 处理状态：0: 成功
     private String message;
     private Object data; // 返回数据
     private ArrayList<Button> links = new ArrayList<>();
+
 
     private Data(int code, String message, Object data){
         this.code = code;
@@ -48,7 +51,7 @@ public class Data {
      * @deprecated with 1.0.3
      */
     public static final Data success(String message){
-        return new Data(Data.CODE_SUCCESS, message, Data.NOOP);
+        return new Data(Data.CODE_SUCCESS, message, null);
     }
 
     public static final Data success(String message, Object data){
@@ -61,7 +64,7 @@ public class Data {
      * @return
      */
     public static final Data failure(int code, String message){
-        return new Data(code, message, Data.NOOP);
+        return new Data(code, message, null);
     }
 
     public static final Data failure(String message){

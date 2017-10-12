@@ -122,7 +122,7 @@
 		 * mini: 是否为迷你型，如果true，则只有"上一页"和"下一页"的按钮
 		 */
 		page: function(p, callback, mini){
-			var pc = parseInt(p.pageCount); 	// 总页数
+			var pc = parseInt(p.totalPages); 	// 总页数
 			if(pc == 0){
 				this.html('');
 				return this;
@@ -130,7 +130,7 @@
 
 			var	c = 3,				// 左右各需要显示的分页数量
 				tc = c * 2 + 3, 	// 显示的分页总数
-				cp = parseInt(p.pageNo),		//当前页号
+				cp = parseInt(p.number),		//当前页号
 				h = [];
 			h.push('<ul class="pagination pagination-sm">');
 			// 上一页

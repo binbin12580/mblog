@@ -13,7 +13,9 @@
 	<bean name="propertiesConfiger" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="properties" ref="configProperties"/>
 	</bean>
-    
+
+	<bean class="mblog.web.exceptions.DefaultExceptionHandler"/>
+
     <!--
 	
 	文件绝对路径存储：
