@@ -65,6 +65,15 @@ public class GMagickUtils {
 		return op;
 	}
 
+	public static ConvertCmd getCmd() {
+		ConvertCmd cmd = new ConvertCmd(true);
+		String osName = System.getProperty("os.name").toLowerCase();
+		if(osName.indexOf("win") >= 0) {
+			cmd.setSearchPath(getGMagickHome());
+		}
+		return cmd;
+	}
+
 	public static void scale(String ori, String dest, int width, int height) throws IOException, InterruptedException, IM4JavaException {
 		File destFile = new File(dest);
 		if(destFile.exists()) {
@@ -72,11 +81,7 @@ public class GMagickUtils {
 		}
 
 		IMOperation imo = getIMO(Integer.valueOf(width), Integer.valueOf(height));
-		ConvertCmd cmd = new ConvertCmd(true);
-		String osName = System.getProperty("os.name").toLowerCase();
-		if(osName.indexOf("win") >= 0) {
-			cmd.setSearchPath(getGMagickHome());
-		}
+		ConvertCmd cmd = getCmd();
 
 		cmd.setErrorConsumer(StandardStream.STDERR);
 		cmd.run(imo, new Object[]{ori, dest});
@@ -153,7 +158,7 @@ public class GMagickUtils {
 		op.addImage(new String[]{ori});
 		op.crop(Integer.valueOf(width), Integer.valueOf(height), Integer.valueOf(x), Integer.valueOf(y));
 		op.addImage(new String[]{dest});
-		ConvertCmd convert = new ConvertCmd(true);
+		ConvertCmd convert = getCmd();
 		convert.run(op, new Object[0]);
 		return true;
 	}
@@ -185,7 +190,7 @@ public class GMagickUtils {
 		}
 
 		op.addImage(new String[]{dest});
-		ConvertCmd convert = new ConvertCmd(true);
+		ConvertCmd convert = getCmd();
 		convert.run(op, new Object[0]);
 		return true;
 	}

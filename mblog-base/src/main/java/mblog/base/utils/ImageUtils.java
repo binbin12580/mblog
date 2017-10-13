@@ -42,7 +42,7 @@ public class ImageUtils extends GMagickUtils {
         }
 
         op.addImage(dest);
-        ConvertCmd convert = new ConvertCmd(true);
+        ConvertCmd convert = getCmd();
         convert.run(op);
         return true;
     }
