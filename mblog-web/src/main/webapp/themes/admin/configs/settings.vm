@@ -2,20 +2,11 @@
     #parse("/admin/message.vm")
 
     <div class="form-group">
-        <label class="col-lg-2 control-label">文章编辑器</label>
-        <div class="col-lg-3">
-            <select name="site_editor" class="form-control" data-select="$!{configs['site_editor'].value}">
-                <option value="ueditor">ueditor</option>
-                <option value="markdown">markdown</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
         <label class="col-lg-2 control-label">图片处理器</label>
         <div class="col-lg-4">
             <select name="image_processor" class="form-control" data-select="$!{configs['image_processor'].value}">
-                <option value="GraphicsMagick">GraphicsMagick</option>
                 <option value="Thumbnailator">Thumbnailator</option>
+                <option value="GraphicsMagick">GraphicsMagick</option>
             </select>
         </div>
     </div>
