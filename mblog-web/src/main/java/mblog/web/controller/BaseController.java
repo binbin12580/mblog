@@ -193,9 +193,6 @@ public class BaseController {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
 		for (Element el : elements) {
-			String previewHandler = el.attr("preview-handler");
-			boolean isHandler = (previewHandler != null && "true".equals(previewHandler));
-
 			String imageUrl = el.attr("src");
 
 			if (request.getContextPath().length() > 1 && imageUrl.startsWith(request.getContextPath())) {
@@ -206,24 +203,11 @@ public class BaseController {
 			a.setPreview(imageUrl);
 
 			try {
-				if (!isHandler && imageUrl.startsWith("/store/")) {
-					String root = fileRepoFactory.select().getRoot();
-					File temp = new File(root + imageUrl);
-					// 创建快照
-					String screenshot = fileRepoFactory.select().storeScale(temp, appContext.getScreenshotDir(), 225, 140);
-					a.setScreenshot(screenshot);
-
-					el.attr("preview-handler", "true");
-				} else {
-					a.setScreenshot(imageUrl);
-				}
-
+				a.setScreenshot(imageUrl);
 				if (imageUrl.startsWith("http")) {
 					a.setStore(1);
 				}
-
 				rets.add(a);
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
