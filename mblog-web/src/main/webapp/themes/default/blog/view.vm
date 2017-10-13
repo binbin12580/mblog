@@ -22,21 +22,6 @@
         <span class="pull-right action-box"></span>
 	</div>
 	<div class="post-frame">
-		#if($ret.albums)
-			<div class="thumbs">
-			#foreach($alb in $ret.albums)
-				<div class="single-post-media">
-					<a title="${ret.title}" href="#resource(${alb.original})">
-						#if($att.store == 1)
-							<img src="$base/assets/images/spinner.gif" data-original="#resource(${alb.original})"/>
-						#else
-							<img src="$base/assets/images/spinner.gif" data-original="#resource(${alb.original})"/>
-						#end
-					</a>
-				</div><!-- .post-thumbnail -->
-			#end
-			</div>
-		#end
 		<div class="post-content">
 			${ret.content}
 		</div>
