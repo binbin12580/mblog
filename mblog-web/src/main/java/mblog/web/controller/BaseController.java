@@ -216,6 +216,9 @@ public class BaseController {
 					el.attr("preview-handler", "true");
 				} else {
 					a.setScreenshot(imageUrl);
+				}
+
+				if (imageUrl.startsWith("http")) {
 					a.setStore(1);
 				}
 
