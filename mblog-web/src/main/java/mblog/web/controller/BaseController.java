@@ -194,26 +194,26 @@ public class BaseController {
 
 		for (Element el : elements) {
 			String previewHandler = el.attr("preview-handler");
-			if (previewHandler != null && "true".equals(previewHandler)) {
-				break;
-			}
+			boolean isHandler = (previewHandler != null && "true".equals(previewHandler));
 
 			String imageUrl = el.attr("src");
 
 			if (request.getContextPath().length() > 1 && imageUrl.startsWith(request.getContextPath())) {
-				imageUrl = imageUrl.replace(request.getContextPath(), "/");
+				imageUrl = imageUrl.replace(request.getContextPath(), "");
 			}
 			Attach a = new Attach();
 			a.setOriginal(imageUrl);
 			a.setPreview(imageUrl);
 
 			try {
-				if (imageUrl.startsWith("/store/")) {
+				if (!isHandler && imageUrl.startsWith("/store/")) {
 					String root = fileRepoFactory.select().getRoot();
 					File temp = new File(root + imageUrl);
 					// 创建快照
 					String screenshot = fileRepoFactory.select().storeScale(temp, appContext.getScreenshotDir(), 225, 140);
 					a.setScreenshot(screenshot);
+
+					el.attr("preview-handler", "true");
 				} else {
 					a.setScreenshot(imageUrl);
 					a.setStore(1);
@@ -221,7 +221,6 @@ public class BaseController {
 
 				rets.add(a);
 
-				el.attr("preview-handler", "true");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

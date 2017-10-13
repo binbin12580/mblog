@@ -47,7 +47,7 @@ public class AttachServiceImpl implements AttachService {
 			return Collections.emptyMap();
 		}
 
-		List<AttachPO> list = attachDao.findAllByIdIn(toIds);
+		List<AttachPO> list = attachDao.findAllByToIdIn(toIds);
 		Map<Long, List<Attach>> ret = new HashMap<>();
 
 		list.forEach(po -> {
@@ -93,6 +93,8 @@ public class AttachServiceImpl implements AttachService {
 	@Transactional
 	public long batchPost(long toId, List<Attach> albums) {
 		long lastId = 0;
+
+		attachDao.deleteAllByToId(toId);
 
 		for (Attach d : albums) {
 			d.setToId(toId);
