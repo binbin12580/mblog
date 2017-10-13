@@ -52,6 +52,7 @@ public class ImageHandleUtils {
         } else{
             GMagickUtils.scale(ori, dest, width,height);
         }
+//        Thumbnails.of(ori).size(width, height).toFile(dest);
     }
 
     /**
