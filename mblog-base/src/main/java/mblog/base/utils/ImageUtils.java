@@ -2,7 +2,6 @@ package mblog.base.utils;
 
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.log4j.Logger;
-import org.im4java.core.IM4JavaException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -163,10 +162,9 @@ public class ImageUtils {
      * @return boolean
      *
      * @throws java.io.IOException io异常
-     * @throws IM4JavaException    im4j 异常
      * @throws InterruptedException 中断异常
      */
-    public static boolean truncateImage(String ori, String dest, int x, int y, int width, int height) throws IOException, InterruptedException, IM4JavaException {
+    public static boolean truncateImage(String ori, String dest, int x, int y, int width, int height) throws IOException, InterruptedException {
         File oriFile = new File(ori);
 
         validate(oriFile, dest);
@@ -176,7 +174,7 @@ public class ImageUtils {
         return true;
     }
 
-    public static boolean truncateImage(String ori, String dest, int x, int y, int size) throws IOException, InterruptedException, IM4JavaException {
+    public static boolean truncateImage(String ori, String dest, int x, int y, int size) throws IOException, InterruptedException {
         return truncateImage(ori, dest, x, y, size, size);
     }
 
