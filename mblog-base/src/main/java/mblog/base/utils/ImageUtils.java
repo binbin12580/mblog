@@ -2,9 +2,7 @@ package mblog.base.utils;
 
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.log4j.Logger;
-import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
-import org.im4java.core.IMOperation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,36 +13,26 @@ import java.net.URLConnection;
 /**
  * @author langhsu on 2015/9/4.
  */
-public class ImageUtils extends GMagickUtils {
+public class ImageUtils {
     private static Logger log = Logger.getLogger(ImageUtils.class);
 
-    public static boolean truncateImage(String ori, String dest, int width, int height) throws IOException, InterruptedException, IM4JavaException {
-        File oriFile = new File(ori);
-
-        validate(oriFile, dest);
-
-        BufferedImage src = ImageIO.read(oriFile); // 读入文件
-        int w = src.getWidth();
-        int h = src.getHeight();
-
-        int min = Math.min(w, h);
-        int side = Math.min(width, height);
-
-        IMOperation op = new IMOperation();
-        op.addImage(ori);
-
-        if (w <= width && h <= height) {
-            // Don't do anything
-        } else if (min < side) {
-            op.gravity("center").extent(width, height);
-        } else {
-            op.resize(width, height, '^').gravity("center").extent(width, height);
+    public static void validate(File ori, String dest) throws IOException {
+        File destFile = new File(dest);
+        if(ori == null) {
+            throw new NullPointerException("Source must not be null");
+        } else if(dest == null) {
+            throw new NullPointerException("Destination must not be null");
+        } else if(!ori.exists()) {
+            throw new FileNotFoundException("Source \'" + ori + "\' does not exist");
+        } else if(ori.isDirectory()) {
+            throw new IOException("Source \'" + ori + "\' exists but is a directory");
+        } else if(ori.getCanonicalPath().equals(destFile.getCanonicalPath())) {
+            throw new IOException("Source \'" + ori + "\' and destination \'" + dest + "\' are the same");
+        } else if(destFile.getParentFile() != null && !destFile.getParentFile().exists() && !destFile.getParentFile().mkdirs()) {
+            throw new IOException("Destination \'" + dest + "\' directory cannot be created");
+        } else if(destFile.exists() && !destFile.canWrite()) {
+            throw new IOException("Destination \'" + dest + "\' exists but is read-only");
         }
-
-        op.addImage(dest);
-        ConvertCmd convert = getCmd();
-        convert.run(op);
-        return true;
     }
 
     /**
@@ -89,7 +77,7 @@ public class ImageUtils extends GMagickUtils {
      */
     public static boolean scaleImageByWidth(String ori, String dest, int maxSize) throws IOException {
         File oriFile = new File(ori);
-        GMagickUtils.validate(oriFile, dest);
+        validate(oriFile, dest);
 
         BufferedImage src = ImageIO.read(oriFile); // 读入文件
         int w = src.getWidth();

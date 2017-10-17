@@ -12,7 +12,6 @@ package mblog.web.listener;
 import mblog.base.context.AppContext;
 import mblog.base.lang.Consts;
 import mblog.base.print.Printer;
-import mblog.base.utils.GMagickUtils;
 import mblog.base.utils.PropertiesLoader;
 import mblog.core.data.Config;
 import mblog.core.persist.service.ConfigService;
@@ -52,8 +51,6 @@ public class StartupListener implements InitializingBean, ServletContextAware {
 		// 初始化配置文件
 		try {
 			PropertiesLoader p = new PropertiesLoader(Consts.MTONS_CONFIG);
-			String gmHome = p.getProperty(GMagickUtils.GMAGICK_HOME);
-			System.setProperty(GMagickUtils.GMAGICK_HOME, gmHome);
 			System.setProperty(Consts.SYSTEM_VERSION, p.getProperty(Consts.SYSTEM_VERSION));
 
 		} catch (Exception e) {

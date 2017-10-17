@@ -9,6 +9,7 @@
 */
 package mblog.base.upload.impl;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +20,6 @@ import javax.imageio.ImageIO;
 
 import mblog.base.context.AppContext;
 import mblog.base.lang.MtonsException;
-import mblog.base.upload.ImageHandleUtils;
 import mblog.base.utils.FileNameUtils;
 import mblog.base.utils.ImageUtils;
 import org.apache.commons.io.FileUtils;
@@ -117,7 +117,7 @@ public abstract class AbstractFileRepo implements FileRepo {
 			String scaleName = FileNameUtils.genFileName(getExt(file.getOriginalFilename()));
 			String dest = root + basePath + "/" + scaleName;
 
-			ImageHandleUtils.scaleImageByWidth(temp.getAbsolutePath(), dest, maxWidth);
+			ImageUtils.scaleImageByWidth(temp.getAbsolutePath(), dest, maxWidth);
 
 			path = basePath + "/" + scaleName;
 		} catch (Exception e) {
@@ -172,7 +172,7 @@ public abstract class AbstractFileRepo implements FileRepo {
 
 			// 根据临时文件生成略缩图
 			String dest = root + basePath + path;
-			ImageHandleUtils.scaleImageByWidth(temp.getAbsolutePath(), dest, maxWidth);
+			ImageUtils.scaleImageByWidth(temp.getAbsolutePath(), dest, maxWidth);
 
 		} catch (Exception e) {
 			throw e;
@@ -188,7 +188,7 @@ public abstract class AbstractFileRepo implements FileRepo {
 		String path = FileNameUtils.genPathAndFileName(getExt(file.getName()));
 
 		String dest = root + basePath + path;
-		ImageHandleUtils.scaleImageByWidth(file.getAbsolutePath(), dest, maxWidth);
+		ImageUtils.scaleImageByWidth(file.getAbsolutePath(), dest, maxWidth);
 
 		return basePath + path;
 	}
@@ -199,7 +199,7 @@ public abstract class AbstractFileRepo implements FileRepo {
 		String path = FileNameUtils.genPathAndFileName(getExt(file.getName()));
 
 		String dest = root + basePath + path;
-		ImageUtils.truncateImage(file.getAbsolutePath(), dest, width, height);
+		ImageUtils.scale(file.getAbsolutePath(), dest, width, height);
 		return basePath + path;
 	}
 

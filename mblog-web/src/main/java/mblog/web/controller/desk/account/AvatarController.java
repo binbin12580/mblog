@@ -11,8 +11,8 @@ package mblog.web.controller.desk.account;
 
 import mblog.base.context.AppContext;
 import mblog.base.data.Data;
-import mblog.base.upload.ImageHandleUtils;
 import mblog.base.utils.FilePathUtils;
+import mblog.base.utils.ImageUtils;
 import mblog.core.data.AccountProfile;
 import mblog.core.persist.service.UserService;
 import mblog.web.controller.BaseController;
@@ -68,10 +68,10 @@ public class AvatarController extends BaseController {
 		        }
 		        // 在目标目录下生成截图
 		        String scalePath = f.getParent() + "/" + profile.getId() + ".jpg";
-		        ImageHandleUtils.truncateImage(temp.getAbsolutePath(), scalePath, x.intValue(), y.intValue(), width.intValue());
+				ImageUtils.truncateImage(temp.getAbsolutePath(), scalePath, x.intValue(), y.intValue(), width.intValue());
 		        
 				// 对结果图片进行压缩
-				ImageHandleUtils.scaleImage(scalePath, dest, 100);
+				ImageUtils.scaleImage(scalePath, dest, 100);
 
 				AccountProfile user = userService.updateAvatar(profile.getId(), ava100);
 				putProfile(user);
