@@ -9,7 +9,7 @@
 * 搜索工具 Lucene
 * 缓存 Ehcache
 * 视图模板 Velocity
-* 其它 Jsoup、fastjson、GraphicsMagick
+* 其它 Jsoup、fastjson
 * jQuery、Seajs
 * Bootstrap 前端框架
 * UEditor/Markdown编辑器
@@ -22,7 +22,6 @@
 ### 相关文档
 
 部署文档及说明参见项目中的 `doc` 目录
-
 
 
 ### 开源协议 (Apache License)

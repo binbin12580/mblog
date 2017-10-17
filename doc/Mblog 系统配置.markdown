@@ -16,9 +16,6 @@
 ###2. 文件存放目录
  - 找到 mblog-web/src/main/resources/mtons.properties 文件
  - 修改 `store.root` 属性, windows 用户记得地址要带盘符, linux 用户不带
- - (仅windows用户)修改 `gmagick.home` 属性, 此处填写你的 GraphicsMagick 安装目录, 如果安装目录有空格, 复制完地址后手动替换下空格。 
-
-> [Graphicsmagick 下载](http://www.graphicsmagick.org/download.html)
 
 ###3. 第三方登录
 

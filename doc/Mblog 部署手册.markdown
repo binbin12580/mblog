@@ -2,7 +2,6 @@
 ---
 1. 准备工作
    - 安装 Jdk8
-   - 安装图片处理工具：GraphicsMagick1.3.20，[下载地址][1]
    - 安装 Maven
    - 准备 IDE (如果你不看源码，可以忽略下面的步骤，直接通过Maven编译war包)
 
@@ -24,9 +23,11 @@
    - 启动成功后,你应该去后台的`系统配置`里配置你的网站信息等。
    
 5. 常见问题总结
-   - java.io.FileNotFoundException: gm 应该是你 GraphicsMagick 安装不成功或者重启下电脑再试试
    - 进入系统后, 菜单加载不出来, 那应该是你没有导 db_init.sql
-   - 点标签显示乱码, 那应该是你的应用服务器 URIEncoding 没设
+   - 点标签显示乱码, 请设置Tomcat的 URIEncoding 为 UTF-8
+   ```
+   <Connector port="8080" protocol="HTTP/1.1" ... URIEncoding="UTF-8"/>
+   ```
 
 
   [1]: http://www.graphicsmagick.org/download.html
