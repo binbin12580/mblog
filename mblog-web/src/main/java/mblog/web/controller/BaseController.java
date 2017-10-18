@@ -202,15 +202,10 @@ public class BaseController {
 			a.setOriginal(imageUrl);
 			a.setPreview(imageUrl);
 
-			try {
-				a.setScreenshot(imageUrl);
-				if (imageUrl.startsWith("http")) {
-					a.setStore(1);
-				}
-				rets.add(a);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (imageUrl.startsWith("http")) {
+				a.setStore(1);
 			}
+			rets.add(a);
 		}
 
 		post.setContent(doc.html());

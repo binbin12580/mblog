@@ -49,11 +49,6 @@ public class AttachPO {
 	 */
 	private String preview;
 
-	/**
-	 * 快照 225x140
-	 */
-	private String screenshot;
-
 	private int width;
 
 	private int height;
@@ -124,11 +119,4 @@ public class AttachPO {
 		this.store = store;
 	}
 
-	public String getScreenshot() {
-		return screenshot;
-	}
-
-	public void setScreenshot(String screenshot) {
-		this.screenshot = screenshot;
-	}
 }

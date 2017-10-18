@@ -42,8 +42,6 @@ public class AppContext implements ServletContextAware {
 	 */
 	String thumbsDir = "/store/thumbs";
 
-	String screenshotDir = "/store/screenshot";
-	
 	/*
 	 * 文件存储-头像目录
 	 */
@@ -117,14 +115,6 @@ public class AppContext implements ServletContextAware {
 			Map.Entry<String, String> e = iter.next();
 			servletContext.setAttribute(e.getKey(), e.getValue());
 		}
-	}
-
-	public String getScreenshotDir() {
-		return screenshotDir;
-	}
-
-	public void setScreenshotDir(String screenshotDir) {
-		this.screenshotDir = screenshotDir;
 	}
 
 	@Override

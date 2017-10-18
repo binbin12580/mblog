@@ -106,12 +106,10 @@ public class PostBizImpl implements PostBiz {
 		List<Attach> atts = attachService.findByTarget(id);
 		postService.delete(id, authorId);
 
-		// 时刻保持清洁, 物理删除图片
 		if (!atts.isEmpty()) {
 			atts.forEach(a -> {
 				fileRepo.deleteFile(a.getPreview());
 				fileRepo.deleteFile(a.getOriginal());
-				fileRepo.deleteFile(a.getScreenshot());
 			});
 		}
 
@@ -130,7 +128,6 @@ public class PostBizImpl implements PostBiz {
 				atts.forEach(a -> {
 					fileRepo.deleteFile(a.getPreview());
 					fileRepo.deleteFile(a.getOriginal());
-					fileRepo.deleteFile(a.getScreenshot());
 				});
 			}
 
